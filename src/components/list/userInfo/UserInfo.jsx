@@ -1,12 +1,12 @@
 import './userInfo.css'
 import React from 'react'
-import '../../../../public/avatar.png'
 
 const UserInfo = () => {
   return (
     <div className='userInfo'>
       <div className="user">
-        <img src='../../../../public/avatar.png' alt="" />
+        <img src='./avatar.png' alt="" />
+        <h2>John Doe</h2>
       </div>
       <div className="icons">
         <img src="./more.png" alt="" />
