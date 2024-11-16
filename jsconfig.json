@@ -1,15 +1,23 @@
+// {
+//     "compilerOptions": {
+//         "target": "ES6",
+//         "module": "ES6",
+//         "baseUrl": "./",
+//         "paths": {
+//             "src/*": [
+//                 "src/components/*"
+//             ]
+//         }
+//     },
+//     "include": [
+//         "src"
+//     ]
+// }
+
 {
     "compilerOptions": {
-        "target": "ES6",
-        "module": "ES6",
-        "baseUrl": "./",
-        "paths": {
-            "@components/*": [
-                "src/components/*"
-            ]
-        }
+      "target": "ESNext", // Настройка для современной разработки
+      "module": "ESNext"
     },
-    "include": [
-        "src"
-    ]
-}
+    "exclude": ["node_modules"]
+  }

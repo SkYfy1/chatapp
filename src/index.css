@@ -12,11 +12,12 @@ body {
   align-items: center;
   justify-content: center;
   height: 100vh;
+  overflow: hidden;
   color: white;
 }
 
 .container {
-  width: 90vw;
+  width: 80vw;
   height: 90vh;
   background: rgba(14,25,40, 0.75);
   backdrop-filter: blur(19px) saturate(180%);

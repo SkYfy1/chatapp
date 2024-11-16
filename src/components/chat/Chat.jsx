@@ -1,10 +1,17 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import './chat.css'
 import EmojiPicker from 'emoji-picker-react'
 
 const Chat = () => {
   const [open, setOpen] = useState(false);
-  const [text, setText] = useState('')
+  const [text, setText] = useState('');
+  const ref = useRef(null);
+
+  useEffect(() => {
+    ref.current.scrollIntoView({
+      behavior: 'smooth'
+    })
+  }, [])
 
   return (
     <div className='chat'>
@@ -75,6 +82,7 @@ const Chat = () => {
             <span>1 min ago</span>
           </div>
         </div>
+        <div ref={ref}></div>
       </div>
       <div className="bottom">
         <div className="icons">
