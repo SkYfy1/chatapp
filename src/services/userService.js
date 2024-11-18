@@ -1,26 +1,13 @@
 import { auth, db } from '../lib/firebase'
 import supabase from '../lib/supabase'
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { setDoc, doc } from 'firebase/firestore';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { setDoc, doc, getDoc } from 'firebase/firestore';
 import { toast } from 'react-toastify';
 
 
 class userService {
     static async createUser(user, image) {
         try {
-            // const res = await createUserWithEmailAndPassword(auth, user.email, user.password);
-
-            // await setDoc(doc(db, 'users', res.user.uid), {
-            //     username: user.username,
-            //     email: user.email,
-            //     id: res.user.uid,
-            //     blocked: [],
-            // })
-
-            // await setDoc(doc(db, 'userschats', res.user.uid), {
-            //     chats: [],
-            // })
-
             // Use the JS library to create a bucket.
 
             // const { data1, error1 } = await supabase.storage.createBucket('avatars', {
@@ -39,7 +26,6 @@ class userService {
 
             const { data: publicURL, error: urlError } = supabase.storage.from('avatars').getPublicUrl(`uploads/${image.file.name}`)
             
-            // const { publicURL, error: urlError } = await supabase.storage.from('avatars').createSignedUrl(`uploads/${image.file.name}`, 60)
 
             if (urlError) {
                 console.error('Error uploading file:', urlError.message);
@@ -47,10 +33,47 @@ class userService {
                 console.log(publicURL);
             }
 
+            const res = await createUserWithEmailAndPassword(auth, user.email, user.password);
+
+            console.log(res)
+
+            await setDoc(doc(db, 'users', res.user.uid), {
+                username: user.username,
+                email: user.email,
+                id: res.user.uid,
+                avatar: publicURL.publicUrl,
+                blocked: [],
+            })
+
+            await setDoc(doc(db, 'userchats', res.user.uid), {
+                chats: [],
+            })
+
             toast.success('Account created! You can login now!')
         } catch (error) {
             console.log(error)
             toast.error(error.message)
+        }
+    }
+
+    static async loginUser(email, password) {
+        try {
+            const res = await signInWithEmailAndPassword(auth, email, password);
+            toast.success('Welcome back!')
+        } catch (error) {
+            console.log(error.message)
+        }
+    }
+
+    static async getUserInfo(uid) {
+        const docRef = doc(db, 'users', uid);
+        const docSnap = await getDoc(docRef);
+
+        if(docSnap.exists()) {
+            console.log('Document data: ', docSnap.data());
+            return docSnap.data();
+        } else {
+            console.log('No such document')
         }
     }
 }
