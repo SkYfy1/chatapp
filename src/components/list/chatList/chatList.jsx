@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import "./chatList.css"
 import AddUser from './addUser/addUser'
 import { useAuthStore } from '../../../context/useAuthStore';
-import { doc, onSnapshot } from 'firebase/firestore';
+import { doc, getDoc, onSnapshot } from 'firebase/firestore';
 import { db } from '../../../lib/firebase';
 
 
@@ -13,11 +13,25 @@ const ChatList = () => {
   const currentUser = useAuthStore((state) => state.currentUser);
 
   useEffect(() => {
-    const unsub = onSnapshot(doc(db, 'userchats', currentUser.id), (doc) => {
-      console.log(doc.data())
-      setChats(doc.data().chats)
+    const unSub = onSnapshot(doc(db, 'userchats', currentUser.id), async (res) => {
+      const items = res.data().chats;
+      console.log(res.data())
+
+      const promises = items.map(async (item) => {
+        const userDocRef = doc(db, 'users', item.receiverId);
+
+        const userDocSnap = await getDoc(userDocRef);
+
+        const user = userDocSnap.data();
+
+        return { ...item, user }
+      })
+
+      const chatData = await Promise.all(promises);
+
+      setChats(chatData.sort((a,b) => b.updatedAt - a.updatedAt));
     })
-    return () => unsub()
+    return () => unSub()
   }, [currentUser.id]);
 
   console.log(chats)
@@ -37,34 +51,15 @@ const ChatList = () => {
           <p>Hello</p>
         </div>
       </div>
-      <div className="item">
-        <img src='./avatar.png' alt="" />
-        <div className='texts'>
-          <span>Jane Doe</span>
-          <p>Hello</p>
+      {chats?.map((chat) => (
+        <div className="item" key={chat.chatId}>
+          <img src='./avatar.png' alt="" />
+          <div className='texts'>
+            <span>John Doe</span>
+            <p>{chat.lastMessage}</p>
+          </div>
         </div>
-      </div>
-      <div className="item">
-        <img src='./avatar.png' alt="" />
-        <div className='texts'>
-          <span>Jane Doe</span>
-          <p>Hello</p>
-        </div>
-      </div>
-      <div className="item">
-        <img src='./avatar.png' alt="" />
-        <div className='texts'>
-          <span>Jane Doe</span>
-          <p>Hello</p>
-        </div>
-      </div>
-      <div className="item">
-        <img src='./avatar.png' alt="" />
-        <div className='texts'>
-          <span>Jane Doe</span>
-          <p>Hello</p>
-        </div>
-      </div>
+      ))}
       {addMode && <AddUser />}
     </div>
   )
