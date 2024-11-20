@@ -7,9 +7,13 @@ import { useEffect } from "react"
 import { auth } from './lib/firebase'
 import { onAuthStateChanged } from "firebase/auth"
 import { useAuthStore } from "./context/useAuthStore"
+import useChatStore from "./context/useChatStore"
 
 const App = () => {
   const { currentUser, isLoading, fetchUserInfo } = useAuthStore();
+  const chatId = useChatStore(state => state.chatId);
+
+  // console.log(chatId)
 
   useEffect(() => {
     const unSub = onAuthStateChanged(auth, (user) => {
@@ -20,7 +24,7 @@ const App = () => {
     }
   }, [fetchUserInfo])
 
-  console.log(currentUser)
+  // console.log(currentUser)
 
   if (isLoading) {
     return <div className="loading">Loading...</div>
@@ -31,8 +35,10 @@ const App = () => {
       {currentUser ? (
         <>
           <List />
-          <Chat />
-          <Detail />
+          {chatId && <>
+            <Chat />
+            <Detail />
+          </>}
         </>
       ) : (
         <Login />

@@ -1,7 +1,7 @@
 import { auth, db } from '../lib/firebase'
 import supabase from '../lib/supabase'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
-import { setDoc, doc, getDoc } from 'firebase/firestore';
+import { setDoc, doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { toast } from 'react-toastify';
 
 
@@ -16,7 +16,7 @@ class userService {
 
 
             const { data, error: uploadError } = await supabase.storage.from('avatars').upload(`uploads/${image.file.name}`, image.file);
-            
+
 
             if (uploadError) {
                 console.error('Error uploading file:', uploadError.message);
@@ -25,7 +25,7 @@ class userService {
             }
 
             const { data: publicURL, error: urlError } = supabase.storage.from('avatars').getPublicUrl(`uploads/${image.file.name}`)
-            
+
 
             if (urlError) {
                 console.error('Error uploading file:', urlError.message);
@@ -69,11 +69,28 @@ class userService {
         const docRef = doc(db, 'users', uid);
         const docSnap = await getDoc(docRef);
 
-        if(docSnap.exists()) {
+        if (docSnap.exists()) {
             console.log('Document data: ', docSnap.data());
             return docSnap.data();
         } else {
             console.log('No such document')
+        }
+    }
+
+    static async findUser(name) {
+        try {
+            const userRef = collection(db, 'users');
+            const q = query(userRef, where('username', '==', name));
+            console.log(q);
+
+            const querySnapShot = await getDocs(q);
+
+            if (!querySnapShot.empty) {
+                console.log(querySnapShot.docs[0].data())
+                return querySnapShot.docs[0].data();
+            }
+        } catch (error) {
+            console.log(error.message)
         }
     }
 }

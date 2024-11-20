@@ -58,6 +58,22 @@
         display: flex;
         flex-direction: column;
         gap: 20px;
+        
+        .noMessages {
+            flex: 2;
+            margin: 0 auto;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            .alert {
+                background-color: rgba(17, 25, 40, 0.856);
+                padding: 20px;
+                border-radius: 10px;
+                font-size: 13px;
+            }
+        }
 
         .message {
             max-width: 70%;
