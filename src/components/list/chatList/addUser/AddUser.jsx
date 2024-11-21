@@ -4,7 +4,7 @@ import userService from '../../../../services/userService';
 import { chatService } from '../../../../services/chatsService';
 import { useAuthStore } from '../../../../context/useAuthStore';
 
-const AddUser = () => {
+const AddUser = ({ show }) => {
     const [friend, setFriend] = useState(null);
     const currentUser = useAuthStore(state => state.currentUser)
     const handleSearch = async (e) => {
@@ -12,13 +12,14 @@ const AddUser = () => {
         const formData = new FormData(e.target);
         const userName = formData.get('username');
         const user = await userService.findUser(userName);
-        if(user) {
+        if (user) {
             setFriend(user);
         }
     }
 
     const handleAdd = async () => {
-        await chatService.createChat(friend.id, currentUser.id)
+        await chatService.createChat(friend.id, currentUser.id);
+        setTimeout(() => show(false), 2000)
     }
     return (
         <div className='addUser'>
@@ -31,9 +32,9 @@ const AddUser = () => {
                     <img src={friend.avatar} alt="" />
                     <span>{friend.username}</span>
                 </div>
-                    <button onClick={handleAdd}>
-                        Add User
-                    </button>
+                <button onClick={handleAdd}>
+                    Add User
+                </button>
             </div>}
         </div>
     )

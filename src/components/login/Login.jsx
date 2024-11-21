@@ -32,7 +32,7 @@ const Login = () => {
 
         const { email, password } = Object.fromEntries(formData);
 
-        await userService.createUser(email, password);
+        await userService.loginUser(email, password);
         setLoading(false)
     }
 

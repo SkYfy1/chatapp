@@ -23,7 +23,7 @@ export class chatService {
                     chatId: newChatRef.id,
                     lastMessage: '',
                     receiverId: uid,
-                    upadatedAt: Date.now(),
+                    updatedAt: Date.now(),
                 })
             });
 

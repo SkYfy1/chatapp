@@ -3,13 +3,14 @@ import List from "./components/list/List"
 import Detail from './components/detail/Detail'
 import Login from "./components/login/Login"
 import Notification from "./components/notification/Notification"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { auth } from './lib/firebase'
 import { onAuthStateChanged } from "firebase/auth"
 import { useAuthStore } from "./context/useAuthStore"
 import useChatStore from "./context/useChatStore"
 
 const App = () => {
+  const [showSettings, setShowSettings] = useState(false);
   const { currentUser, isLoading, fetchUserInfo } = useAuthStore();
   const chatId = useChatStore(state => state.chatId);
 
@@ -35,10 +36,8 @@ const App = () => {
       {currentUser ? (
         <>
           <List />
-          {chatId && <>
-            <Chat />
-            <Detail />
-          </>}
+          {chatId && <Chat show={showSettings} toggle={setShowSettings}/>}
+          {showSettings && <Detail />}
         </>
       ) : (
         <Login />

@@ -1,13 +1,16 @@
 import React from 'react'
 import './detail.css'
 import { auth } from '../../lib/firebase'
+import useChatStore from '../../context/useChatStore'
 
 const Detail = () => {
+  const friend = useChatStore(state => state.user);
+
   return (
     <div className='detail'>
       <div className="user">
-        <img src="./avatar.png" alt="" />
-        <h2>Jane Doe</h2>
+        <img src={friend.avatar || "./avatar.png"} alt="avatar" />
+        <h2>{friend.username}</h2>
         <p>Lorem ipsum suk iodj fovej kavler.</p>
       </div>
       <div className="info">

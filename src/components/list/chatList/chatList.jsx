@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import "./chatList.css"
 import AddUser from './addUser/addUser'
 import { useAuthStore } from '../../../context/useAuthStore';
-import { doc, getDoc, onSnapshot } from 'firebase/firestore';
+import { doc, getDoc, onSnapshot, updateDoc } from 'firebase/firestore';
 import { db } from '../../../lib/firebase';
 import useChatStore from '../../../context/useChatStore';
 
@@ -39,6 +39,38 @@ const ChatList = () => {
   }, [currentUser.id]);
 
   async function handleSelect(chat) {
+    // const userChatsRef = doc(db, 'userchats', currentUser.id);
+    // const userChatsSnapshot = await getDoc(userChatsRef);
+
+    // if (userChatsSnapshot.exists()) {
+    //   const userChatsData = userChatsSnapshot.data();
+
+    //   const chatIndex = userChatsData.chats.findIndex(c => c.chatId === chatId);
+
+    //   userChatsData.chats[chatIndex].isSeen = true
+
+    //   await updateDoc(userChatsRef, {
+    //     chats: userChatsData.chats
+    //   })
+    // }
+
+    const userChats = chats.map(item => {
+      const { user, ...rest } = item;
+      return rest;
+    })
+
+    console.log(userChats);
+
+    const chatIndex = userChats.findIndex(item => item.chatId === chat.chatId);
+
+    userChats[chatIndex].isSeen = true;
+
+    console.log(userChats.chats);
+
+    await updateDoc(doc(db, 'userchats', currentUser.id), {
+      chats: userChats
+    })
+
     await changeChat(chat.chatId, chat.user)
   }
 
@@ -59,7 +91,14 @@ const ChatList = () => {
         </div>
       </div>
       {chats?.map((chat) => (
-        <div className="item" key={chat.chatId} onClick={() => handleSelect(chat)}>
+        <div
+          className="item"
+          key={chat.chatId}
+          onClick={() => handleSelect(chat)}
+          style={{
+            backgroundColor: chat?.isSeen ? 'transparent' : '#5183fe'
+          }}
+        >
           <img src={chat.user.avatar || './avatar.png'} alt="" />
           <div className='texts'>
             <span>{chat.user.username}</span>
@@ -67,7 +106,7 @@ const ChatList = () => {
           </div>
         </div>
       ))}
-      {addMode && <AddUser />}
+      {addMode && <AddUser show={addMode} />}
     </div>
   )
 }

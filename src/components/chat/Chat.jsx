@@ -1,17 +1,25 @@
 import React, { useEffect, useRef, useState } from 'react'
 import './chat.css'
 import EmojiPicker from 'emoji-picker-react'
-import { doc, onSnapshot } from 'firebase/firestore';
+import { arrayUnion, doc, onSnapshot, updateDoc, getDoc } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import useChatStore from '../../context/useChatStore';
+import { useAuthStore } from '../../context/useAuthStore';
 
-const Chat = () => {
+const Chat = ({ show, toggle }) => {
   const [open, setOpen] = useState(false);
   const [chat, setChat] = useState(null)
   const [text, setText] = useState('');
   const ref = useRef(null);
   const chatId = useChatStore(state => state.chatId);
   const receiver = useChatStore(state => state.user);
+  const currentUser = useAuthStore(state => state.currentUser);
+
+  const onKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleSend()
+    }
+  }
 
   useEffect(() => {
     ref.current.scrollIntoView({
@@ -28,8 +36,53 @@ const Chat = () => {
     return () => unSub()
   }, [chatId])
 
+  useEffect(() => {
+    window.addEventListener('keydown', onKeyDown)
+
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [])
+
+  const handleSend = async () => {
+    if (text == '') return;
+    try {
+      await updateDoc(doc(db, 'chat', chatId), {
+        messages: arrayUnion({
+          senderId: currentUser.id,
+          text,
+          createdAt: new Date
+        })
+      });
+
+      const userIDs = [currentUser.id, receiver.id];
+
+      userIDs.forEach(async (id) => {
+        const userChatsRef = doc(db, 'userchats', id);
+        const userChatsSnapshot = await getDoc(userChatsRef);
+
+        if (userChatsSnapshot.exists()) {
+          const userChatsData = userChatsSnapshot.data();
+
+          const chatIndex = userChatsData.chats.findIndex(c => c.chatId === chatId);
+
+          userChatsData.chats[chatIndex].lastMessage = text;
+          userChatsData.chats[chatIndex].isSeen = (id === currentUser.id) ? true : false;
+          userChatsData.chats[chatIndex].updatedAt = Date.now();
+
+          await updateDoc(userChatsRef, {
+            chats: userChatsData.chats
+          })
+
+        }
+      });
+
+      setText('')
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   // useEffect(() => {
-  //   console.log("Chat id:", chatId)
+  //   console.log(new Date(chat?.messages[0].createdAt.seconds))
   // })
 
   return (
@@ -43,15 +96,15 @@ const Chat = () => {
           </div>
         </div>
         <div className="icons">
-          <img src="./phone.png" alt="" />
-          <img src="./video.png" alt="" />
-          <img src="./info.png" alt="" />
+          <img src="./phone.png" alt="call" />
+          <img src="./video.png" alt="video" />
+          <img src="./info.png" alt="settings" onClick={() => toggle(!show)} />
         </div>
       </div>
       <div className="center">
         {chat?.messages.length == 0 && <div className='noMessages'><div className='alert'>Write a message to start a chat!</div></div>}
         {chat?.messages?.map(message => (
-          <div className="message own" key={message?.createAt}>
+          <div className={message.senderId === currentUser.id ? "message own" : 'message'} key={message.text}>
             <div className="texts">
               {message.image && <img src={message.image} alt="Message Image" />}
               <p>
@@ -76,7 +129,7 @@ const Chat = () => {
             <EmojiPicker onEmojiClick={(e) => setText(prev => prev + e.emoji)} open={open} />
           </div>
         </div>
-        <button className='sendButton'>
+        <button className='sendButton' onClick={handleSend}>
           Send
         </button>
       </div>
