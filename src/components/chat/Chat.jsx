@@ -5,12 +5,35 @@ import { arrayUnion, doc, onSnapshot, updateDoc, getDoc } from 'firebase/firesto
 import { db } from '../../lib/firebase';
 import useChatStore from '../../context/useChatStore';
 import { useAuthStore } from '../../context/useAuthStore';
+import { imageService } from '../../services/imageService';
+import ModalWindow from '../ui/ModalWindow';
 
 const Chat = ({ show, toggle }) => {
   const [open, setOpen] = useState(false);
   const [chat, setChat] = useState(null)
   const [text, setText] = useState('');
+  const [image, setImage] = useState({
+    file: null,
+    url: null
+  });
+  const [showBig, setShowBig] = useState({
+    img: null,
+    state: false
+  })
+
+  const handleAddImage = (e) => {
+    if (e.target.files[0]) {
+      setImage({
+        file: e.target.files[0],
+        url: URL.createObjectURL(e.target.files[0])
+      })
+    }
+  };
+
+
   const ref = useRef(null);
+
+
   const chatId = useChatStore(state => state.chatId);
   const receiver = useChatStore(state => state.user);
   const currentUser = useAuthStore(state => state.currentUser);
@@ -44,12 +67,21 @@ const Chat = ({ show, toggle }) => {
 
   const handleSend = async () => {
     if (text == '') return;
+
+    let imgUrl = null;
+
     try {
+      if (image.file) {
+        imgUrl = await imageService.uploadImageAndGetLink(image, 'images');
+        console.log(imgUrl)
+      }
+
       await updateDoc(doc(db, 'chat', chatId), {
         messages: arrayUnion({
           senderId: currentUser.id,
           text,
-          createdAt: new Date
+          createdAt: new Date,
+          ...(imgUrl && { img: imgUrl }),
         })
       });
 
@@ -74,8 +106,11 @@ const Chat = ({ show, toggle }) => {
 
         }
       });
-
-      setText('')
+      setText('');
+      setImage({
+        file: null,
+        url: null,
+      })
     } catch (error) {
       console.log(error)
     }
@@ -84,6 +119,10 @@ const Chat = ({ show, toggle }) => {
   // useEffect(() => {
   //   console.log(new Date(chat?.messages[0].createdAt.seconds))
   // })
+
+  const showModal = (imgUrl) => {
+
+  }
 
   return (
     <div className='chat'>
@@ -103,25 +142,46 @@ const Chat = ({ show, toggle }) => {
       </div>
       <div className="center">
         {chat?.messages.length == 0 && <div className='noMessages'><div className='alert'>Write a message to start a chat!</div></div>}
-        {chat?.messages?.map(message => (
-          <div className={message.senderId === currentUser.id ? "message own" : 'message'} key={message.text}>
-            <div className="texts">
-              {message.image && <img src={message.image} alt="Message Image" />}
-              <p>
-                {message.text}
-              </p>
-              {/* <span>{message.createdAt}</span> */}
+        {chat?.messages?.map(message => {
+          const milliseconds = message?.createdAt.seconds * 1000 + Math.floor(message?.createdAt.nanoseconds / 1e6);
+          const date = new Date(milliseconds);
+          return (
+            <div className={message.senderId === currentUser.id ? "message own" : 'message'} key={message.text}>
+              <div className="texts">
+                {message.img && <img src={message.img} alt="Message Image" onClick={() => setShowBig({
+                  img: message.img,
+                  state: true
+                })} />}
+                <p>
+                  {message.text}
+                </p>
+                <span>{date.toLocaleString()}</span>
+              </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
         <div ref={ref}></div>
       </div>
       <div className="bottom">
         <div className="icons">
-          <img src="./img.png" alt="" />
+          <label htmlFor="img">
+            <img src="./img.png" alt="" />
+            <input type="file" id='img' style={{ display: 'none' }} onChange={handleAddImage} />
+          </label>
           <img src="./camera.png" alt="" />
           <img src="./video.png" alt="" />
         </div>
+        {image.file &&
+          <div className='image-preview'>
+            <svg onClick={() => setImage({
+              file: null,
+              url: null,
+            })} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="close-btn">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+            <p>Image:</p>
+            <img src={image.url} className='img' alt='image-preview' />
+          </div>}
         <input value={text} onChange={(e) => setText(prev => e.target.value)} type="text" placeholder='Type a message...' />
         <div className="emoji">
           <img src="./emoji.png" alt="" onClick={() => setOpen(prev => !prev)} />
@@ -133,6 +193,12 @@ const Chat = ({ show, toggle }) => {
           Send
         </button>
       </div>
+      {showBig.state && <ModalWindow onclick={() => setShowBig(prev => ({
+        img: null,
+        state: false
+      }))}>
+        <img src={showBig.img} alt="" onClick={(e) => e.stopPropagation()} />
+      </ModalWindow>}
     </div>
   )
 }
