@@ -1,16 +1,32 @@
 import React from 'react'
 import './detail.css'
-import { auth } from '../../lib/firebase'
+import { auth, db } from '../../lib/firebase'
 import useChatStore from '../../context/useChatStore'
+import { useAuthStore } from '../../context/useAuthStore'
+import { arrayRemove, arrayUnion, doc, updateDoc } from 'firebase/firestore'
 
 const Detail = () => {
   const friend = useChatStore(state => state.user);
+  const { changeBlock, isReceiverBlocked, isUserBlocked } = useChatStore();
+  const currentUser = useAuthStore(state => state.currentUser);
+
+  const handleBlock = async () => {
+    if (!friend) return;
+
+    const userDoc = doc(db, 'users', currentUser.id);
+
+    await updateDoc(userDoc, {
+      blocked: isReceiverBlocked ? arrayRemove(friend.id) : arrayUnion(friend.id)
+    })
+
+    changeBlock();
+  };
 
   return (
     <div className='detail'>
       <div className="user">
-        <img src={friend.avatar || "./avatar.png"} alt="avatar" />
-        <h2>{friend.username}</h2>
+        <img src={isUserBlocked ?  "./avatar.png" : friend?.avatar} alt="avatar" />
+        <h2>{friend?.username}</h2>
         <p>Lorem ipsum suk iodj fovej kavler.</p>
       </div>
       <div className="info">
@@ -75,7 +91,9 @@ const Detail = () => {
           </div>
         </div>
         <div className='btn-div'>
-          <button>Block User</button>
+          <button onClick={handleBlock}>{
+            isUserBlocked ? 'You are blocked' : isReceiverBlocked ? "User blocked" : "Block user"
+          }</button>
           <button className='logout' onClick={() => auth.signOut()}>Logout</button>
         </div>
       </div>

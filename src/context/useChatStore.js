@@ -8,18 +8,18 @@ const useChatStore = create((set) => ({
     isUserBlocked: false,
 
     changeChat: (chatId, user) => {
-        // const currentUser = useAuthStore.getState().currentUser;
-        // // CHECK IF CURRENT USER IS BLOCKED
+        const currentUser = useAuthStore.getState().currentUser;
+        // CHECK IF CURRENT USER IS BLOCKED
 
-        // if (user.blocked.includes(currentUser.id)) {
-        //     return set({ isUserBlocked: true, user: null })
-        // }
+        if (user.blocked.includes(currentUser.id)) {
+            return set({ isUserBlocked: true, user: null, chatId: chatId })
+        }
 
-        // // CHECK IF RECIEVER USER IS BLOCKED
+        // CHECK IF RECIEVER USER IS BLOCKED
 
-        // if (currentUser.blocked.includes(user.id)) {
-        //     return set({ isReceiverBlocked: true, user })
-        // }
+        if (currentUser.blocked.includes(user.id)) {
+            return set({ isReceiverBlocked: true, user, chatId: chatId })
+        }
         console.log('chat changing', chatId, user)
 
         set({ chatId: chatId, user: user })

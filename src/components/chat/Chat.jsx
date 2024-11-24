@@ -19,7 +19,9 @@ const Chat = ({ show, toggle }) => {
   const [showBig, setShowBig] = useState({
     img: null,
     state: false
-  })
+  });
+
+  const { isReceiverBlocked, isUserBlocked } = useChatStore();
 
   const handleAddImage = (e) => {
     if (e.target.files[0]) {
@@ -128,9 +130,9 @@ const Chat = ({ show, toggle }) => {
     <div className='chat'>
       <div className="top">
         <div className="user">
-          <img src={receiver.avatar || "./avatar.png"} alt="" />
+          <img src={receiver?.avatar || "./avatar.png"} alt="" />
           <div className="texts">
-            <span>{receiver.username}</span>
+            <span>{receiver?.username}</span>
             <p>Lorem Ipsum adalah text contoh digunakan didalam industri pencetakan dan typesetting.</p>
           </div>
         </div>
@@ -146,7 +148,7 @@ const Chat = ({ show, toggle }) => {
           const milliseconds = message?.createdAt.seconds * 1000 + Math.floor(message?.createdAt.nanoseconds / 1e6);
           const date = new Date(milliseconds);
           return (
-            <div className={message.senderId === currentUser.id ? "message own" : 'message'} key={message.text}>
+            <div className={message.senderId === currentUser.id ? "message own" : 'message'} key={message.createdAt}>
               <div className="texts">
                 {message.img && <img src={message.img} alt="Message Image" onClick={() => setShowBig({
                   img: message.img,
@@ -182,14 +184,14 @@ const Chat = ({ show, toggle }) => {
             <p>Image:</p>
             <img src={image.url} className='img' alt='image-preview' />
           </div>}
-        <input value={text} onChange={(e) => setText(prev => e.target.value)} type="text" placeholder='Type a message...' />
+        <input disabled={isUserBlocked || isReceiverBlocked} value={text} onChange={(e) => setText(prev => e.target.value)} type="text" placeholder={isUserBlocked || isReceiverBlocked ? 'You can not send a massage' : 'Type a message...'} />
         <div className="emoji">
           <img src="./emoji.png" alt="" onClick={() => setOpen(prev => !prev)} />
           <div className="picker">
             <EmojiPicker onEmojiClick={(e) => setText(prev => prev + e.emoji)} open={open} />
           </div>
         </div>
-        <button className='sendButton' onClick={handleSend}>
+        <button disabled={isUserBlocked || isReceiverBlocked} className='sendButton' onClick={handleSend}>
           Send
         </button>
       </div>
