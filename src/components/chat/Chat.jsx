@@ -7,10 +7,11 @@ import useChatStore from '../../context/useChatStore';
 import { useAuthStore } from '../../context/useAuthStore';
 import { imageService } from '../../services/imageService';
 import ModalWindow from '../ui/ModalWindow';
+import { useInView } from 'react-intersection-observer';
 
 const Chat = ({ show, toggle }) => {
   const [open, setOpen] = useState(false);
-  const [chat, setChat] = useState(null)
+  // const [chat, setChat] = useState(null)
   const [text, setText] = useState('');
   const [image, setImage] = useState({
     file: null,
@@ -21,8 +22,19 @@ const Chat = ({ show, toggle }) => {
     state: false
   });
 
-  const { isReceiverBlocked, isUserBlocked } = useChatStore();
+  const ref = useRef(null);
+  const reference = useRef();
 
+  const chatId = useChatStore(state => state.chatId);
+  const receiver = useChatStore(state => state.user);
+  const currentUser = useAuthStore(state => state.currentUser);
+  const { isReceiverBlocked, isUserBlocked, updateChat, chat } = useChatStore();
+
+
+  const { ref: r, inView } = useInView({
+    threshold: 0.5
+  });
+  
   const handleAddImage = (e) => {
     if (e.target.files[0]) {
       setImage({
@@ -32,14 +44,6 @@ const Chat = ({ show, toggle }) => {
     }
   };
 
-
-  const ref = useRef(null);
-
-
-  const chatId = useChatStore(state => state.chatId);
-  const receiver = useChatStore(state => state.user);
-  const currentUser = useAuthStore(state => state.currentUser);
-
   const onKeyDown = (e) => {
     if (e.key === 'Enter') {
       handleSend()
@@ -47,15 +51,18 @@ const Chat = ({ show, toggle }) => {
   }
 
   useEffect(() => {
-    ref.current.scrollIntoView({
+    setTimeout(ref.current.scrollIntoView({
       behavior: 'smooth'
-    })
+    }), 500)
+
+    console.log(ref.current)
   }, [])
 
   useEffect(() => {
     const unSub = onSnapshot(doc(db, 'chat', chatId), (res) => {
       // console.log('Response', res.data())
-      setChat(res.data())
+      // setChat(res.data())
+      updateChat(res.data())
     })
 
     return () => unSub()
@@ -125,6 +132,7 @@ const Chat = ({ show, toggle }) => {
   const showModal = (imgUrl) => {
 
   }
+  
 
   return (
     <div className='chat'>
@@ -142,7 +150,13 @@ const Chat = ({ show, toggle }) => {
           <img src="./info.png" alt="settings" onClick={() => toggle(!show)} />
         </div>
       </div>
-      <div className="center">
+      <div ref={reference} className="center">
+        <div className='inview' ref={r}></div>
+        {(inView && reference.current.scrollHeight > 900) && <svg onClick={() => ref.current.scrollIntoView({
+          behavior: 'smooth'
+        })} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={show ? "arrowWithDetails" : "arrow"}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="m9 12.75 3 3m0 0 3-3m-3 3v-7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+        </svg>}
         {chat?.messages.length == 0 && <div className='noMessages'><div className='alert'>Write a message to start a chat!</div></div>}
         {chat?.messages?.map(message => {
           const milliseconds = message?.createdAt.seconds * 1000 + Math.floor(message?.createdAt.nanoseconds / 1e6);

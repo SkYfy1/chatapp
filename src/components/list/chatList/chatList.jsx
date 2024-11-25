@@ -17,7 +17,7 @@ const ChatList = () => {
   useEffect(() => {
     const unSub = onSnapshot(doc(db, 'userchats', currentUser.id), async (res) => {
       const items = res.data().chats;
-      console.log(res.data())
+      // console.log(res.data())
 
       const promises = items.map(async (item) => {
         const userDocRef = doc(db, 'users', item.receiverId);
@@ -31,7 +31,7 @@ const ChatList = () => {
 
       const chatData = await Promise.all(promises);
 
-      console.log(chatData)
+      // console.log(chatData)
 
       setChats(chatData.sort((a, b) => b.updatedAt - a.updatedAt));
     })
@@ -59,13 +59,13 @@ const ChatList = () => {
       return rest;
     })
 
-    console.log(userChats);
+    // console.log(userChats);
 
     const chatIndex = userChats.findIndex(item => item.chatId === chat.chatId);
 
     userChats[chatIndex].isSeen = true;
 
-    console.log(userChats.chats);
+    // console.log(userChats[0]);
 
     await updateDoc(doc(db, 'userchats', currentUser.id), {
       chats: userChats

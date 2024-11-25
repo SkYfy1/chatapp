@@ -1,7 +1,7 @@
 import { auth, db } from '../lib/firebase'
 import supabase from '../lib/supabase'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
-import { setDoc, doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
+import { setDoc, doc, getDoc, collection, query, where, getDocs, arrayUnion, arrayRemove, updateDoc } from 'firebase/firestore';
 import { toast } from 'react-toastify';
 
 
@@ -91,6 +91,18 @@ class userService {
             }
         } catch (error) {
             console.log(error.message)
+        }
+    }
+
+    static async blockUser(isBlocked, uid, fid) {
+        try {
+            const userDoc = doc(db, 'users', uid);
+
+            await updateDoc(userDoc, {
+                blocked: isBlocked ? arrayRemove(fid) : arrayUnion(fid)
+            })
+        } catch (error) {
+            console.log(error)
         }
     }
 }

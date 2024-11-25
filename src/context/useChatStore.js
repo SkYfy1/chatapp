@@ -3,6 +3,7 @@ import { useAuthStore } from "./useAuthStore";
 
 const useChatStore = create((set) => ({
     chatId: null,
+    chat: null,
     user: null,
     isReceiverBlocked: false,
     isUserBlocked: false,
@@ -23,6 +24,10 @@ const useChatStore = create((set) => ({
         console.log('chat changing', chatId, user)
 
         set({ chatId: chatId, user: user })
+    },
+
+    updateChat: (data) => {
+        set({ chat: data})
     },
 
     changeBlock: () => {
