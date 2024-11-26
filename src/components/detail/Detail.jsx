@@ -4,6 +4,7 @@ import { auth, db } from '../../lib/firebase'
 import useChatStore from '../../context/useChatStore'
 import { useAuthStore } from '../../context/useAuthStore'
 import userService from '../../services/userService'
+import ImageDownload from '../download/ImageDownload'
 
 const Detail = () => {
   const friend = useChatStore(state => state.user);
@@ -11,7 +12,8 @@ const Detail = () => {
   const [show, setShow] = useState({
     shared: false,
     settings: false,
-    privacy: false
+    privacy: false,
+    files: false
   })
   const currentUser = useAuthStore(state => state.currentUser);
   const ref = useRef();
@@ -29,26 +31,27 @@ const Detail = () => {
     changeBlock();
   };
 
-  const images = chat.messages.filter(mes => mes.hasOwnProperty('img')).map(mes => mes.img)
+  const images = chat.messages.filter(mes => mes.hasOwnProperty('img')).map(mes => mes.img);
+  const files = chat.messages.filter(mes => mes.hasOwnProperty('file')).map(mes => mes.file);
 
-  const handleDownload = async (lin) => {
-    try {
-      const response = await fetch(lin);
-      if (!response.ok) throw new Error("Ошибка загрузки файла");
+  // const handleDownload = async (lin) => {
+  //   try {
+  //     const response = await fetch(lin);
+  //     if (!response.ok) throw new Error("Ошибка загрузки файла");
 
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
+  //     const blob = await response.blob();
+  //     const url = URL.createObjectURL(blob);
 
-      const link = ref.current;
-      link.href = url;
-      link.download = "11-2.jpg"; // Имя файла при скачивании
-      link.click();
+  //     const link = ref.current;
+  //     link.href = url;
+  //     link.download = "11-2.jpg"; // Имя файла при скачивании
+  //     link.click();
 
-      URL.revokeObjectURL(url); // Освобождаем память
-    } catch (error) {
-      console.error("Ошибка при скачивании файла:", error);
-    }
-  }
+  //     URL.revokeObjectURL(url); // Освобождаем память
+  //   } catch (error) {
+  //     console.error("Ошибка при скачивании файла:", error);
+  //   }
+  // }
 
   return (
     <div className='detail'>
@@ -83,15 +86,16 @@ const Detail = () => {
           </div>
           {show.shared && <div className="photos">
             {images.map((el) => (
-              <div className="photoItem" key={el}>
-                <div className="photoDetail">
-                  <img src={el} alt="" />
-                  <span>asdadjhkasjkd.png</span>
-                </div>
-                <a ref={ref}>
-                  <img onClick={() => handleDownload(el)} className='download' src="./download.png" alt="Download icon" />
-                </a>
-              </div>
+              // <div className="photoItem" key={el}>
+              //   <div className="photoDetail">
+              //     <img src={el} alt="" />
+              //     <span>asdadjhkasjkd.png</span>
+              //   </div>
+              //   <a ref={ref}>
+              //     <img onClick={() => handleDownload(el)} className='download' src="./download.png" alt="Download icon" />
+              //   </a>
+              // </div>
+              <ImageDownload image={el} key={el} />
             )
             )}
           </div>}
@@ -99,8 +103,14 @@ const Detail = () => {
         <div className="option">
           <div className="title">
             <span>Shared Files</span>
-            <img src="./arrowUp.png" alt="" />
+            <img onClick={() => setShow(state => ({ ...state, files: !state.files }))} src={show.files ? "./arrowDown.png" : "./arrowUp.png"} alt="" />
           </div>
+          {show.files &&
+            <div className='file-list'>
+              {files.map((file) => (
+                <div className='file-list-elem' key={file.name}>{file.name}</div>
+              ))}
+            </div>}
         </div>
         <div className='btn-div'>
           <button onClick={handleBlock}>{

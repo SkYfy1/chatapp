@@ -47,6 +47,17 @@
                 }
             }
 
+            .file-list {
+                display: flex;
+                margin-top: 10px;
+                flex-direction: column;
+                gap: 5px;
+
+                .file-list-elem {
+                   
+                }
+            }
+
             .photos {
                 display: flex;
                 flex-direction: column;

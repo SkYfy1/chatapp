@@ -5,9 +5,10 @@ import { arrayUnion, doc, onSnapshot, updateDoc, getDoc } from 'firebase/firesto
 import { db } from '../../lib/firebase';
 import useChatStore from '../../context/useChatStore';
 import { useAuthStore } from '../../context/useAuthStore';
-import { imageService } from '../../services/imageService';
+import { fileService } from '../../services/fileService';
 import ModalWindow from '../ui/ModalWindow';
 import { useInView } from 'react-intersection-observer';
+import FileDownload from '../download/FileDownload';
 
 const Chat = ({ show, toggle }) => {
   const [open, setOpen] = useState(false);
@@ -21,6 +22,7 @@ const Chat = ({ show, toggle }) => {
     img: null,
     state: false
   });
+  const [file, setFile] = useState(null)
 
   const ref = useRef(null);
   const reference = useRef();
@@ -34,13 +36,19 @@ const Chat = ({ show, toggle }) => {
   const { ref: r, inView } = useInView({
     threshold: 0.5
   });
-  
+
   const handleAddImage = (e) => {
     if (e.target.files[0]) {
       setImage({
         file: e.target.files[0],
         url: URL.createObjectURL(e.target.files[0])
       })
+    }
+  };
+
+  const handleAddFile = (e) => {
+    if (e.target.files[0]) {
+      setFile(e.target.files[0]);
     }
   };
 
@@ -78,11 +86,17 @@ const Chat = ({ show, toggle }) => {
     if (text == '') return;
 
     let imgUrl = null;
+    let fileUrl = null;
 
     try {
       if (image.file) {
-        imgUrl = await imageService.uploadImageAndGetLink(image, 'images');
-        console.log(imgUrl)
+        imgUrl = await fileService.uploadFileAndGetLink(image.file, 'images');
+        // console.log(imgUrl)
+      }
+
+      if (file) {
+        fileUrl = await fileService.uploadFileAndGetLink(file, 'files');
+        console.log(fileUrl)
       }
 
       await updateDoc(doc(db, 'chat', chatId), {
@@ -91,6 +105,7 @@ const Chat = ({ show, toggle }) => {
           text,
           createdAt: new Date,
           ...(imgUrl && { img: imgUrl }),
+          ...(fileUrl && { file: fileUrl }),
         })
       });
 
@@ -119,7 +134,8 @@ const Chat = ({ show, toggle }) => {
       setImage({
         file: null,
         url: null,
-      })
+      });
+      setFile(null)
     } catch (error) {
       console.log(error)
     }
@@ -132,7 +148,7 @@ const Chat = ({ show, toggle }) => {
   const showModal = (imgUrl) => {
 
   }
-  
+
 
   return (
     <div className='chat'>
@@ -158,19 +174,27 @@ const Chat = ({ show, toggle }) => {
           <path strokeLinecap="round" strokeLinejoin="round" d="m9 12.75 3 3m0 0 3-3m-3 3v-7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
         </svg>}
         {chat?.messages.length == 0 && <div className='noMessages'><div className='alert'>Write a message to start a chat!</div></div>}
+        {/* Message */}
         {chat?.messages?.map(message => {
           const milliseconds = message?.createdAt.seconds * 1000 + Math.floor(message?.createdAt.nanoseconds / 1e6);
           const date = new Date(milliseconds);
           return (
             <div className={message.senderId === currentUser.id ? "message own" : 'message'} key={message.createdAt}>
               <div className="texts">
+                {/* Image */}
                 {message.img && <img src={message.img} alt="Message Image" onClick={() => setShowBig({
                   img: message.img,
                   state: true
                 })} />}
+                {/* Text */}
                 <p>
                   {message.text}
                 </p>
+                {/* File */}
+                {message.file &&
+                  <div className={message.senderId === currentUser.id ? 'message-file own' : 'message-file'}>
+                    <FileDownload file={message.file} />
+                    <div>{message.file.name}</div></div>}
                 <span>{date.toLocaleString()}</span>
               </div>
             </div>
@@ -182,7 +206,7 @@ const Chat = ({ show, toggle }) => {
         <div className="icons">
           <label htmlFor="img">
             <img src="./img.png" alt="" />
-            <input type="file" id='img' style={{ display: 'none' }} onChange={handleAddImage} />
+            <input disabled={isUserBlocked || isReceiverBlocked} type="file" id='img' style={{ display: 'none' }} onChange={handleAddImage} />
           </label>
           <img src="./camera.png" alt="" />
           <img src="./video.png" alt="" />
@@ -199,6 +223,12 @@ const Chat = ({ show, toggle }) => {
             <img src={image.url} className='img' alt='image-preview' />
           </div>}
         <input disabled={isUserBlocked || isReceiverBlocked} value={text} onChange={(e) => setText(prev => e.target.value)} type="text" placeholder={isUserBlocked || isReceiverBlocked ? 'You can not send a massage' : 'Type a message...'} />
+        <label htmlFor="file" className='label-file'>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="file">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
+          </svg>
+          <input disabled={isUserBlocked || isReceiverBlocked} type="file" id='file' onChange={handleAddFile} />
+        </label>
         <div className="emoji">
           <img src="./emoji.png" alt="" onClick={() => setOpen(prev => !prev)} />
           <div className="picker">
