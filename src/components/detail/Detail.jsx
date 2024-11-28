@@ -108,7 +108,8 @@ const Detail = () => {
           {show.files &&
             <div className='file-list'>
               {files.map((file) => (
-                <div className='file-list-elem' key={file.name}>{file.name}</div>
+                // <div className='file-list-elem' key={file.name}>{file.name}</div>
+                <a href={"#" + file.name} className='file-list-elem' key={file.name}>{file.name}</a>
               ))}
             </div>}
         </div>

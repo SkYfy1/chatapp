@@ -192,9 +192,10 @@ const Chat = ({ show, toggle }) => {
                 </p>
                 {/* File */}
                 {message.file &&
-                  <div className={message.senderId === currentUser.id ? 'message-file own' : 'message-file'}>
+                  <div id={message.file.name} className={message.senderId === currentUser.id ? 'message-file own' : 'message-file'}>
                     <FileDownload file={message.file} />
-                    <div>{message.file.name}</div></div>}
+                    <div>{message.file.name}</div>
+                  </div>}
                 <span>{date.toLocaleString()}</span>
               </div>
             </div>

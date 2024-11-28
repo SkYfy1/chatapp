@@ -61,6 +61,7 @@
         flex-direction: column;
         gap: 20px;
         position: relative;
+        scroll-behavior: smooth;
 
         .inview {
             position: absolute;
@@ -106,7 +107,7 @@
         }
 
         .message {
-            max-width: 70%;
+            max-width: fit-content;
             display: flex;
             gap: 20px;
 
@@ -130,11 +131,28 @@
                     padding: 10px;
                     border-radius: 5px;
                     background-color: rgba(17, 25, 40, 0.3);
+                    gap: 10px;
 
-                    svg {
+                    .svg-wrapper {
                         width: 50px;
                         height: 50px;
-                        color: white
+                        color: white;
+                        cursor: pointer;
+                        position: relative;
+                    }
+
+                    .svg-inner {
+                        width: 50px;
+                        height: 50px;
+                    }
+
+                    .svg-innerD {
+                        width: 15px;
+                        height: 15px;
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translateX(-50%) translateY(-40%);
                     }
 
                     &.own {

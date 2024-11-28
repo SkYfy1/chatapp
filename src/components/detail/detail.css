@@ -54,7 +54,12 @@
                 gap: 5px;
 
                 .file-list-elem {
-                   
+                    text-decoration: none;
+                }
+
+                a:visited {
+                    color: inherit;
+                    text-decoration: none;
                 }
             }
 
