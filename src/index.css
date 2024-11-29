@@ -12,14 +12,15 @@ body {
   align-items: center;
   justify-content: center;
   height: 100vh;
-  overflow: hidden;
+  width: 100%;
+  overflow: scroll;
   color: white;
 }
 
 .container {
   width: 80vw;
   height: 90vh;
-  background: rgba(14,25,40, 0.75);
+  background: rgba(14, 25, 40, 0.75);
   backdrop-filter: blur(19px) saturate(180%);
   border-radius: 15px;
   border: 1px solid rgba(255, 255, 255, 0.125);
@@ -33,3 +34,8 @@ body {
   border-radius: 10px;
   background-color: rgba(17, 25, 40, 0.9);
 }
+
+@media screen and (max-width: 632px) {
+ 
+}
+

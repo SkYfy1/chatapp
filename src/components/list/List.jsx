@@ -1,16 +1,15 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import './list.css'
 import UserInfo from './userInfo/UserInfo'
 import ChatList from './chatList/chatList'
 
 
-const List = () => {
+const List = ({ isMobile, toggle }) => {
   return (
-    <div className='list'>
+    <div className={'list'}>
       <UserInfo />
-      <ChatList />
+      <ChatList isMobile={isMobile} toggle={toggle}/>
     </div>
   )
 }
-
 export default List

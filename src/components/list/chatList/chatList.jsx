@@ -7,7 +7,7 @@ import { db } from '../../../lib/firebase';
 import useChatStore from '../../../context/useChatStore';
 
 
-const ChatList = () => {
+const ChatList = ({ isMobile, toggle }) => {
   const [addMode, setAddMode] = useState(false);
   const [chats, setChats] = useState();
 
@@ -71,7 +71,9 @@ const ChatList = () => {
       chats: userChats
     })
 
-    await changeChat(chat.chatId, chat.user)
+    await changeChat(chat.chatId, chat.user);
+
+    {isMobile && toggle(true);}
   }
 
   return (

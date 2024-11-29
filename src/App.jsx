@@ -13,6 +13,26 @@ const App = () => {
   const [showSettings, setShowSettings] = useState(false);
   const { currentUser, isLoading, fetchUserInfo } = useAuthStore();
   const chatId = useChatStore(state => state.chatId);
+  const [isMobile, setIsMobile] = useState(false);
+  const [toggle, setToggle] = useState(false);
+
+  // create an event listener
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 720) {
+        setIsMobile(true)
+      } else {
+        setIsMobile(false)
+      }
+    }
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+
+
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   // console.log(chatId)
 
@@ -35,8 +55,8 @@ const App = () => {
     <div className='container'>
       {currentUser ? (
         <>
-          <List />
-          {chatId && <Chat show={showSettings} toggle={setShowSettings}/>}
+          {!toggle && <List isMobile={isMobile} toggle={setToggle} chatId={chatId}/>}
+          {chatId && <Chat show={showSettings} isMobile={isMobile} showChats={setToggle} toggle={setShowSettings} />}
           {showSettings && <Detail />}
         </>
       ) : (

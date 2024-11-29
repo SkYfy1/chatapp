@@ -10,7 +10,7 @@ import ModalWindow from '../ui/ModalWindow';
 import { useInView } from 'react-intersection-observer';
 import FileDownload from '../download/FileDownload';
 
-const Chat = ({ show, toggle }) => {
+const Chat = ({ show, toggle, isMobile, showChats }) => {
   const [open, setOpen] = useState(false);
   // const [chat, setChat] = useState(null)
   const [text, setText] = useState('');
@@ -153,6 +153,11 @@ const Chat = ({ show, toggle }) => {
   return (
     <div className='chat'>
       <div className="top">
+        {isMobile && <div className='burger'>
+          <div style={{ width: '30px', borderBottom: '1px solid white', marginBottom: '5px' }}></div>
+          <div style={{ width: '30px', borderBottom: '1px solid white', marginBottom: '5px' }}></div>
+          <div style={{ width: '30px', borderBottom: '1px solid white', marginBottom: '5px' }}></div>
+        </div>}
         <div className="user">
           <img src={receiver?.avatar || "./avatar.png"} alt="" />
           <div className="texts">
@@ -194,7 +199,7 @@ const Chat = ({ show, toggle }) => {
                 {message.file &&
                   <div id={message.file.name} className={message.senderId === currentUser.id ? 'message-file own' : 'message-file'}>
                     <FileDownload file={message.file} />
-                    <div>{message.file.name}</div>
+                    <span>{message.file.name}</span>
                   </div>}
                 <span>{date.toLocaleString()}</span>
               </div>
