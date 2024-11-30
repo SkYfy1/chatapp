@@ -10,7 +10,7 @@ import ModalWindow from '../ui/ModalWindow';
 import { useInView } from 'react-intersection-observer';
 import FileDownload from '../download/FileDownload';
 
-const Chat = ({ show, toggle, isMobile, showChats }) => {
+const Chat = ({ showDetails, setShowDetails, isMobile, showChats }) => {
   const [open, setOpen] = useState(false);
   // const [chat, setChat] = useState(null)
   const [text, setText] = useState('');
@@ -149,33 +149,34 @@ const Chat = ({ show, toggle, isMobile, showChats }) => {
 
   }
 
+  if(!chatId) {
+    return <div className="chat"></div>
+  }
+
 
   return (
-    <div className='chat'>
+    <div className={showDetails ? 'chat mobile' :'chat'}>
       <div className="top">
-        {isMobile && <div className='burger'>
-          <div style={{ width: '30px', borderBottom: '1px solid white', marginBottom: '5px' }}></div>
-          <div style={{ width: '30px', borderBottom: '1px solid white', marginBottom: '5px' }}></div>
-          <div style={{ width: '30px', borderBottom: '1px solid white', marginBottom: '5px' }}></div>
-        </div>}
-        <div className="user">
+        <div className="user" onClick={() => setShowDetails(!showDetails)} style={isMobile && {
+          marginLeft: 60
+        }}>
           <img src={receiver?.avatar || "./avatar.png"} alt="" />
           <div className="texts">
             <span>{receiver?.username}</span>
             <p>Lorem Ipsum adalah text contoh digunakan didalam industri pencetakan dan typesetting.</p>
           </div>
         </div>
-        <div className="icons">
+        {!isMobile && <div className="icons">
           <img src="./phone.png" alt="call" />
           <img src="./video.png" alt="video" />
           <img src="./info.png" alt="settings" onClick={() => toggle(!show)} />
-        </div>
+        </div>}
       </div>
       <div ref={reference} className="center">
         <div className='inview' ref={r}></div>
         {(inView && reference.current.scrollHeight > 900) && <svg onClick={() => ref.current.scrollIntoView({
           behavior: 'smooth'
-        })} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={show ? "arrowWithDetails" : "arrow"}>
+        })} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={showDetails ? "arrowWithDetails" : "arrow"}>
           <path strokeLinecap="round" strokeLinejoin="round" d="m9 12.75 3 3m0 0 3-3m-3 3v-7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
         </svg>}
         {chat?.messages.length == 0 && <div className='noMessages'><div className='alert'>Write a message to start a chat!</div></div>}
@@ -214,8 +215,14 @@ const Chat = ({ show, toggle, isMobile, showChats }) => {
             <img src="./img.png" alt="" />
             <input disabled={isUserBlocked || isReceiverBlocked} type="file" id='img' style={{ display: 'none' }} onChange={handleAddImage} />
           </label>
-          <img src="./camera.png" alt="" />
-          <img src="./video.png" alt="" />
+          <label htmlFor="img">
+            <img src="./camera.png" alt="" />
+            <input disabled={isUserBlocked || isReceiverBlocked} type="file" id='img' style={{ display: 'none' }} onChange={handleAddImage} />
+          </label>
+          <label htmlFor="img">
+            <img src="./video.png" alt="" />
+            <input disabled={isUserBlocked || isReceiverBlocked} type="file" id='img' style={{ display: 'none' }} onChange={handleAddImage} />
+          </label>
         </div>
         {image.file &&
           <div className='image-preview'>
@@ -249,7 +256,9 @@ const Chat = ({ show, toggle, isMobile, showChats }) => {
         img: null,
         state: false
       }))}>
-        <img src={showBig.img} alt="" onClick={(e) => e.stopPropagation()} />
+        <img style={{
+          height: '80%', width: '80%'
+        }} src={showBig.img} alt="" onClick={(e) => e.stopPropagation()} />
       </ModalWindow>}
     </div>
   )

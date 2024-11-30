@@ -11,11 +11,20 @@
         align-items: center;
         gap: 15px;
         border-bottom: 1px solid #dddddd35;
+        position: relative;
 
         img {
             width: 100px;
             height: 100px;
             object-fit: cover;
+        }
+
+        .arrowBack {
+            width: 30px;
+            height: 30px;
+            position: absolute;
+            top: 40px;
+            left: 15px;
         }
     }
 

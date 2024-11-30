@@ -7,3 +7,17 @@
 .none {
     display: none;
 }
+
+.burger {
+    position: absolute;
+    top: 45px;
+    left: 25px;
+    cursor: pointer;
+    z-index: 2;
+
+    .burger-line {
+        width: 30px; 
+        border-bottom: 2px solid white; 
+        margin-bottom: 5px
+    }
+}

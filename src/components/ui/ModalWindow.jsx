@@ -16,7 +16,9 @@ const ModalWindow = ({ children, onclick }) => {
                 justifyContent: 'center',
                 alignItems: 'center',
             }}>
-                <div className='modal-block'>{children}</div>
+                <div className='modal-block' style={{
+                    textAlign: 'center'
+                }}>{children}</div>
             </div>
         </>
     )

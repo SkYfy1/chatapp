@@ -56,8 +56,8 @@ const App = () => {
       {currentUser ? (
         <>
           {!toggle && <List isMobile={isMobile} toggle={setToggle} chatId={chatId}/>}
-          {chatId && <Chat show={showSettings} isMobile={isMobile} showChats={setToggle} toggle={setShowSettings} />}
-          {showSettings && <Detail />}
+          {chatId && <Chat showDetails={showSettings} isMobile={isMobile} showChats={setToggle} setShowDetails={setShowSettings} />}
+          {showSettings && <Detail setShowDetails={setShowSettings} isMobile={isMobile} />}
         </>
       ) : (
         <Login />

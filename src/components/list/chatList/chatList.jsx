@@ -73,7 +73,7 @@ const ChatList = ({ isMobile, toggle }) => {
 
     await changeChat(chat.chatId, chat.user);
 
-    {isMobile && toggle(true);}
+    {isMobile && toggle();}
   }
 
   return (

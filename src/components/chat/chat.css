@@ -300,8 +300,12 @@
 }
 
 @media (min-width: 300px) and (max-width: 1000px) {
+    .mobile {
+        width: 20%;
+        overflow: hidden;
+    }
+
     .chat {
-        /* flex: 2; */
         border-left: 1px solid #dddddd35;
         border-right: 1px solid #dddddd35;
         height: 100%;
