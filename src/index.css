@@ -13,9 +13,10 @@ body {
   justify-content: center;
   height: 100vh;
   width: 100%;
-  overflow: scroll;
+  overflow: hidden;
   color: white;
 }
+
 
 .container {
   width: 80vw;

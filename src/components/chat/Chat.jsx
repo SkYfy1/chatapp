@@ -157,8 +157,8 @@ const Chat = ({ showDetails, setShowDetails, isMobile, showChats }) => {
   return (
     <div className={showDetails ? 'chat mobile' :'chat'}>
       <div className="top">
-        <div className="user" onClick={() => setShowDetails(!showDetails)} style={isMobile && {
-          marginLeft: 60
+        <div className="user" onClick={() => setShowDetails(!showDetails)} style={{
+          marginLeft: isMobile && 60
         }}>
           <img src={receiver?.avatar || "./avatar.png"} alt="" />
           <div className="texts">
@@ -169,7 +169,7 @@ const Chat = ({ showDetails, setShowDetails, isMobile, showChats }) => {
         {!isMobile && <div className="icons">
           <img src="./phone.png" alt="call" />
           <img src="./video.png" alt="video" />
-          <img src="./info.png" alt="settings" onClick={() => toggle(!show)} />
+          <img src="./info.png" alt="settings" onClick={() => setShowDetails(!showDetails)} />
         </div>}
       </div>
       <div ref={reference} className="center">

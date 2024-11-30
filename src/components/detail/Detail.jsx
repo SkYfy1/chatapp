@@ -56,10 +56,9 @@ const Detail = ({ setShowDetails, isMobile }) => {
   return (
     <div className='detail'>
       <div className="user">
-        {isMobile && <svg onClick={() => setShowDetails(false)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="arrowBack">
+        <svg onClick={() => setShowDetails(false)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="arrowBack">
           <path strokeLinecap="round" strokeLinejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
         </svg>
-        }
         <img src={isUserBlocked ? "./avatar.png" : friend?.avatar} alt="avatar" />
         <h2>{friend?.username}</h2>
         <p>Lorem ipsum suk iodj fovej kavler.</p>
