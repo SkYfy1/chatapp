@@ -392,7 +392,7 @@
                 position: fixed;
                 width: 40px;
                 height: 40px;
-                bottom: 120px;
+                bottom: 65px;
                 right: 1%;
             }
 
@@ -400,8 +400,9 @@
                 position: fixed;
                 width: 40px;
                 height: 40px;
-                bottom: 120px;
-                right: 26%;
+                bottom: 65px;
+                left: 0;
+                display: none;
             }
 
             .noMessages {

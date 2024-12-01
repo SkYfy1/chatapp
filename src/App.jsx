@@ -55,7 +55,7 @@ const App = () => {
     <div className='container'>
       {currentUser ? (
         <>
-          {!toggle && <List isMobile={isMobile} toggle={setToggle} chatId={chatId}/>}
+          {!toggle && <List isMobile={isMobile} toggle={setToggle} chatId={chatId} showDetails={showSettings}/>}
           {chatId && <Chat showDetails={showSettings} isMobile={isMobile} showChats={setToggle} setShowDetails={setShowSettings} />}
           {showSettings && <Detail setShowDetails={setShowSettings} isMobile={isMobile} />}
         </>

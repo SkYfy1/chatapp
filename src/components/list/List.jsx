@@ -4,12 +4,12 @@ import UserInfo from './userInfo/UserInfo'
 import ChatList from './chatList/chatList'
 
 
-const List = ({ isMobile, toggle }) => {
+const List = ({ isMobile, toggle, showDetails }) => {
   const [showBurger, setShowBurger] = useState(false)
   if (isMobile) {
     return (
       showBurger ?
-        <div className='burger' onClick={() => setShowBurger(!showBurger)}>
+        <div className={showDetails || 'burger'} onClick={() => setShowBurger(!showBurger)}>
           <div className='burger-line'></div>
           <div className='burger-line'></div>
           <div className='burger-line'></div>
