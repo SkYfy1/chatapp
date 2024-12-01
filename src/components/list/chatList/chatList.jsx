@@ -10,9 +10,14 @@ import useChatStore from '../../../context/useChatStore';
 const ChatList = ({ isMobile, toggle }) => {
   const [addMode, setAddMode] = useState(false);
   const [chats, setChats] = useState();
+  const [filter, setFilter] = useState('')
 
   const currentUser = useAuthStore((state) => state.currentUser);
   const { changeChat } = useChatStore();
+
+  useEffect(() => {
+    console.log(filter)
+  }, [filter])
 
   useEffect(() => {
     const unSub = onSnapshot(doc(db, 'userchats', currentUser.id), async (res) => {
@@ -81,7 +86,7 @@ const ChatList = ({ isMobile, toggle }) => {
       <div className="search">
         <div className="searchBar">
           <img src="./search.png" alt="" />
-          <input type="text" placeholder='Search' />
+          <input type="text" placeholder='Search'  value={filter} onChange={(e) => setFilter(e.target.value)}/>
         </div>
         <img onClick={() => setAddMode(prev => !prev)} src={addMode ? './minus.png' : "./plus.png"} alt="" className='add' />
       </div>
@@ -92,7 +97,7 @@ const ChatList = ({ isMobile, toggle }) => {
           <p>Hello</p>
         </div>
       </div>
-      {chats?.map((chat) => (
+      {chats?.filter((el) => el.user.username.toLowerCase().startsWith(filter.toLowerCase())).map((chat) => (
         <div
           className="item"
           key={chat.chatId}
@@ -101,9 +106,11 @@ const ChatList = ({ isMobile, toggle }) => {
             backgroundColor: chat?.isSeen ? 'transparent' : '#5183fe'
           }}
         >
-          <img src={chat.user.avatar || './avatar.png'} alt="" />
+          <img src={chat.user.blocked.includes(currentUser.id) 
+          ? './avatar.png'
+          : chat.user.avatar || './avatar.png'} alt="" />
           <div className='texts'>
-            <span>{chat.user.username}</span>
+            <span>{chat.user.blocked.includes(currentUser.id) ? 'User' : chat.user.username}</span>
             <p>{chat.lastMessage}</p>
           </div>
         </div>

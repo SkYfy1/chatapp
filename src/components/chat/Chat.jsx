@@ -245,7 +245,7 @@ const Chat = ({ showDetails, setShowDetails, isMobile, showChats }) => {
         <div className="emoji">
           <img src="./emoji.png" alt="" onClick={() => setOpen(prev => !prev)} />
           <div className="picker">
-            <EmojiPicker onEmojiClick={(e) => setText(prev => prev + e.emoji)} open={open} />
+            <EmojiPicker onEmojiClick={(e) => setText(prev => prev + e.emoji)} open={open} theme='dark' width={isMobile ? 320 : 400}/>
           </div>
         </div>
         <button disabled={isUserBlocked || isReceiverBlocked} className='sendButton' onClick={handleSend}>
@@ -265,57 +265,3 @@ const Chat = ({ showDetails, setShowDetails, isMobile, showChats }) => {
 }
 
 export default Chat
-
-
-// <div className="message">
-//           <img src="./avatar.png" alt="" />
-//           <div className="texts">
-//             <p>
-//               Lorem Ipsum er rett og slett dummytekst fra og for trykkeindustrien. Lorem Ipsum har vært bransjens standard for dummytekst helt siden 1500-tallet, da en ukjent boktrykker stokket en mengde bokstaver for å lage et prøveeksemplar av en bok.
-//             </p>
-//             <span>1 min ago</span>
-//           </div>
-//         </div>
-//         <div className="message own">
-//           <div className="texts">
-//             <img src="https://png.pngtree.com/background/20230513/original/pngtree-the-forest-in-japan-has-red-foliage-with-stones-and-leaves-picture-image_2507712.jpg" alt="" />
-//             <p>
-//               Lorem Ipsum er rett og slett dummytekst fra og for trykkeindustrien. Lorem Ipsum har vært bransjens standard for dummytekst helt siden 1500-tallet, da en ukjent boktrykker stokket en mengde bokstaver for å lage et prøveeksemplar av en bok.
-//             </p>
-//             <span>1 min ago</span>
-//           </div>
-//         </div>
-//         <div className="message">
-//           <img src="./avatar.png" alt="" />
-//           <div className="texts">
-//             <p>
-//               Lorem Ipsum er rett og slett dummytekst fra og for trykkeindustrien. Lorem Ipsum har vært bransjens standard for dummytekst helt siden 1500-tallet, da en ukjent boktrykker stokket en mengde bokstaver for å lage et prøveeksemplar av en bok.
-//             </p>
-//             <span>1 min ago</span>
-//           </div>
-//         </div>
-//         <div className="message own">
-//           <div className="texts">
-//             <p>
-//               Lorem Ipsum er rett og slett dummytekst fra og for trykkeindustrien. Lorem Ipsum har vært bransjens standard for dummytekst helt siden 1500-tallet, da en ukjent boktrykker stokket en mengde bokstaver for å lage et prøveeksemplar av en bok.
-//             </p>
-//             <span>1 min ago</span>
-//           </div>
-//         </div>
-//         <div className="message own">
-//           <div className="texts">
-//             <p>
-//               Lorem Ipsum er rett og slett dummytekst fra og for trykkeindustrien. Lorem Ipsum har vært bransjens standard for dummytekst helt siden 1500-tallet, da en ukjent boktrykker stokket en mengde bokstaver for å lage et prøveeksemplar av en bok.
-//             </p>
-//             <span>1 min ago</span>
-//           </div>
-//         </div>
-//         <div className="message">
-//           <img src="./avatar.png" alt="" />
-//           <div className="texts">
-//             <p>
-//               Lorem Ipsum er rett og slett dummytekst fra og for trykkeindustrien. Lorem Ipsum har vært bransjens standard for dummytekst helt siden 1500-tallet, da en ukjent boktrykker stokket en mengde bokstaver for å lage et prøveeksemplar av en bok.
-//             </p>
-//             <span>1 min ago</span>
-//           </div>
-//         </div>

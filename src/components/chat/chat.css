@@ -292,7 +292,7 @@
                 .picker {
                     position: absolute;
                     bottom: 50px;
-                    left: 0px;
+                    right: -20px;
                 }
             }
         }
@@ -617,8 +617,8 @@
 
                 .picker {
                     position: absolute;
-                    bottom: 50px;
-                    left: 0px;
+                    bottom: 46px;
+                    right: -90px;
                 }
             }
         }
