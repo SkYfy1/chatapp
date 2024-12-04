@@ -8,13 +8,20 @@ import { auth } from './lib/firebase'
 import { onAuthStateChanged } from "firebase/auth"
 import { useAuthStore } from "./context/useAuthStore"
 import useChatStore from "./context/useChatStore"
+import UserSettings from "./components/settings/UserSettings"
 
 const App = () => {
+  const [showDetails, setShowDetails] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const { currentUser, isLoading, fetchUserInfo } = useAuthStore();
   const chatId = useChatStore(state => state.chatId);
   const [isMobile, setIsMobile] = useState(false);
   const [toggle, setToggle] = useState(false);
+
+  const changeSettingsState = () => {
+    setShowSettings(prev => !prev)
+    setToggle(prev => !prev)
+  }
 
   // create an event listener
   useEffect(() => {
@@ -55,9 +62,10 @@ const App = () => {
     <div className='container'>
       {currentUser ? (
         <>
-          {!toggle && <List isMobile={isMobile} toggle={setToggle} chatId={chatId} showDetails={showSettings}/>}
-          {chatId && <Chat showDetails={showSettings} isMobile={isMobile} showChats={setToggle} setShowDetails={setShowSettings} />}
-          {showSettings && <Detail setShowDetails={setShowSettings} isMobile={isMobile} />}
+          {!toggle && <List isMobile={isMobile} toggle={setToggle} chatId={chatId} showDetails={showDetails} openSettings={changeSettingsState}/>}
+          {showSettings && <UserSettings close={changeSettingsState}/>}
+          {chatId && <Chat showDetails={showDetails} isMobile={isMobile} showChats={setToggle} setShowDetails={setShowDetails} />}
+          {showDetails && <Detail setShowDetails={setShowDetails} isMobile={isMobile} />}
         </>
       ) : (
         <Login />

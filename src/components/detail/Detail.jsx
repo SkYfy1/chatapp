@@ -78,26 +78,11 @@ const Detail = ({ setShowDetails, isMobile }) => {
         </div>
         <div className="option">
           <div className="title">
-            <span>Chat Settings</span>
-            <img src="./arrowUp.png" alt="" />
-          </div>
-        </div>
-        <div className="option">
-          <div className="title">
             <span>Shared photos</span>
             <img onClick={() => setShow(state => ({ ...state, shared: !state.shared }))} src={show.shared ? "./arrowDown.png" : "./arrowUp.png"} alt="" />
           </div>
           {show.shared && <div className="photos">
             {images.map((el) => (
-              // <div className="photoItem" key={el}>
-              //   <div className="photoDetail">
-              //     <img src={el} alt="" />
-              //     <span>asdadjhkasjkd.png</span>
-              //   </div>
-              //   <a ref={ref}>
-              //     <img onClick={() => handleDownload(el)} className='download' src="./download.png" alt="Download icon" />
-              //   </a>
-              // </div>
               <ImageDownload image={el} key={el} />
             )
             )}
@@ -111,7 +96,6 @@ const Detail = ({ setShowDetails, isMobile }) => {
           {show.files &&
             <div className='file-list'>
               {files.map((file) => (
-                // <div className='file-list-elem' key={file.name}>{file.name}</div>
                 <a href={"#" + file.name} className='file-list-elem' key={file.name}>{file.name.length > 50 ? file.name.split('.')[0].slice(0, 15) + '.' + file.name.split('.')[1] : file.name }</a>
               ))}
             </div>}

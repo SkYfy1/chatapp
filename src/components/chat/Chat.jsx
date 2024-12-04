@@ -243,7 +243,7 @@ const Chat = ({ showDetails, setShowDetails, isMobile, showChats }) => {
           <input disabled={isUserBlocked || isReceiverBlocked} type="file" id='file' onChange={handleAddFile} />
         </label>
         <div className="emoji">
-          <img src="./emoji.png" alt="" onClick={() => setOpen(prev => !prev)} />
+          <img src="./emoji.png" alt="" onMouseEnter={() => setOpen(true)} onClick={() => setOpen(prev => !prev)} />
           <div className="picker">
             <EmojiPicker onEmojiClick={(e) => setText(prev => prev + e.emoji)} open={open} theme='dark' width={isMobile ? 320 : 400}/>
           </div>

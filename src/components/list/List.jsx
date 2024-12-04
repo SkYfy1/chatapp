@@ -4,7 +4,7 @@ import UserInfo from './userInfo/UserInfo'
 import ChatList from './chatList/chatList'
 
 
-const List = ({ isMobile, toggle, showDetails }) => {
+const List = ({ isMobile, toggle, showDetails, openSettings }) => {
   const [showBurger, setShowBurger] = useState(false)
   if (isMobile) {
     return (
@@ -21,7 +21,7 @@ const List = ({ isMobile, toggle, showDetails }) => {
   }
   return (
     <div className={'list'}>
-      <UserInfo />
+      <UserInfo openSettings={openSettings} />
       <ChatList isMobile={isMobile} toggle={toggle} />
     </div>
   )
