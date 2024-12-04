@@ -1,0 +1,153 @@
+.userForm {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 15px;
+    position: relative;
+
+    .top {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid #dddddd35;
+        padding: 10px;
+
+        .back {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+
+            h2 {
+                font-size: 28px;
+                font-weight: 100;
+            }
+
+            svg {
+                width: 50px;
+                height: 50px;
+            }
+        }
+    }
+
+    .imgChange {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+
+        .wrapper {
+            position: relative;
+
+            .background {
+                position: absolute;
+                border-radius: 50%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                top: -1px;
+                left: 0;
+                height: 98%;
+                width: 100%;
+                background-color: rgba(75, 93, 128, 0.747);
+                ;
+
+                svg {
+                    width: 70px;
+                    height: 70px;
+                    transition: all 0.25s ease-in;
+                }
+
+                svg:hover {
+                    transform: scale(1.2);
+                }
+            }
+
+            img {
+                width: 180px;
+            }
+        }
+    }
+
+    .form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px;
+
+        .formInput {
+            position: relative;
+            label {
+                position: absolute;
+                font-size: 14px;
+                top: 14px;
+                left: 10px;
+                transition: all .1s ease-in-out;
+            }
+
+            .isDirty {
+                transition: none;
+                position: absolute;
+                font-size: 11px;
+                top: -10px;
+                left: 14px;
+            }
+
+            input {
+                border: 1px solid #dddddd35;
+                border-radius: 8px;
+                padding: 10px;
+                outline: none;
+                background: transparent;
+                color: white;
+                width: 100%;
+                font-size: 16px;
+            }
+
+            input:hover {
+                border: 1px solid rgba(59, 85, 134, 0.856);
+            }
+
+            input:focus {
+                border: 2px solid rgba(59, 85, 134, 0.856);
+            }
+        }
+
+        .formInput:focus-within label:not(.isDirty) {
+            transform: translate(-10px, -22px) scale(0.8);
+        }
+    }
+
+    button {
+        position: absolute;
+        bottom: -80px;
+        right: 15px;
+        border-radius: 50%;
+        background-color: rgba(75, 93, 128, 0.493);
+        border: none;
+        outline: none;
+
+        width: 50px;
+        height: 50px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        transition: filter 0.15s ease-in;
+        transition: transform 0.3s ease;
+
+        svg {
+            height: 40px;
+            width: 40px;
+            color: white;
+        }
+
+        &:hover {
+            filter: contrast(1.5);
+        }
+    }
+
+    .showButton {
+        transform: translateY(-100px);
+    }
+}   
