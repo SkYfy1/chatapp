@@ -8,10 +8,10 @@
     /* top: 20px;
     left: 10px; */
     transform: translate(-9.8vw, -7.6vh);
-    color: black;
+    color: white;
     padding: 5px;
     font-size: 12px;
-    background-color: white;
+    background-color: rgba(17, 25, 40, 0.3);
     border-radius: 2px;
     text-align: center;
     z-index: 3;

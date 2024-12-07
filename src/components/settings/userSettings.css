@@ -97,6 +97,7 @@
             div {
                 display: flex;
                 gap: 25px;
+                p { cursor: pointer; }
 
                 svg {
                     width: 30px;

@@ -2,34 +2,38 @@ import React, { useEffect, useRef } from 'react'
 import './userForm.css'
 import { useForm, } from 'react-hook-form'
 import { useAuthStore } from '../../../context/useAuthStore'
+import userService from '../../../services/userService'
 
-const UserForm = () => {
+const UserForm = ({ headBack }) => {
     const userData = useAuthStore(state => state.currentUser);
     const {
         register,
         handleSubmit,
-        formState
+        formState,
     } = useForm({
         defaultValues: {
             username: userData.username,
-            phone: userData?.phone,
+            phone: userData?.phoneNumber,
             about: userData?.about
         }
     });
 
     const onSubmit = (data) => {
-        alert(JSON.stringify(data));
+        // alert(JSON.stringify(data));
+        userService.updateUserData(null, data.username, userData.id, data.phone, data.about);
+        headBack();
     };
 
     useEffect(() => {
         console.log(formState.defaultValues)
+        console.log(formState.errors)
     }, [formState])
 
     return (
         <div className='userForm'>
             <div className='top'>
                 <div className='back'>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                    <svg onClick={headBack} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M7.49 12 3.74 8.248m0 0 3.75-3.75m-3.75 3.75h16.5V19.5" />
                     </svg>
                     <h2>Change Profile</h2>
@@ -51,10 +55,14 @@ const UserForm = () => {
                     <input id='name' type="text" {...register('username')} />
                 </div>
                 <div className='formInput'>
-                    <label className={formState.dirtyFields.phone && 'isDirty'} htmlFor="phone">Phone (Necessarily)</label>
+                    <label className={(formState.dirtyFields.phone || formState.defaultValues.phone) && 'isDirty'} htmlFor="phone">Phone (Necessarily)</label>
                     <input id='phone' type="text" {...register('phone', {
-                        pattern: /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/
+                        pattern: {
+                            value: /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/,
+                            message: 'Not valid phone number'
+                        }
                     })} />
+                    {formState.errors.phone && <p>{formState.errors.phone.message}</p>}
                 </div>
                 <div className='formInput'>
                     <label className={(formState.dirtyFields.about || formState.defaultValues.about) && 'isDirty'} htmlFor="about">About (Unnecessarily)</label>

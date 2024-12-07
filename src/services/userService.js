@@ -105,6 +105,41 @@ class userService {
             console.log(error)
         }
     }
+
+    static async updateUserData(newImage = null, username = null, uid = null, phone = null, about = null) {
+        try {
+            // const { data, error: uploadError } = supabase.from('avatar').upload(`uploads/${newImage.file.name}`, newImage.file);
+
+            // if (uploadError) {
+            //     console.error('Error uploading file:', uploadError.message);
+            // } else {
+            //     console.log(data);
+            // }
+
+            const userRef = doc(db, 'users', uid);
+
+            const data = await getDoc(userRef);
+            // console.log(data.data());
+
+            // Checking existing name or not
+            const nameRef = collection(db, 'users');
+            const q = query(nameRef, where('username', '==', username));
+
+            const querySnapShot = await getDocs(q);
+
+            if (!querySnapShot.empty) {
+                throw new Error('Username is taken by another user')
+            }
+
+            await updateDoc(userRef, {
+                username,
+                phoneNumber: phone || 'No number',
+                about: about || 'Nothing...',
+            });
+        } catch (error) {
+            console.log(error)
+        }
+    }
 }
 
 export default userService;
