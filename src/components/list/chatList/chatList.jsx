@@ -1,16 +1,18 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import "./chatList.css"
 import AddUser from './addUser/addUser'
 import { useAuthStore } from '../../../context/useAuthStore';
 import { doc, getDoc, onSnapshot, updateDoc } from 'firebase/firestore';
 import { db } from '../../../lib/firebase';
 import useChatStore from '../../../context/useChatStore';
+import Tooltip from '../../ui/Tooltip';
 
 
 const ChatList = ({ isMobile, toggle }) => {
   const [addMode, setAddMode] = useState(false);
   const [chats, setChats] = useState();
-  const [filter, setFilter] = useState('')
+  const [filter, setFilter] = useState('');
+  const [pointer, setPointer] = useState({ pointerX: null, pointerY: null });
 
   const currentUser = useAuthStore((state) => state.currentUser);
   const { changeChat } = useChatStore();
@@ -18,6 +20,19 @@ const ChatList = ({ isMobile, toggle }) => {
   useEffect(() => {
     console.log(filter)
   }, [filter])
+
+  useEffect(() => {
+    const getPointer = (e) => {
+      setPointer({ pointerX: e.clientX, pointerY: e.clientY })
+      console.log({ pointerX: e.pageX, pointerY: e.pageY })
+    }
+
+    window.addEventListener('mousemove', getPointer)
+
+    return () => {
+      window.removeEventListener('mousemove', getPointer)
+    }
+  }, [])
 
   useEffect(() => {
     const unSub = onSnapshot(doc(db, 'userchats', currentUser.id), async (res) => {
@@ -78,7 +93,7 @@ const ChatList = ({ isMobile, toggle }) => {
 
     await changeChat(chat.chatId, chat.user);
 
-    {isMobile && toggle();}
+    { isMobile && toggle(); }
   }
 
   return (
@@ -86,34 +101,29 @@ const ChatList = ({ isMobile, toggle }) => {
       <div className="search">
         <div className="searchBar">
           <img src="./search.png" alt="" />
-          <input type="text" placeholder='Search'  value={filter} onChange={(e) => setFilter(e.target.value)}/>
+          <input type="text" placeholder='Search' value={filter} onChange={(e) => setFilter(e.target.value)} />
         </div>
         <img onClick={() => setAddMode(prev => !prev)} src={addMode ? './minus.png' : "./plus.png"} alt="" className='add' />
       </div>
-      <div className="item">
-        <img src='./avatar.png' alt="" />
-        <div className='texts'>
-          <span>Jane Doe</span>
-          <p>Hello</p>
-        </div>
-      </div>
       {chats?.filter((el) => el.user.username.toLowerCase().startsWith(filter.toLowerCase())).map((chat) => (
-        <div
-          className="item"
-          key={chat.chatId}
-          onClick={() => handleSelect(chat)}
-          style={{
-            backgroundColor: chat?.isSeen ? 'transparent' : '#5183fe'
-          }}
-        >
-          <img src={chat.user.blocked.includes(currentUser.id) 
-          ? './avatar.png'
-          : chat.user.avatar || './avatar.png'} alt="" />
-          <div className='texts'>
-            <span>{chat.user.blocked.includes(currentUser.id) ? 'User' : chat.user.username}</span>
-            <p>{chat.lastMessage}</p>
+        <Tooltip style={pointer} text={`Open chat with ${chat.user.username}`}>
+          <div
+            className="item"
+            key={chat.chatId}
+            onClick={() => handleSelect(chat)}
+            style={{
+              backgroundColor: chat?.isSeen ? 'transparent' : '#5183fe'
+            }}
+          >
+            <img src={chat.user.blocked.includes(currentUser.id)
+              ? './avatar.png'
+              : chat.user.avatar || './avatar.png'} alt="" />
+            <div className='texts'>
+              <span>{chat.user.blocked.includes(currentUser.id) ? 'User' : chat.user.username}</span>
+              <p>{chat.lastMessage}</p>
+            </div>
           </div>
-        </div>
+        </Tooltip>
       ))}
       {addMode && <AddUser show={addMode} />}
     </div>

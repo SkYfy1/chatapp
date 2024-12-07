@@ -9,6 +9,8 @@ import { onAuthStateChanged } from "firebase/auth"
 import { useAuthStore } from "./context/useAuthStore"
 import useChatStore from "./context/useChatStore"
 import UserSettings from "./components/settings/UserSettings"
+import Tooltip from "./components/ui/Tooltip"
+import { signal } from "@preact/signals"
 
 const App = () => {
   const [showDetails, setShowDetails] = useState(false);
@@ -62,8 +64,8 @@ const App = () => {
     <div className='container'>
       {currentUser ? (
         <>
-          {!toggle && <List isMobile={isMobile} toggle={setToggle} chatId={chatId} showDetails={showDetails} openSettings={changeSettingsState}/>}
-          {showSettings && <UserSettings close={changeSettingsState}/>}
+          {!toggle && <List isMobile={isMobile} toggle={setToggle} chatId={chatId} showDetails={showDetails} openSettings={changeSettingsState} />}
+          {showSettings && <UserSettings close={changeSettingsState} />}
           {chatId && <Chat showDetails={showDetails} isMobile={isMobile} showChats={setToggle} setShowDetails={setShowDetails} />}
           {showDetails && <Detail setShowDetails={setShowDetails} isMobile={isMobile} />}
         </>
