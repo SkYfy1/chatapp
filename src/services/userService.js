@@ -116,6 +116,8 @@ class userService {
             //     console.log(data);
             // }
 
+            console.log(phone)
+
             const userRef = doc(db, 'users', uid);
 
             const data = await getDoc(userRef);
@@ -127,9 +129,11 @@ class userService {
 
             const querySnapShot = await getDocs(q);
 
-            if (!querySnapShot.empty) {
+            if (!querySnapShot.empty && data.data().username !== username) {
                 throw new Error('Username is taken by another user')
             }
+
+            console.log('About: ' + about)
 
             await updateDoc(userRef, {
                 username,

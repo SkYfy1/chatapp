@@ -20,14 +20,19 @@ const UserForm = ({ headBack }) => {
 
     const onSubmit = (data) => {
         // alert(JSON.stringify(data));
-        userService.updateUserData(null, data.username, userData.id, data.phone, data.about);
+        console.log(JSON.stringify(data));
+        if (!formState.dirtyFields.username) {
+            userService.updateUserData(null, userData.username, userData.id, data.phone, data.about);
+        } else {
+            userService.updateUserData(null, data.username, userData.id, data.phone, data.about);
+        }
         headBack();
     };
 
-    useEffect(() => {
-        console.log(formState.defaultValues)
-        console.log(formState.errors)
-    }, [formState])
+    // useEffect(() => {
+    //     console.log(formState.defaultValues)
+    //     console.log(formState.errors)
+    // }, [formState])
 
     return (
         <div className='userForm'>
