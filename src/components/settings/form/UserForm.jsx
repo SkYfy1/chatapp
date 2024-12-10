@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import './userForm.css'
 import { useForm, } from 'react-hook-form'
 import { useAuthStore } from '../../../context/useAuthStore'
@@ -6,6 +6,10 @@ import userService from '../../../services/userService'
 
 const UserForm = ({ headBack }) => {
     const userData = useAuthStore(state => state.currentUser);
+    const [img, setImg] = useState({
+        file: null,
+        name: null,
+    })
     const {
         register,
         handleSubmit,
@@ -29,14 +33,13 @@ const UserForm = ({ headBack }) => {
         headBack();
     };
 
-    // useEffect(() => {
-    //     console.log(formState.defaultValues)
-    //     console.log(formState.errors)
-    // }, [formState])
+    useEffect(() => {
+        console.log(img)
+    }, [img])
 
     return (
         <div className='userForm'>
-            <div className='top'>
+            <div className='tope'>
                 <div className='back'>
                     <svg onClick={headBack} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M7.49 12 3.74 8.248m0 0 3.75-3.75m-3.75 3.75h16.5V19.5" />
@@ -45,14 +48,15 @@ const UserForm = ({ headBack }) => {
                 </div>
             </div>
             <div className="imgChange">
-                <div className='wrapper'>
-                    <div className="background">
+                <label className='wrapper' htmlFor='imgInput'>
+                    {!img.url && <div className="background">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
                         </svg>
-                    </div>
-                    <img src={userData.avatar || './avatar.png'} alt="avatar" />
-                </div>
+                    </div>}
+                    <img src={img.url ? img.url : userData.avatar || './avatar.png'} alt="avatar" />
+                    <input type="file" id='imgInput' style={{ display: 'none' }} onChange={(e) => setImg({ file: e.target.files[0], url: URL.createObjectURL(e.target.files[0]) })} />
+                </label>
             </div>
             <form className="form" id='form' onSubmit={handleSubmit(onSubmit)}>
                 <div className='formInput'>

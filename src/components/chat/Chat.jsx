@@ -12,7 +12,6 @@ import FileDownload from '../download/FileDownload';
 
 const Chat = ({ showDetails, setShowDetails, isMobile, showChats }) => {
   const [open, setOpen] = useState(false);
-  // const [chat, setChat] = useState(null)
   const [text, setText] = useState('');
   const [image, setImage] = useState({
     file: null,
@@ -163,7 +162,7 @@ const Chat = ({ showDetails, setShowDetails, isMobile, showChats }) => {
           <img src={receiver?.avatar || "./avatar.png"} alt="" />
           <div className="texts">
             <span>{receiver?.username}</span>
-            <p>Lorem Ipsum adalah text contoh digunakan didalam industri pencetakan dan typesetting.</p>
+            <p>{receiver?.about}</p>
           </div>
         </div>
         {!isMobile && <div className="icons">

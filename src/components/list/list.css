@@ -10,7 +10,7 @@
 
 .burger {
     position: absolute;
-    top: 45px;
+    top: 30px;
     left: 25px;
     cursor: pointer;
     z-index: 2;

@@ -16,5 +16,17 @@ export const useAuthStore = create((set) => ({
             console.log(err.message);
             return set({ currentUser: null, isLoading: false });
         }
+    },
+
+    updateUserInfo: async (data) => {
+        if (!data) return;
+
+        try {
+            set({
+                currentUser: data
+            })
+        } catch (error) {
+            console.log(error);
+        }
     }
 }))

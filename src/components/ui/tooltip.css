@@ -26,3 +26,9 @@
     visibility: visible;
     opacity: 1;
 }
+
+@media (min-width: 300px) and (max-width: 1000px) { 
+    .tooltip.text {
+        display: none;
+    }
+}

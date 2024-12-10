@@ -106,10 +106,9 @@ const ChatList = ({ isMobile, toggle }) => {
         <img onClick={() => setAddMode(prev => !prev)} src={addMode ? './minus.png' : "./plus.png"} alt="" className='add' />
       </div>
       {chats?.filter((el) => el.user.username.toLowerCase().startsWith(filter.toLowerCase())).map((chat) => (
-        <Tooltip style={pointer} text={`Open chat with ${chat.user.username}`}>
+        !isMobile ? <Tooltip key={chat.chatId} style={pointer} text={`Open chat with ${chat.user.username}`}>
           <div
             className="item"
-            key={chat.chatId}
             onClick={() => handleSelect(chat)}
             style={{
               backgroundColor: chat?.isSeen ? 'transparent' : '#5183fe'
@@ -123,7 +122,22 @@ const ChatList = ({ isMobile, toggle }) => {
               <p>{chat.lastMessage}</p>
             </div>
           </div>
-        </Tooltip>
+        </Tooltip> : <div
+          key={chat.chatId}
+          className="item"
+          onClick={() => handleSelect(chat)}
+          style={{
+            backgroundColor: chat?.isSeen ? 'transparent' : '#5183fe'
+          }}
+        >
+          <img src={chat.user.blocked.includes(currentUser.id)
+            ? './avatar.png'
+            : chat.user.avatar || './avatar.png'} alt="" />
+          <div className='texts'>
+            <span>{chat.user.blocked.includes(currentUser.id) ? 'User' : chat.user.username}</span>
+            <p>{chat.lastMessage}</p>
+          </div>
+        </div>
       ))}
       {addMode && <AddUser show={addMode} />}
     </div>

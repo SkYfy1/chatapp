@@ -4,34 +4,38 @@ import Detail from './components/detail/Detail'
 import Login from "./components/login/Login"
 import Notification from "./components/notification/Notification"
 import { useEffect, useState } from "react"
-import { auth } from './lib/firebase'
+import { auth, db } from './lib/firebase'
 import { onAuthStateChanged } from "firebase/auth"
 import { useAuthStore } from "./context/useAuthStore"
 import useChatStore from "./context/useChatStore"
 import UserSettings from "./components/settings/UserSettings"
 import Tooltip from "./components/ui/Tooltip"
 import { signal } from "@preact/signals"
+import { doc, onSnapshot } from "firebase/firestore"
 
 const App = () => {
   const [showDetails, setShowDetails] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
-  const { currentUser, isLoading, fetchUserInfo } = useAuthStore();
+  const { currentUser, isLoading, fetchUserInfo, updateUserInfo } = useAuthStore();
   const chatId = useChatStore(state => state.chatId);
   const [isMobile, setIsMobile] = useState(false);
   const [toggle, setToggle] = useState(false);
+  const [showChat, setShowChat] = useState(false);
 
   const changeSettingsState = () => {
     setShowSettings(prev => !prev)
     setToggle(prev => !prev)
-  }
+  };
 
   // create an event listener
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 720) {
-        setIsMobile(true)
+        setIsMobile(true);
+        console.log('mobile')
       } else {
-        setIsMobile(false)
+        setIsMobile(false);
+        console.log('pc')
       }
     }
 
@@ -41,9 +45,11 @@ const App = () => {
 
 
     return () => window.removeEventListener('resize', handleResize)
-  }, [])
+  }, []);
 
   // console.log(chatId)
+
+  // Set user data in state after checking authstate
 
   useEffect(() => {
     const unSub = onAuthStateChanged(auth, (user) => {
@@ -52,13 +58,28 @@ const App = () => {
     return () => {
       unSub();
     }
-  }, [fetchUserInfo])
+  }, [fetchUserInfo]);
+
+
+
+  // Get user information after updating
+
+  useEffect(() => {
+      const onSub = currentUser?.id && onSnapshot(doc(db, 'users', currentUser.id), (user) => {
+        console.log(user.data());
+        updateUserInfo(user.data());
+      });
+
+      return () => {
+        currentUser?.id && onSub();
+      }
+  }, [fetchUserInfo]);
 
   // console.log(currentUser)
 
   if (isLoading) {
     return <div className="loading">Loading...</div>
-  }
+  };
 
   return (
     <div className='container'>

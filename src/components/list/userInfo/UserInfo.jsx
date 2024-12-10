@@ -1,9 +1,11 @@
 import './userInfo.css'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useAuthStore } from '../../../context/useAuthStore'
+import useChatStore from '../../../context/useChatStore';
 
-const UserInfo = ({ openSettings }) => {
+const UserInfo = ({ openSettings, isMobile }) => {
   const userInfo = useAuthStore((state) => state.currentUser);
+
   return (
     <div className='userInfo'>
       <div className="user">

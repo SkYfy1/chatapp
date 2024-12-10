@@ -27,11 +27,15 @@ const useChatStore = create((set) => ({
     },
 
     updateChat: (data) => {
-        set({ chat: data})
+        set({ chat: data })
     },
 
     changeBlock: () => {
         set(state => ({ ...state, isReceiverBlocked: !state.isReceiverBlocked }))
+    },
+
+    closeChat: () => {
+        set({ chatId: null })
     }
 }))
 
