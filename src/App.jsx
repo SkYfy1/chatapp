@@ -20,7 +20,6 @@ const App = () => {
   const chatId = useChatStore(state => state.chatId);
   const [isMobile, setIsMobile] = useState(false);
   const [toggle, setToggle] = useState(false);
-  const [showChat, setShowChat] = useState(false);
 
   const changeSettingsState = () => {
     setShowSettings(prev => !prev)
@@ -47,7 +46,6 @@ const App = () => {
     return () => window.removeEventListener('resize', handleResize)
   }, []);
 
-  // console.log(chatId)
 
   // Set user data in state after checking authstate
 
@@ -66,7 +64,7 @@ const App = () => {
 
   useEffect(() => {
       const onSub = currentUser?.id && onSnapshot(doc(db, 'users', currentUser.id), (user) => {
-        console.log(user.data());
+        console.log('Updating state' + JSON.stringify(user.data()));
         updateUserInfo(user.data());
       });
 

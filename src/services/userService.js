@@ -3,6 +3,7 @@ import supabase from '../lib/supabase'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { setDoc, doc, getDoc, collection, query, where, getDocs, arrayUnion, arrayRemove, updateDoc } from 'firebase/firestore';
 import { toast } from 'react-toastify';
+import { fileService } from './fileService';
 
 
 class userService {
@@ -108,20 +109,15 @@ class userService {
 
     static async updateUserData(newImage = null, username = null, uid = null, phone = null, about = null) {
         try {
-            // const { data, error: uploadError } = supabase.from('avatar').upload(`uploads/${newImage.file.name}`, newImage.file);
-
-            // if (uploadError) {
-            //     console.error('Error uploading file:', uploadError.message);
-            // } else {
-            //     console.log(data);
-            // }
+            const imgLink = await fileService.uploadFileAndGetLink(newImage, 'avatars');
 
             console.log(phone)
 
             const userRef = doc(db, 'users', uid);
 
             const data = await getDoc(userRef);
-            // console.log(data.data());
+
+            const userDoc = data.data();
 
             // Checking existing name or not
             const nameRef = collection(db, 'users');
@@ -139,6 +135,8 @@ class userService {
                 username,
                 phoneNumber: phone || 'No number',
                 about: about || 'Nothing...',
+                prevImgs: userDoc.hasOwnProperty("prevImgs") ? arrayUnion(userDoc.avatar) : [],
+                ...(imgLink && { avatar: imgLink }),
             });
         } catch (error) {
             console.log(error)
