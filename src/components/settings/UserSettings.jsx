@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './userSettings.css'
 import { useAuthStore } from '../../context/useAuthStore';
 import UserForm from './form/UserForm';
@@ -6,11 +6,34 @@ import UserForm from './form/UserForm';
 const UserSettings = ({ close }) => {
     const userInfo = useAuthStore((state) => state.currentUser);
     const [changeData, setChangeData] = useState(false);
+    const [showImg, setShowImg] = useState(userInfo.prevImgs.length);
+
+    const avatars = [...userInfo.prevImgs, userInfo.avatar];
+
+    useEffect(() => {
+        console.log(showImg)
+    }, [showImg])
+
+    const nextImg = () => {
+        if (showImg != avatars.length - 1) {
+            setShowImg(prev => prev + 1);
+        } else {
+            setShowImg(0);
+        }
+    }
+
+    const prevImg = () => {
+        if (showImg === 0) {
+            setShowImg(avatars.length - 1);
+        } else {
+            setShowImg(prev => prev - 1);
+        }
+    }
 
 
     if (changeData) {
         return (
-                <UserForm headBack={() => setChangeData(false)}/>
+            <UserForm headBack={() => setChangeData(false)} />
         )
     };
 
@@ -34,7 +57,26 @@ const UserSettings = ({ close }) => {
             </div>
             <div className='main'>
                 <div className="settingsImg">
-                    <img src={userInfo.avatar || './avatar.png'} alt="avatar" />
+                    <div className="slider">
+                        <div className='lines'>
+                            {avatars.map(el => (
+                                <div className='line'></div>
+                            ))}
+                        </div>
+                        <svg onClick={() => prevImg()} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="left">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18" />
+                        </svg>
+                        {userInfo.prevImgs ? <img src={avatars[showImg]} alt="avatar" /> : <img src={userInfo.avatar || './avatar.png'} alt="avatar" />}
+                        <svg onClick={() => nextImg()} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="right">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+                        </svg>
+                    </div>
+                    {/* <img src={userInfo.avatar || './avatar.png'} alt="avatar" /> */}
+                    {/* <div className='test'>
+                        {avatars.map(el => (
+                            <img src={el} alt="avatar" />
+                        ))}
+                    </div> */}
                     <h2>{userInfo.username}</h2>
                 </div>
                 <div className='settings-list'>

@@ -9,8 +9,6 @@ import { onAuthStateChanged } from "firebase/auth"
 import { useAuthStore } from "./context/useAuthStore"
 import useChatStore from "./context/useChatStore"
 import UserSettings from "./components/settings/UserSettings"
-import Tooltip from "./components/ui/Tooltip"
-import { signal } from "@preact/signals"
 import { doc, onSnapshot } from "firebase/firestore"
 
 const App = () => {

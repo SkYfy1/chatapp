@@ -42,12 +42,60 @@
                 text-align: center;
                 position: relative;
 
-                img {
+                .test {
+                    img {
+                        width: 80px;
+                        height: 80px;
+                    }
+                }
+
+                .slider {
+                    position: relative;
                     width: 300px;
                     height: 300px;
-                    border-radius: 50%;
-                    object-fit: contain;
+                    margin: 0 auto;
+
+                    .lines {
+                        display: flex;
+                        position: absolute;
+                        top: 0;
+                        left: 50%;
+                        width: 100%;
+                        height: 100%;
+                        transform: translateX(-50%);
+                        color: black;
+                        gap: 25px;
+                        border-radius: 50%;
+
+                        .line {
+                            border-bottom: 3px black solid;
+                            width: 15px;
+                            height: 10px;
+                        }
+                    }
+
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        border-radius: 50%;
+                        object-fit: contain;
+                    }
+
+                    .left {
+                        position: absolute;
+                        top: 50%;
+                        left: 0;
+                        transform: translateY(-50%);
+                    }
+
+                    .right {
+                        position: absolute;
+                        top: 50%;
+                        right: 0;
+                        transform: translateY(-50%);
+                    }
                 }
+
 
                 h2 {
                     position: absolute;
@@ -115,120 +163,162 @@
 }
 
 @media (min-width: 300px) and (max-width: 1000px) {
-        .settings {
-            flex: 1;
+    .settings {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 0px;
+
+        svg {
+            width: 35px;
+            height: 35px;
+            cursor: pointer;
+        }
+
+        .tope {
             display: flex;
-            flex-direction: column;
-            gap: 0px;
-    
-            svg {
-                width: 35px;
-                height: 35px;
-                cursor: pointer;
-            }
-    
-            .tope {
+            justify-content: space-between;
+            gap: 55px;
+            border-bottom: 1px solid #dddddd35;
+            padding: 17.5px;
+
+            .back {
                 display: flex;
-                justify-content: space-between;
-                gap:55px;
-                border-bottom: 1px solid #dddddd35;
-                padding: 17.5px;
-    
-                .back {
-                    display: flex;
-                    align-items: center;
-                    gap: 15px;
-    
-                    h2 {
-                        font-size: 18px;
-                        font-weight: 100;
+                align-items: center;
+                gap: 15px;
+
+                h2 {
+                    font-size: 18px;
+                    font-weight: 100;
+                }
+            }
+
+            .action {
+                display: flex;
+                gap: 15px;
+            }
+        }
+
+        .main {
+            padding: 5px;
+
+            overflow-y: scroll;
+
+            .settingsImg {
+                width: 100%;
+                text-align: center;
+                position: relative;
+
+                .test {
+                    img {
+                        width: 80px;
+                        height: 80px;
                     }
                 }
-    
-                .action {
-                    display: flex;
-                    gap: 15px;
-                }
-            }
-    
-            .main {
-                padding: 5px;
-                
-                overflow-y: scroll;
-                .settingsImg {
-                    width: 100%;
-                    text-align: center;
+
+                .slider {
                     position: relative;
-    
+                    width: 200px;
+                    height: 200px;
+                    margin: 0 auto;
+
+                    .lines {
+                        display: flex;
+                        position: absolute;
+                        top: 0;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        color: black;
+
+                        background-color: red;
+                        gap: 25px
+                    }
+
                     img {
                         width: 200px;
                         height: 200px;
                         border-radius: 50%;
                         object-fit: contain;
                     }
-    
-                    h2 {
+
+                    .left {
                         position: absolute;
-                        bottom: 0;
-                        font-size: 19px;
-                        left: 25px;
+                        top: 50%;
+                        left: 0;
+                        transform: translateY(-50%);
+                    }
+
+                    .right {
+                        position: absolute;
+                        top: 50%;
+                        right: 0;
+                        transform: translateY(-50%);
                     }
                 }
-    
-                .settings-list {
-                    padding: 20px 20px;
-                    display: flex;
-                    flex-direction: column;
-                    gap: 15px;
-                    border-bottom: 2px solid #dddddd35;
-    
-                    .settings-list-item {
-                        display: flex;
-                        align-items: center;
-                        gap: 25px;
-    
-                        svg {
-                            width: 30px;
-                            height: 30px;
-                        }
-    
-                        div {
-                            display: flex;
-                            flex-direction: column;
-    
-                            p {
-                                font-weight: 200;
-                            }
-    
-                            span {
-                                font-size: 12px;
-                                color: rgb(194, 194, 194)
-                            }
-                        }
-                    }
+
+
+                h2 {
+                    position: absolute;
+                    bottom: 0;
+                    font-size: 19px;
+                    left: 25px;
                 }
-    
-                .settings-list2 {
-                    padding: 20px 20px;
+            }
+
+            .settings-list {
+                padding: 20px 20px;
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+                border-bottom: 2px solid #dddddd35;
+
+                .settings-list-item {
                     display: flex;
-                    flex-direction: column;
-                    gap: 15px;
-                    border-bottom: 2px solid #dddddd35;
-    
+                    align-items: center;
+                    gap: 25px;
+
+                    svg {
+                        width: 30px;
+                        height: 30px;
+                    }
+
                     div {
                         display: flex;
-                        gap: 25px;
-    
+                        flex-direction: column;
+
                         p {
-                            cursor: pointer;
+                            font-weight: 200;
                         }
-    
-                        svg {
-                            width: 30px;
-                            height: 30px;
+
+                        span {
+                            font-size: 12px;
+                            color: rgb(194, 194, 194)
                         }
                     }
                 }
             }
+
+            .settings-list2 {
+                padding: 20px 20px;
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+                border-bottom: 2px solid #dddddd35;
+
+                div {
+                    display: flex;
+                    gap: 25px;
+
+                    p {
+                        cursor: pointer;
+                    }
+
+                    svg {
+                        width: 30px;
+                        height: 30px;
+                    }
+                }
+            }
         }
+    }
 }
