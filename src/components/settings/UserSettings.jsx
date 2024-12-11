@@ -1,18 +1,41 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import './userSettings.css'
 import { useAuthStore } from '../../context/useAuthStore';
 import UserForm from './form/UserForm';
+import ModalWindow from '../ui/ModalWindow';
+import { handleDownloadImage } from '../../utils/handleDownload';
 
 const UserSettings = ({ close }) => {
     const userInfo = useAuthStore((state) => state.currentUser);
     const [changeData, setChangeData] = useState(false);
     const [showImg, setShowImg] = useState(userInfo.prevImgs.length);
+    const [fullImg, setFullImg] = useState({
+        img: null,
+        state: false
+    });
+    const ref = useRef(null);
 
     const avatars = [...userInfo.prevImgs, userInfo.avatar];
 
+    // Making links from supabase for downloanding and making download attr for Anchor element
+
+    Promise.all(avatars.map((avatar) => handleDownloadImage(avatar))).then(el => ref.current = el);
+
+    // useEffect(() => {
+    //     console.log(showImg)
+    // }, [showImg])
+
+    // useEffect(() => {
+    //     const getLinks = async () => {
+    //         ref.current = await Promise.all(avatars.map((avatar) => handleDownloadImage(avatar)));
+    //     }
+
+    //     getLinks();
+    // }, []);
+
     useEffect(() => {
-        console.log(showImg)
-    }, [showImg])
+        console.log(ref.current);
+    }, [])
 
     const nextImg = () => {
         if (showImg != avatars.length - 1) {
@@ -59,14 +82,22 @@ const UserSettings = ({ close }) => {
                 <div className="settingsImg">
                     <div className="slider">
                         <div className='lines'>
-                            {avatars.map(el => (
-                                <div className='line'></div>
+                            {avatars.map((el, index) => (
+                                <div onClick={() => setShowImg(index)} className={avatars[showImg] === el ? 'chosen-line' : 'line'}></div>
                             ))}
                         </div>
                         <svg onClick={() => prevImg()} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="left">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18" />
                         </svg>
-                        {userInfo.prevImgs ? <img src={avatars[showImg]} alt="avatar" /> : <img src={userInfo.avatar || './avatar.png'} alt="avatar" />}
+                        {userInfo.prevImgs ? <img onClick={() => setFullImg({
+                            img: avatars[showImg],
+                            state: true
+                        })} src={avatars[showImg]} alt="avatar" /> : <img
+                            onClick={() => setFullImg({
+                                img: userInfo.avatar,
+                                state: true
+                            })}
+                            src={userInfo.avatar || './avatar.png'} alt="avatar" />}
                         <svg onClick={() => nextImg()} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="right">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                         </svg>
@@ -143,8 +174,37 @@ const UserSettings = ({ close }) => {
                     </div>
                 </div>
             </div>
-        </div>
+            {fullImg.state && <ModalWindow onclick={() => {
+                setFullImg({
+                    img: null,
+                    state: false
+                })
+            }}>
+                <img style={{
+                    height: '80%', width: '80%'
+                }} src={fullImg.img} alt="" onClick={(e) => e.stopPropagation()} />
+                <div className='image-func'>
+                    <svg className='return-image' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                    </svg>
+                    <a href={ref.current[showImg]} download='picture.png' className='download-image' onClick={(e) => e.stopPropagation()}>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                            </svg>
+                    </a>
+                </div>
+            </ModalWindow>}
+        </div >
     )
-}
+};
+
+
+{/* <a ref={aRef} className='download-image' onClick={(e) => e.stopPropagation()}>
+    <div onClick={(e) => { e.stopPropagation(); aRef.current.download = ref.current[0]; aRef.current.href = ref.current[0]; aRef.current.click(); console.log('meow') }}>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+        </svg>
+    </div>
+</a> */}
 
 export default UserSettings

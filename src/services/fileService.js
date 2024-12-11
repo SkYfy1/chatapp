@@ -27,9 +27,7 @@ export class fileService {
         try {
             const { data, error } = await supabase.storage.from(dest).download(`uploads/${file.name}`);
             const url = URL.createObjectURL(data);
-
-            console.log(data)
-
+            // console.log(data)
             return url;
         } catch (error) {
             console.log(error)
