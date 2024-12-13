@@ -67,8 +67,6 @@ const Chat = ({ showDetails, setShowDetails, isMobile, showChats }) => {
 
   useEffect(() => {
     const unSub = onSnapshot(doc(db, 'chat', chatId), (res) => {
-      // console.log('Response', res.data())
-      // setChat(res.data())
       updateChat(res.data())
     })
 
@@ -90,7 +88,6 @@ const Chat = ({ showDetails, setShowDetails, isMobile, showChats }) => {
     try {
       if (image.file) {
         imgUrl = await fileService.uploadFileAndGetLink(image.file, 'images');
-        // console.log(imgUrl)
       }
 
       if (file) {
@@ -138,14 +135,6 @@ const Chat = ({ showDetails, setShowDetails, isMobile, showChats }) => {
     } catch (error) {
       console.log(error)
     }
-  }
-
-  // useEffect(() => {
-  //   console.log(new Date(chat?.messages[0].createdAt.seconds))
-  // })
-
-  const showModal = (imgUrl) => {
-
   }
 
   if(!chatId) {

@@ -242,7 +242,7 @@
         .form {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 20px;
             padding: 15px;
 
             .formInput {
@@ -265,18 +265,18 @@
                 }
 
                 input {
-                    border: 1px solid #dddddd35;
+                    border: 2px solid #dddddd35;
                     border-radius: 8px;
                     padding: 10px;
                     outline: none;
                     background: transparent;
                     color: white;
                     width: 100%;
-                    font-size: 16px;
+                    font-size: 15px;
                 }
 
                 input:hover {
-                    border: 1px solid rgba(59, 85, 134, 0.856);
+                    border: 2px solid rgba(59, 85, 134, 0.856);
                 }
 
                 input:focus {
@@ -292,21 +292,21 @@
         button {
             position: absolute;
             bottom: -80px;
-            right: 15px;
-            border-radius: 50%;
+            right: 10%;
+            border-radius: 5px;
             background-color: rgba(75, 93, 128, 0.493);
             border: none;
             outline: none;
+            /* transform: translateX(50%); */
 
-            width: 50px;
-            height: 50px;
+            width: 80%;
 
             display: flex;
             justify-content: center;
             align-items: center;
 
             transition: filter 0.15s ease-in;
-            transition: transform 0.3s ease;
+            transition: transform .4s ease;
 
             svg {
                 height: 40px;

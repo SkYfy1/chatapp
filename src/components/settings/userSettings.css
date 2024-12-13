@@ -88,7 +88,7 @@
                             /* backdrop-filter: blur(19px) saturate(180%); */
                             width: 35px;
                             height: 3px;
-                            
+
                         }
 
                         .line {
@@ -97,7 +97,7 @@
                             /* backdrop-filter: blur(19px) saturate(180%); */
                             width: 35px;
                             height: 3px;
-                            
+
                         }
                     }
 
@@ -195,6 +195,25 @@
         flex-direction: column;
         gap: 0px;
 
+        .image-func {
+            position: absolute;
+            display: flex;
+            gap: 20px;
+            bottom: 5%;
+            right: 50%;
+            z-index: 51;
+            transform: translateX(50%);
+
+            a {
+                color: white;
+            }
+
+            svg {
+                width: 40px;
+                height: 40px;
+            }
+        }
+
         svg {
             width: 35px;
             height: 35px;
@@ -271,14 +290,14 @@
                         position: absolute;
                         top: 50%;
                         left: 0;
-                        transform: translateY(-50%);
+                        transform: translateY(-50%) translateX(-150%);
                     }
 
                     .right {
                         position: absolute;
                         top: 50%;
                         right: 0;
-                        transform: translateY(-50%);
+                        transform: translateY(-50%) translateX(150%);
                     }
                 }
 
@@ -314,10 +333,11 @@
 
                         p {
                             font-weight: 200;
+                            font-size: 15px;
                         }
 
                         span {
-                            font-size: 12px;
+                            font-size: 11px;
                             color: rgb(194, 194, 194)
                         }
                     }
@@ -334,9 +354,12 @@
                 div {
                     display: flex;
                     gap: 25px;
+                    align-items: center;
 
                     p {
                         cursor: pointer;
+                        font-weight: 200;
+                        font-size: 15px;
                     }
 
                     svg {

@@ -10,14 +10,14 @@ import userService from '../../services/userService';
 const UserSettings = ({ close }) => {
     const userInfo = useAuthStore((state) => state.currentUser);
     const [changeData, setChangeData] = useState(false);
-    const [showImg, setShowImg] = useState(userInfo.prevImgs.length);
+    const [showImg, setShowImg] = useState(0);
     const [fullImg, setFullImg] = useState({
         img: null,
         state: false
     });
     const ref = useRef(null);
 
-    const avatars = [...userInfo.prevImgs, userInfo.avatar];
+    const avatars = [userInfo.avatar, ...userInfo.prevImgs];
 
     const returnImage = async (e) => {
         e.stopPropagation();
@@ -27,24 +27,13 @@ const UserSettings = ({ close }) => {
 
     // Making links from supabase for downloanding and making download attr for Anchor element
 
-    // Promise.all(avatars.map((avatar) => handleDownloadImage(avatar))).then(el => ref.current = el);
-
-    // useEffect(() => {
-    //     console.log(ref.current)
-    // }, [ref])
-
     useEffect(() => {
         const getLinks = async () => {
-            // console.log(avatars)
             ref.current = await Promise.all(avatars.map((avatar) => handleDownloadImage(avatar)));
         }
 
         getLinks();
     }, []);
-
-    // useEffect(() => {
-    //     console.log(ref.current);
-    // }, [])
 
     const nextImg = () => {
         if (showImg != avatars.length - 1) {
@@ -111,12 +100,6 @@ const UserSettings = ({ close }) => {
                             <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                         </svg>
                     </div>
-                    {/* <img src={userInfo.avatar || './avatar.png'} alt="avatar" /> */}
-                    {/* <div className='test'>
-                        {avatars.map(el => (
-                            <img src={el} alt="avatar" />
-                        ))}
-                    </div> */}
                     <h2>{userInfo.username}</h2>
                 </div>
                 <div className='settings-list'>
@@ -206,14 +189,5 @@ const UserSettings = ({ close }) => {
         </div >
     )
 };
-
-
-{/* <a ref={aRef} className='download-image' onClick={(e) => e.stopPropagation()}>
-    <div onClick={(e) => { e.stopPropagation(); aRef.current.download = ref.current[0]; aRef.current.href = ref.current[0]; aRef.current.click(); console.log('meow') }}>
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
-        </svg>
-    </div>
-</a> */}
 
 export default UserSettings
