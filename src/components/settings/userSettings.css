@@ -170,7 +170,7 @@
                 gap: 15px;
                 border-bottom: 2px solid #dddddd35;
 
-                div {
+                div:not(.popup) {
                     display: flex;
                     gap: 25px;
 
@@ -178,10 +178,52 @@
                         cursor: pointer;
                     }
 
-                    svg {
+                    > svg {
                         width: 30px;
                         height: 30px;
                     }
+                }
+            }
+        }
+
+        /* Pop up */
+        .language {
+            position: relative;
+
+            .popup {
+                position: absolute;
+                z-index: 100;
+                top: 0;
+                right: left;
+                transform: translateX(120%) translateY(-40%);
+                border: 1px solid rgba(202, 202, 202, 0.5);
+                padding: 15px;
+                border-radius: 5px;
+                background: rgba(14, 25, 40, 0.75);
+
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+
+                h1 {
+                    font-size: 22px;
+                    margin-top: 3px;
+                }
+
+                button {
+                    padding: 5px;
+                    background-color: #1a73e8;
+                    outline: none;
+                    border: none;
+                    border-radius: 2px;
+                }
+
+                .close {
+                    position: absolute;
+                    top: 5px;
+                    right: 5px;
+                    width: 20px;
+                    height: 20px;
                 }
             }
         }
@@ -366,6 +408,40 @@
                         width: 30px;
                         height: 30px;
                     }
+                }
+            }
+        }
+
+        /* Pop up */
+        .language {
+            position: relative;
+
+            .popup {
+                position: absolute;
+                z-index: 100;
+                top: 0;
+                right: left;
+                transform: translateX(120%) translateY(-40%);
+                border: 1px solid rgba(202, 202, 202, 0.5);
+                width: 190px;
+                padding: 10px;
+                border-radius: 5px;
+                background: rgba(14, 25, 40, 0.75);
+
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+
+                h1 {
+                    font-size: 22px;
+                }
+
+                button {
+                    padding: 5px;
+                    background-color: #1a73e8;
+                    outline: none;
+                    border: none;
+                    border-radius: 2px;
                 }
             }
         }
