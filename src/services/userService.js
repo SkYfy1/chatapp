@@ -142,6 +142,24 @@ class userService {
             console.log(error)
         }
     }
+
+    static async returnUserImage(imgLink, img, uid) {
+        try {
+            const userRef = doc(db, 'users', uid);
+
+            await updateDoc(userRef, {
+                avatar: imgLink,
+                prevImgs: arrayRemove(imgLink)
+            })
+
+            await updateDoc(userRef, {
+                prevImgs: arrayUnion(img)
+            });
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
 }
 
 export default userService;
