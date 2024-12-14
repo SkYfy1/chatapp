@@ -6,6 +6,8 @@ import { doc, getDoc, onSnapshot, updateDoc } from 'firebase/firestore';
 import { db } from '../../../lib/firebase';
 import useChatStore from '../../../context/useChatStore';
 import Tooltip from '../../ui/Tooltip';
+import language from '../../../utils/language.js'
+import useAppStore from '../../../context/useAppStore'
 
 
 const ChatList = ({ isMobile, toggle }) => {
@@ -13,6 +15,7 @@ const ChatList = ({ isMobile, toggle }) => {
   const [chats, setChats] = useState();
   const [filter, setFilter] = useState('');
   const [pointer, setPointer] = useState({ pointerX: null, pointerY: null });
+  const lang = useAppStore();
 
   const currentUser = useAuthStore((state) => state.currentUser);
   const { changeChat } = useChatStore();
@@ -103,7 +106,7 @@ const ChatList = ({ isMobile, toggle }) => {
         <img onClick={() => setAddMode(prev => !prev)} src={addMode ? './minus.png' : "./plus.png"} alt="" className='add' />
       </div>
       {chats?.filter((el) => el.user.username.toLowerCase().startsWith(filter.toLowerCase())).map((chat) => (
-        !isMobile ? <Tooltip key={chat.chatId} style={pointer} text={`Open chat with ${chat.user.username}`}>
+        !isMobile ? <Tooltip key={chat.chatId} style={pointer} text={`${language.settings.tooltip[lang.language]}${chat.user.username}`}>
           <div
             className="item"
             onClick={() => handleSelect(chat)}

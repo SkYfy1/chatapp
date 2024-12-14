@@ -3,9 +3,12 @@ import './userForm.css'
 import { useForm, } from 'react-hook-form'
 import { useAuthStore } from '../../../context/useAuthStore'
 import userService from '../../../services/userService'
+import language from '../../../utils/language'
+import useAppStore from '../../../context/useAppStore'
 
 const UserForm = ({ headBack }) => {
     const userData = useAuthStore(state => state.currentUser);
+    const lang = useAppStore()
     const [img, setImg] = useState({
         file: null,
         name: null,
@@ -44,7 +47,7 @@ const UserForm = ({ headBack }) => {
                     <svg onClick={headBack} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M7.49 12 3.74 8.248m0 0 3.75-3.75m-3.75 3.75h16.5V19.5" />
                     </svg>
-                    <h2>Change Profile</h2>
+                    <h2>{lang.language == 'en' ? 'Change Profile' : 'Изменить профиль'}</h2>
                 </div>
             </div>
             <div className="imgChange">
@@ -60,11 +63,11 @@ const UserForm = ({ headBack }) => {
             </div>
             <form className="form" id='form' onSubmit={handleSubmit(onSubmit)}>
                 <div className='formInput'>
-                    <label className={formState.defaultValues.username && 'isDirty'} htmlFor="name">Name (Necessarily)</label>
+                    <label className={formState.defaultValues.username && 'isDirty'} htmlFor="name">{language.settings.form[lang.language][0]}</label>
                     <input id='name' type="text" {...register('username')} />
                 </div>
                 <div className='formInput'>
-                    <label className={(formState.dirtyFields.phone || formState.defaultValues.phone) && 'isDirty'} htmlFor="phone">Phone (Necessarily)</label>
+                    <label className={(formState.dirtyFields.phone || formState.defaultValues.phone) && 'isDirty'} htmlFor="phone">{language.settings.form[lang.language][1]}</label>
                     <input id='phone' type="text" {...register('phone', {
                         pattern: {
                             value: /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/,
@@ -74,7 +77,7 @@ const UserForm = ({ headBack }) => {
                     {formState.errors.phone && <p>{formState.errors.phone.message}</p>}
                 </div>
                 <div className='formInput'>
-                    <label className={(formState.dirtyFields.about || formState.defaultValues.about) && 'isDirty'} htmlFor="about">About (Unnecessarily)</label>
+                    <label className={(formState.dirtyFields.about || formState.defaultValues.about) && 'isDirty'} htmlFor="about">{language.settings.form[lang.language][2]}</label>
                     <input id='about' type="text" {...register('about')} />
                 </div>
             </form>

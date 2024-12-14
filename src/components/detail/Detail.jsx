@@ -5,9 +5,12 @@ import useChatStore from '../../context/useChatStore'
 import { useAuthStore } from '../../context/useAuthStore'
 import userService from '../../services/userService'
 import ImageDownload from '../download/ImageDownload'
+import useAppStore from '../../context/useAppStore'
+import language from '../../utils/language'
 
 const Detail = ({ setShowDetails, isMobile }) => {
   const friend = useChatStore(state => state.user);
+  const lang = useAppStore();
   const { changeBlock, isReceiverBlocked, isUserBlocked, chat } = useChatStore();
   const [show, setShow] = useState({
     shared: false,
@@ -66,19 +69,19 @@ const Detail = ({ setShowDetails, isMobile }) => {
       <div className="info">
         <div className="option">
           <div className="title">
-            <span>Privacy & help</span>
+            <span>{language.settings.details[lang.language][0]}</span>
             <img onClick={() => setShow(state => ({ ...state, privacy: !state.privacy }))} src={show.privacy ? "./arrowDown.png" : "./arrowUp.png"} alt="" />
           </div>
         </div>
         <div className="option">
           <div className="title">
-            <span>Chat Settings</span>
+            <span>{language.settings.details[lang.language][1]}</span>
             <img onClick={() => setShow(state => ({ ...state, settings: !state.settings }))} src={show.settings ? "./arrowDown.png" : "./arrowUp.png"} alt="" />
           </div>
         </div>
         <div className="option">
           <div className="title">
-            <span>Shared photos</span>
+            <span>{language.settings.details[lang.language][2]}</span>
             <img onClick={() => setShow(state => ({ ...state, shared: !state.shared }))} src={show.shared ? "./arrowDown.png" : "./arrowUp.png"} alt="" />
           </div>
           {show.shared && <div className="photos">
@@ -90,7 +93,7 @@ const Detail = ({ setShowDetails, isMobile }) => {
         </div>
         <div className="option">
           <div className="title">
-            <span>Shared Files</span>
+            <span>{language.settings.details[lang.language][3]}</span>
             <img onClick={() => setShow(state => ({ ...state, files: !state.files }))} src={show.files ? "./arrowDown.png" : "./arrowUp.png"} alt="" />
           </div>
           {show.files &&
