@@ -9,6 +9,7 @@ import { fileService } from '../../services/fileService';
 import ModalWindow from '../ui/ModalWindow';
 import { useInView } from 'react-intersection-observer';
 import FileDownload from '../download/FileDownload';
+import useAppStore from '../../context/useAppStore';
 
 const Chat = ({ showDetails, setShowDetails, isMobile, showChats }) => {
   const [open, setOpen] = useState(false);
@@ -21,7 +22,8 @@ const Chat = ({ showDetails, setShowDetails, isMobile, showChats }) => {
     img: null,
     state: false
   });
-  const [file, setFile] = useState(null)
+  const [file, setFile] = useState(null);
+  const appState = useAppStore();
 
   const ref = useRef(null);
   const reference = useRef();

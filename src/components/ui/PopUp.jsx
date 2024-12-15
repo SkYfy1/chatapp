@@ -9,7 +9,7 @@ const PopUp = ({ changeLanguage, changeStatePop }) => {
             </svg>
             <h1>Select language</h1>
             <button onClick={() => {changeLanguage('en'); changeStatePop(false) }}>English</button>
-            <button onClick={() => {changeLanguage('ru'); changeStatePop(false) }}>Russian</button>
+            <button onClick={() => {changeLanguage('ua'); changeStatePop(false) }}>Ukrainian</button>
         </div>
     )
 }

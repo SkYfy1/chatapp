@@ -1,4 +1,38 @@
 @media screen and (min-width: 1000px) {
+    .data {
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+        padding: 25px;
+
+        .top {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+
+            svg {
+                width: 35px;
+                height: 35px;
+                cursor: pointer;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+
+        .imgs {
+            display: flex;
+            gap: 10px;
+
+            img {
+                width: 100px;
+                height: 100px;
+                object-fit: cover;
+            }
+        }
+    }
+
     .settings {
         flex: 1;
         display: flex;
@@ -178,7 +212,7 @@
                         cursor: pointer;
                     }
 
-                    > svg {
+                    >svg {
                         width: 30px;
                         height: 30px;
                     }

@@ -12,12 +12,13 @@ import useAppStore from '../../../context/useAppStore'
 
 const ChatList = ({ isMobile, toggle }) => {
   const [addMode, setAddMode] = useState(false);
-  const [chats, setChats] = useState();
+  // const [chats, setChats] = useState([]);
   const [filter, setFilter] = useState('');
   const [pointer, setPointer] = useState({ pointerX: null, pointerY: null });
-  const lang = useAppStore();
+  const appState = useAppStore();
 
   const currentUser = useAuthStore((state) => state.currentUser);
+  const { userChats: chats, updateChats } = useAuthStore();
   const { changeChat } = useChatStore();
 
   useEffect(() => {
@@ -53,27 +54,12 @@ const ChatList = ({ isMobile, toggle }) => {
 
       const chatData = await Promise.all(promises);
 
-      setChats(chatData.sort((a, b) => b.updatedAt - a.updatedAt));
+      updateChats(chatData.sort((a, b) => b.updatedAt - a.updatedAt));
     })
     return () => unSub()
   }, [currentUser.id]);
 
   async function handleSelect(chat) {
-    // const userChatsRef = doc(db, 'userchats', currentUser.id);
-    // const userChatsSnapshot = await getDoc(userChatsRef);
-
-    // if (userChatsSnapshot.exists()) {
-    //   const userChatsData = userChatsSnapshot.data();
-
-    //   const chatIndex = userChatsData.chats.findIndex(c => c.chatId === chatId);
-
-    //   userChatsData.chats[chatIndex].isSeen = true
-
-    //   await updateDoc(userChatsRef, {
-    //     chats: userChatsData.chats
-    //   })
-    // }
-
     const userChats = chats.map(item => {
       const { user, ...rest } = item;
       return rest;
@@ -96,6 +82,10 @@ const ChatList = ({ isMobile, toggle }) => {
     { isMobile && toggle(); }
   }
 
+  useEffect(() => {
+    console.log(chats?.map((chat) => chat.chatId))
+  }, [chats])
+
   return (
     <div className='chatList'>
       <div className="search">
@@ -106,7 +96,7 @@ const ChatList = ({ isMobile, toggle }) => {
         <img onClick={() => setAddMode(prev => !prev)} src={addMode ? './minus.png' : "./plus.png"} alt="" className='add' />
       </div>
       {chats?.filter((el) => el.user.username.toLowerCase().startsWith(filter.toLowerCase())).map((chat) => (
-        !isMobile ? <Tooltip key={chat.chatId} style={pointer} text={`${language.settings.tooltip[lang.language]}${chat.user.username}`}>
+        !isMobile ? <Tooltip key={chat.chatId} style={pointer} text={`${language.settings.tooltip[appState.appLanguage]}${chat.user.username}`}>
           <div
             className="item"
             onClick={() => handleSelect(chat)}

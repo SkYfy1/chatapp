@@ -1,10 +1,10 @@
 import { create } from "zustand";
 
 const useAppStore = create((set) => ({
-    language: 'en',
+    appLanguage: 'en',
 
     changeLanguage: (lang) => set({
-        language: lang
+        appLanguage: lang
     })
 }));
 

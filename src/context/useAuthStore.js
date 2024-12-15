@@ -3,7 +3,12 @@ import userService from '../services/userService';
 
 export const useAuthStore = create((set) => ({
     currentUser: null,
+    userChats: [],
     isLoading: true,
+
+    updateChats: async (chats) => {
+        set({ userChats: chats })
+    },
 
     fetchUserInfo: async (uid) => {
         if (!uid) return set({ currentUser: null, isLoading: false });

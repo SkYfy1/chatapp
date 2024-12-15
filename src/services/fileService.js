@@ -1,3 +1,5 @@
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../lib/firebase';
 import supabase from '../lib/supabase'
 
 export class fileService {
@@ -29,6 +31,35 @@ export class fileService {
             const url = URL.createObjectURL(data);
             // console.log(data)
             return url;
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    static async getAllSharedFiles(chatIds) {
+        try {
+            const chats = chatIds.map(async (chat) => {
+                const docRef = doc(db, 'chat', chat);
+
+                const data = await getDoc(docRef);
+
+                return data.data().messages;
+            });
+
+            // console.log(chats)
+            const chatsData = await Promise.all(chats);
+            const messagesWithImgs = chatsData.map(chat => {
+                const img = chat.filter((mes) => mes.img);
+                return img;
+            });
+
+            const messages = messagesWithImgs.flat()
+
+            // console.log(chatsData);
+            // console.log(messagesWithImgs);
+            // console.log(messages);
+
+            return messages;
         } catch (error) {
             console.log(error)
         }

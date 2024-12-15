@@ -8,11 +8,13 @@ import { handleDownloadImage } from '../../utils/handleDownload';
 import userService from '../../services/userService';
 import PopUp from '../ui/PopUp';
 import useAppStore from '../../context/useAppStore';
+import DataComponent from './DataMemory/DataComponent';
 
 const UserSettings = ({ close }) => {
     const userInfo = useAuthStore((state) => state.currentUser);
-    const lang = useAppStore();
+    const appState = useAppStore();
     const [changeData, setChangeData] = useState(false);
+    const [dataMemory, setDataMemory] = useState(false);
     const [showImg, setShowImg] = useState(0);
     const [fullImg, setFullImg] = useState({
         img: null,
@@ -70,7 +72,7 @@ const UserSettings = ({ close }) => {
                     <svg onClick={() => close()} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M7.49 12 3.74 8.248m0 0 3.75-3.75m-3.75 3.75h16.5V19.5" />
                     </svg>
-                    <h2>{lang.language == 'en' ? 'Settings' : 'Настройки'}</h2>
+                    <h2>{appState.appLanguage == 'en' ? 'Settings' : 'Налаштування'}</h2>
                 </div>
                 <div className='action'>
                     <svg onClick={() => setChangeData(prev => !prev)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
@@ -114,7 +116,7 @@ const UserSettings = ({ close }) => {
                         </svg>
                         <div>
                             <p>{userInfo.phoneNumber || 'Add phone number'}</p>
-                            {userInfo.phoneNumber && <span>{language.settings.information[lang.language][0]}</span>}
+                            {userInfo.phoneNumber && <span>{language.settings.information[appState.appLanguage][0]}</span>}
                         </div>
                     </div>
                     <div className='settings-list-item'>
@@ -123,7 +125,7 @@ const UserSettings = ({ close }) => {
                         </svg>
                         <div>
                             <p>{"@" + userInfo.username}</p>
-                            <span>{language.settings.information[lang.language][1]}</span>
+                            <span>{language.settings.information[appState.appLanguage][1]}</span>
                         </div>
                     </div>
                     <div className='settings-list-item'>
@@ -132,7 +134,7 @@ const UserSettings = ({ close }) => {
                         </svg>
                         <div>
                             <p>{userInfo.about || 'Nothing to say...'}</p>
-                            <span>{language.settings.information[lang.language][2]}</span>
+                            <span>{language.settings.information[appState.appLanguage][2]}</span>
                         </div>
                     </div>
                 </div>
@@ -142,35 +144,36 @@ const UserSettings = ({ close }) => {
                             <path strokeLinecap="round" strokeLinejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
                             <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                         </svg>
-                        <p>{language.settings.settingsList[lang.language][0]}</p>
+                        <p>{language.settings.settingsList[appState.appLanguage][0]}</p>
                     </div>
                     <div>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
                             <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                         </svg>
-                        <p>{language.settings.settingsList[lang.language][1]}</p>
+                        <p>{language.settings.settingsList[appState.appLanguage][1]}</p>
                     </div>
                     <div>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
                         </svg>
-                        <p>{language.settings.settingsList[lang.language][2]}</p>
+                        <p>{language.settings.settingsList[appState.appLanguage][2]}</p>
                     </div>
-                    <div>
+                    <div onClick={() => setDataMemory(prev => !prev)}>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M9 3.75H6.912a2.25 2.25 0 0 0-2.15 1.588L2.35 13.177a2.25 2.25 0 0 0-.1.661V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 0 0-2.15-1.588H15M2.25 13.5h3.86a2.25 2.25 0 0 1 2.012 1.244l.256.512a2.25 2.25 0 0 0 2.013 1.244h3.218a2.25 2.25 0 0 0 2.013-1.244l.256-.512a2.25 2.25 0 0 1 2.013-1.244h3.859M12 3v8.25m0 0-3-3m3 3 3-3" />
                         </svg>
-                        <p>{language.settings.settingsList[lang.language][3]}</p>
+                        <p>{language.settings.settingsList[appState.appLanguage][3]}</p>
                     </div>
                     <div className='language' onClick={() => setShowPop(prev => !prev)}>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                             <path strokeLinecap="round" strokeLinejoin="round" d="m10.5 21 5.25-11.25L21 21m-9-3h7.5M3 5.621a48.474 48.474 0 0 1 6-.371m0 0c1.12 0 2.233.038 3.334.114M9 5.25V3m3.334 2.364C11.176 10.658 7.69 15.08 3 17.502m9.334-12.138c.896.061 1.785.147 2.666.257m-4.589 8.495a18.023 18.023 0 0 1-3.827-5.802" />
                         </svg>
-                        <p>{language.settings.settingsList[lang.language][4]}</p>
-                        {showPop && <PopUp changeStatePop={(data) => setShowPop(data)} changeLanguage={lang.changeLanguage}/>}
+                        <p>{language.settings.settingsList[appState.appLanguage][4]}</p>
+                        {showPop && <PopUp changeStatePop={(data) => setShowPop(data)} changeLanguage={appState.changeLanguage} />}
                     </div>
                 </div>
+                {dataMemory && <DataComponent headBack={() => setDataMemory(false)} />}
             </div>
             {fullImg.state && <ModalWindow onclick={() => {
                 setFullImg({
@@ -182,9 +185,9 @@ const UserSettings = ({ close }) => {
                     height: '80%', width: '80%'
                 }} src={fullImg.img} alt="" onClick={(e) => e.stopPropagation()} />
                 <div className='image-func'>
-                        <svg onClick={returnImage} className='return-image' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
-                        </svg>
+                    <svg onClick={returnImage} className='return-image' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                    </svg>
                     <a href={ref?.current[showImg]} download='picture.png' className='download-image' onClick={(e) => e.stopPropagation()}>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />

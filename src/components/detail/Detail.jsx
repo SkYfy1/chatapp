@@ -10,7 +10,7 @@ import language from '../../utils/language'
 
 const Detail = ({ setShowDetails, isMobile }) => {
   const friend = useChatStore(state => state.user);
-  const lang = useAppStore();
+  const appState = useAppStore();
   const { changeBlock, isReceiverBlocked, isUserBlocked, chat } = useChatStore();
   const [show, setShow] = useState({
     shared: false,
@@ -69,19 +69,19 @@ const Detail = ({ setShowDetails, isMobile }) => {
       <div className="info">
         <div className="option">
           <div className="title">
-            <span>{language.settings.details[lang.language][0]}</span>
+            <span>{language.settings.details[appState.appLanguage][0]}</span>
             <img onClick={() => setShow(state => ({ ...state, privacy: !state.privacy }))} src={show.privacy ? "./arrowDown.png" : "./arrowUp.png"} alt="" />
           </div>
         </div>
         <div className="option">
           <div className="title">
-            <span>{language.settings.details[lang.language][1]}</span>
+            <span>{language.settings.details[appState.appLanguage][1]}</span>
             <img onClick={() => setShow(state => ({ ...state, settings: !state.settings }))} src={show.settings ? "./arrowDown.png" : "./arrowUp.png"} alt="" />
           </div>
         </div>
         <div className="option">
           <div className="title">
-            <span>{language.settings.details[lang.language][2]}</span>
+            <span>{language.settings.details[appState.appLanguage][2]}</span>
             <img onClick={() => setShow(state => ({ ...state, shared: !state.shared }))} src={show.shared ? "./arrowDown.png" : "./arrowUp.png"} alt="" />
           </div>
           {show.shared && <div className="photos">
@@ -93,7 +93,7 @@ const Detail = ({ setShowDetails, isMobile }) => {
         </div>
         <div className="option">
           <div className="title">
-            <span>{language.settings.details[lang.language][3]}</span>
+            <span>{language.settings.details[appState.appLanguage][3]}</span>
             <img onClick={() => setShow(state => ({ ...state, files: !state.files }))} src={show.files ? "./arrowDown.png" : "./arrowUp.png"} alt="" />
           </div>
           {show.files &&
@@ -105,9 +105,9 @@ const Detail = ({ setShowDetails, isMobile }) => {
         </div>
         <div className='btn-div'>
           <button onClick={handleBlock}>{
-            isUserBlocked ? 'You are blocked' : isReceiverBlocked ? "User blocked" : "Block user"
+            isUserBlocked ? 'You are blocked' : isReceiverBlocked ? (appState.appLanguage == 'en' ? "User blocked" : 'Заблоковано') : (appState.appLanguage == 'en' ? "Block user" : 'Заблокувати')
           }</button>
-          <button className='logout' onClick={() => auth.signOut()}>Logout</button>
+          <button className='logout' onClick={() => auth.signOut()}>{appState.appLanguage == 'en' ? 'Logout' : 'Вийти'}</button>
         </div>
       </div>
     </div>
