@@ -39,4 +39,36 @@ export class chatService {
             console.log(error)
         }
     }
+
+    static async changeMessageState(chatid, text) {
+        const chatRef = doc(db, 'chat', chatid);
+
+        const chatData = await getDoc(chatRef);
+
+        const chat = chatData.data();
+        // map messages array to find message and update state
+        const updatedMessages = chat.messages.map((mes) => {
+            // find message
+            if (mes.text === text) {
+                // check if message deleted
+                return ({
+                    ...mes,
+                    deleted: mes.deleted ? false : true
+                })
+            } else {
+                return mes;
+            }
+        });
+
+        console.log(updatedMessages)
+
+        await updateDoc(chatRef, {
+            messages: updatedMessages
+        })
+
+        // const q = query(chatRef, where('text', '==', text));
+        // console.log(q);
+
+        console.log(chat)
+    }
 }

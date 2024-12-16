@@ -24,7 +24,7 @@ const UserSettings = ({ close }) => {
     // const [lang, setLanguage]= useState('en');
     const [showPop, setShowPop] = useState(false)
 
-    const avatars = userInfo.hasOwnProperty('prevImgs') ? [userInfo.avatar, ...userInfo?.prevImgs]: [userInfo.avatar];
+    const avatars = userInfo.hasOwnProperty('prevImgs') ? [userInfo.avatar, ...userInfo?.prevImgs] : [userInfo.avatar];
 
     const returnImage = async (e) => {
         e.stopPropagation();
@@ -86,14 +86,14 @@ const UserSettings = ({ close }) => {
             <div className='main'>
                 <div className="settingsImg">
                     <div className="slider">
-                        <div className='lines'>
+                        {avatars.length >= 2 && <div className='lines'>
                             {avatars.map((el, index) => (
                                 <div key={el} onClick={() => setShowImg(index)} className={avatars[showImg] === el ? 'chosen-line' : 'line'}></div>
                             ))}
-                        </div>
-                        <svg onClick={() => prevImg()} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="left">
+                        </div>}
+                        {avatars.length >= 2 && <svg onClick={() => prevImg()} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="left">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18" />
-                        </svg>
+                        </svg>}
                         {userInfo.prevImgs ? <img onClick={() => setFullImg({
                             img: avatars[showImg],
                             state: true
@@ -103,9 +103,9 @@ const UserSettings = ({ close }) => {
                                 state: true
                             })}
                             src={userInfo.avatar || './avatar.png'} alt="avatar" />}
-                        <svg onClick={() => nextImg()} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="right">
+                        {avatars.length >= 2 && <svg onClick={() => nextImg()} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="right">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-                        </svg>
+                        </svg>}
                     </div>
                     <h2>{userInfo.username}</h2>
                 </div>

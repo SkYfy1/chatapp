@@ -125,6 +125,23 @@
                     flex-direction: column;
                     gap: 5px;
 
+                    p {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        svg {
+                            width: 15px;
+                            height: 15px;
+                            transition: all .3s ease;
+                            margin-left: 5px;
+
+                            &:hover {
+                                transform: scale(1.4);
+                                color:#a5a5a5
+                            }
+                        }
+                    }
+
                     .message-file {
                         display: flex;
                         justify-content: space-between;

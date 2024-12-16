@@ -19,48 +19,67 @@ class userService {
 
             // Image upload
 
+            if (image) {
+                const { data, error: uploadError } = await supabase.storage.from('avatars').upload(`uploads/${image.file.name}`, image.file);
 
 
+                if (uploadError) {
+                    console.error('Error uploading file:', uploadError.message);
+                } else {
+                    console.log(data);
+                }
 
-            // const { data, error: uploadError } = await supabase.storage.from('avatars').upload(`uploads/${image.file.name}`, image.file);
-
-
-            // if (uploadError) {
-            //     console.error('Error uploading file:', uploadError.message);
-            // } else {
-            //     console.log(data);
-            // }
-
-            // const { data: publicURL, error: urlError } = supabase.storage.from('avatars').getPublicUrl(`uploads/${image.file.name}`)
+                const { data: publicURL, error: urlError } = supabase.storage.from('avatars').getPublicUrl(`uploads/${image.file.name}`)
 
 
-            // if (urlError) {
-            //     console.error('Error uploading file:', urlError.message);
-            // } else {
-            //     console.log(publicURL);
-            // }
+                if (urlError) {
+                    console.error('Error uploading file:', urlError.message);
+                } else {
+                    console.log(publicURL);
+                }
 
-            const res = await createUserWithEmailAndPassword(auth, user.email, user.password);
+                const res = await createUserWithEmailAndPassword(auth, user.email, user.password);
 
-            console.log(res)
+                console.log(res)
 
-            await setDoc(doc(db, 'users', res.user.uid), {
-                username: user.username,
-                email: user.email,
-                id: res.user.uid,
-                avatar: publicURL?.publicUrl || null,
-                prevImgs: [],
-                blocked: [],
-            }).catch(error => {
-                console.error('Error in users setDoc:', error.message);
-            });
+                await setDoc(doc(db, 'users', res.user.uid), {
+                    username: user.username,
+                    email: user.email,
+                    id: res.user.uid,
+                    avatar: publicURL?.publicUrl || null,
+                    prevImgs: [],
+                    blocked: [],
+                }).catch(error => {
+                    console.error('Error in users setDoc:', error.message);
+                });
 
-            await setDoc(doc(db, 'userchats', res.user.uid), {
-                chats: [],
-            }).catch(error => {
-                console.error('Error in users setDoc:', error.message);
-            });
+                await setDoc(doc(db, 'userchats', res.user.uid), {
+                    chats: [],
+                }).catch(error => {
+                    console.error('Error in users setDoc:', error.message);
+                });
+            } else {
+                const res = await createUserWithEmailAndPassword(auth, user.email, user.password);
 
+                console.log(res)
+
+                await setDoc(doc(db, 'users', res.user.uid), {
+                    username: user.username,
+                    email: user.email,
+                    id: res.user.uid,
+                    avatar: publicURL?.publicUrl || null,
+                    prevImgs: [],
+                    blocked: [],
+                }).catch(error => {
+                    console.error('Error in users setDoc:', error.message);
+                });
+
+                await setDoc(doc(db, 'userchats', res.user.uid), {
+                    chats: [],
+                }).catch(error => {
+                    console.error('Error in users setDoc:', error.message);
+                });
+            }
             toast.success('Account created! You can login now!')
         } catch (error) {
             console.log(error)
