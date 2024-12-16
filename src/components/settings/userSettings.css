@@ -265,6 +265,40 @@
 }
 
 @media (min-width: 300px) and (max-width: 1000px) {
+    .data {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        padding: 15px;
+
+        .top {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+
+            svg {
+                width: 35px;
+                height: 35px;
+                cursor: pointer;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+
+        .imgs {
+            display: flex;
+            gap: 5px;
+
+            img {
+                width: 70px;
+                height: 70px;
+                object-fit: cover;
+            }
+        }
+    }
+
     .settings {
         flex: 1;
         display: flex;

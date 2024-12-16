@@ -2,7 +2,7 @@ import { useRef, useState } from 'react'
 import './login.css'
 import { toast } from 'react-toastify';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth, db } from '../../lib/firebase'
+import { auth, db, testFirestore } from '../../lib/firebase'
 import { doc, setDoc } from 'firebase/firestore';
 import supabase from '../../lib/supabase'
 import userService from '../../services/userService';
@@ -51,7 +51,7 @@ const Login = () => {
     return (
         <div className='login'>
             <div className="item">
-                <h2>Welcome back</h2>
+                <h2 onClick={testFirestore}>Welcome back</h2>
                 <form onSubmit={handleLogin}>
                     <input type="text" placeholder='Email' name='email' />
                     <input type="text" placeholder='Password' name='password' />

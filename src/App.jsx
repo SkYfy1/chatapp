@@ -4,7 +4,7 @@ import Detail from './components/detail/Detail'
 import Login from "./components/login/Login"
 import Notification from "./components/notification/Notification"
 import { useEffect, useState } from "react"
-import { auth, db } from './lib/firebase'
+import { auth, db} from './lib/firebase'
 import { onAuthStateChanged } from "firebase/auth"
 import { useAuthStore } from "./context/useAuthStore"
 import useChatStore from "./context/useChatStore"
@@ -61,14 +61,14 @@ const App = () => {
   // Get user information after updating
 
   useEffect(() => {
-      const onSub = currentUser?.id && onSnapshot(doc(db, 'users', currentUser.id), (user) => {
-        console.log('Updating state' + JSON.stringify(user.data()));
-        updateUserInfo(user.data());
-      });
+    const onSub = currentUser?.id && onSnapshot(doc(db, 'users', currentUser.id), (user) => {
+      console.log('Updating state' + JSON.stringify(user.data()));
+      updateUserInfo(user.data());
+    });
 
-      return () => {
-        currentUser?.id && onSub();
-      }
+    return () => {
+      currentUser?.id && onSub();
+    }
   }, [fetchUserInfo]);
 
 

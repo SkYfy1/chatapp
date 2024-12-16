@@ -24,7 +24,7 @@ const UserSettings = ({ close }) => {
     // const [lang, setLanguage]= useState('en');
     const [showPop, setShowPop] = useState(false)
 
-    const avatars = [userInfo.avatar, ...userInfo.prevImgs];
+    const avatars = userInfo.hasOwnProperty('prevImgs') ? [userInfo.avatar, ...userInfo?.prevImgs]: [userInfo.avatar];
 
     const returnImage = async (e) => {
         e.stopPropagation();
