@@ -4,7 +4,7 @@ import userService from '../../../../services/userService';
 import { chatService } from '../../../../services/chatsService';
 import { useAuthStore } from '../../../../context/useAuthStore';
 
-const AddUser = ({ show }) => {
+const AddUser = ({ show, changeShow }) => {
     const [friend, setFriend] = useState(null);
     const currentUser = useAuthStore(state => state.currentUser)
     const handleSearch = async (e) => {
@@ -19,7 +19,7 @@ const AddUser = ({ show }) => {
 
     const handleAdd = async () => {
         await chatService.createChat(friend.id, currentUser.id);
-        setTimeout(() => show(false), 2000)
+        setTimeout(changeShow, 2000)
     }
     return (
         <div className='addUser'>

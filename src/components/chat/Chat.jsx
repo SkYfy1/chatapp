@@ -171,7 +171,7 @@ const Chat = ({ showDetails, setShowDetails, isMobile, showChats }) => {
       </div>
       <div ref={reference} className="center">
         <div className='inview' ref={r}></div>
-        {(inView && reference.current.scrollHeight > 900) && <svg onClick={() => ref.current.scrollIntoView({
+        {(inView && reference.current.scrollHeight > 900 && chat?.message?.length > 10) && <svg onClick={() => ref.current.scrollIntoView({
           behavior: 'smooth'
         })} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={showDetails ? "arrowWithDetails" : "arrow"}>
           <path strokeLinecap="round" strokeLinejoin="round" d="m9 12.75 3 3m0 0 3-3m-3 3v-7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />

@@ -8,6 +8,7 @@ import useChatStore from '../../../context/useChatStore';
 import Tooltip from '../../ui/Tooltip';
 import language from '../../../utils/language.js'
 import useAppStore from '../../../context/useAppStore'
+import { useTrail, animated } from '@react-spring/web';
 
 
 const ChatList = ({ isMobile, toggle }) => {
@@ -20,6 +21,16 @@ const ChatList = ({ isMobile, toggle }) => {
   const currentUser = useAuthStore((state) => state.currentUser);
   const { userChats: chats, updateChats } = useAuthStore();
   const { changeChat } = useChatStore();
+  const [trails, api] = useTrail(chats.length, () => ({
+    from: {
+      opacity: 0,
+      x: -100,
+    },
+    to: {
+      opacity: 1,
+      x: 0
+    }
+  }))
 
   useEffect(() => {
     console.log(filter)
@@ -95,9 +106,27 @@ const ChatList = ({ isMobile, toggle }) => {
         </div>
         <img onClick={() => setAddMode(prev => !prev)} src={addMode ? './minus.png' : "./plus.png"} alt="" className='add' />
       </div>
-      {chats?.filter((el) => el.user.username.toLowerCase().startsWith(filter.toLowerCase())).map((chat) => (
-        !isMobile ? <Tooltip key={chat.chatId} style={pointer} text={`${language.settings.tooltip[appState.appLanguage]}${chat.user.username}`}>
-          <div
+      {trails.map(({ ...style }, index) =>
+      (
+        <animated.div style={style}>{chats?.filter((el) => el.user.username.toLowerCase().startsWith(filter.toLowerCase())).map((chat) => (
+          !isMobile ? <Tooltip key={chat.chatId} style={pointer} text={`${language.settings.tooltip[appState.appLanguage]}${chat.user.username}`}>
+            <div
+              className="item"
+              onClick={() => handleSelect(chat)}
+              style={{
+                backgroundColor: chat?.isSeen ? 'transparent' : '#5183fe'
+              }}
+            >
+              <img src={chat.user.blocked.includes(currentUser.id)
+                ? './avatar.png'
+                : chat.user.avatar || './avatar.png'} alt="" />
+              <div className='texts'>
+                <span>{chat.user.blocked.includes(currentUser.id) ? 'User' : chat.user.username}</span>
+                <p>{chat.lastMessage}</p>
+              </div>
+            </div>
+          </Tooltip> : <div
+            key={chat.chatId}
             className="item"
             onClick={() => handleSelect(chat)}
             style={{
@@ -112,24 +141,11 @@ const ChatList = ({ isMobile, toggle }) => {
               <p>{chat.lastMessage}</p>
             </div>
           </div>
-        </Tooltip> : <div
-          key={chat.chatId}
-          className="item"
-          onClick={() => handleSelect(chat)}
-          style={{
-            backgroundColor: chat?.isSeen ? 'transparent' : '#5183fe'
-          }}
-        >
-          <img src={chat.user.blocked.includes(currentUser.id)
-            ? './avatar.png'
-            : chat.user.avatar || './avatar.png'} alt="" />
-          <div className='texts'>
-            <span>{chat.user.blocked.includes(currentUser.id) ? 'User' : chat.user.username}</span>
-            <p>{chat.lastMessage}</p>
-          </div>
-        </div>
-      ))}
-      {addMode && <AddUser show={addMode} />}
+        ))[index]}
+        </animated.div>
+      )
+      )}
+      {addMode && <AddUser show={addMode} changeShow={() => setAddMode(false)} />}
     </div>
   )
 }
