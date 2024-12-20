@@ -7,7 +7,7 @@ const DataComponent = ({ headBack }) => {
     const userChats = useAuthStore(state => state.userChats);
     const [imgs, setImgs] = useState(undefined);
 
-    console.log(userChats)
+    // console.log(userChats)
 
     if (userChats.length == 0) {
         return (
@@ -32,7 +32,8 @@ const DataComponent = ({ headBack }) => {
             setImgs(img)
         }
         userChats.length != 0 && getFiles();
-    }, [chatIds])
+    }, [chatIds]);
+
     return (
         <div className='data'>
             {/* {imgs?.map(el => (
@@ -45,8 +46,8 @@ const DataComponent = ({ headBack }) => {
                 <h1>Shared Files</h1>
             </div>
             <div className='imgs'>
-                {imgs?.map(el => (
-                    <img className='image' src={el} alt="" />
+                {imgs?.map((el, index) => (
+                    <img className='image' src={el} alt="" key={index} />
                 ))}
             </div>
         </div>

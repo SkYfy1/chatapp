@@ -36,18 +36,17 @@ const ChatList = ({ isMobile, toggle }) => {
     console.log(filter)
   }, [filter])
 
-  useEffect(() => {
-    const getPointer = (e) => {
-      setPointer({ pointerX: e.clientX, pointerY: e.clientY })
-      console.log({ pointerX: e.pageX, pointerY: e.pageY })
-    }
+  // useEffect(() => {
+  //   const getPointer = (e) => {
+  //     setPointer({ pointerX: e.clientX, pointerY: e.clientY })
+  //   }
 
-    window.addEventListener('mousemove', getPointer)
+  //   window.addEventListener('mousemove', getPointer)
 
-    return () => {
-      window.removeEventListener('mousemove', getPointer)
-    }
-  }, [])
+  //   return () => {
+  //     window.removeEventListener('mousemove', getPointer)
+  //   }
+  // }, [])
 
   useEffect(() => {
     const unSub = onSnapshot(doc(db, 'userchats', currentUser.id), async (res) => {
@@ -113,6 +112,7 @@ const ChatList = ({ isMobile, toggle }) => {
             <div
               className="item"
               onClick={() => handleSelect(chat)}
+              onMouseMove={(e) => setPointer({ pointerX: e.clientX, pointerY: e.clientY })}
               style={{
                 backgroundColor: chat?.isSeen ? 'transparent' : '#5183fe'
               }}
