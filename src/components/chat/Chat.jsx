@@ -187,11 +187,16 @@ const Chat = ({ showDetails, setShowDetails, isMobile, showChats }) => {
               <div className="texts">
                 {/* Image */}
                 {message.img &&
-                  <Spring>
-                    <img src={message.img} alt="Message Image" onClick={() => setShowBig({
+                  <Spring onClick={() => setShowBig({
+                    img: message.img,
+                    state: true
+                  })}>
+                    {/* Fixxxxx */}
+                    {/* <img src={message.img} alt="Message Image" onClick={() => setShowBig({
                       img: message.img,
                       state: true
-                    })} />
+                    })} /> */}
+                    <img src={message.img} alt="Message Image" />
                   </Spring>
                 }
                 {/* Text */}
