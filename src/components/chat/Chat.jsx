@@ -13,6 +13,7 @@ import useAppStore from '../../context/useAppStore';
 import Trail from '../animation/Trail'
 import { chatService } from '../../services/chatsService';
 import Spring from '../animation/Spring';
+import Audio from './Audio/Audio';
 
 const Chat = ({ showDetails, setShowDetails, isMobile, showChats }) => {
   const [open, setOpen] = useState(false);
@@ -26,6 +27,9 @@ const Chat = ({ showDetails, setShowDetails, isMobile, showChats }) => {
     state: false
   });
   const [file, setFile] = useState(null);
+  const [audioMessage, setAudioMessage] = useState();
+  const audioMessageChunks = useRef([]);
+  const controls = useRef();
   const appState = useAppStore();
 
   const ref = useRef(null);
@@ -147,6 +151,38 @@ const Chat = ({ showDetails, setShowDetails, isMobile, showChats }) => {
     }
   }
 
+  // Capture audio message
+
+  const recordAudioMessage = async () => {
+    try {
+      const permission = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+      const mediaRecorder = new MediaRecorder(permission);
+
+      mediaRecorder.start();
+      console.log(mediaRecorder.state);
+      console.log('recording started')
+
+      mediaRecorder.ondataavailable = (e) => {
+        audioMessageChunks.current.push(e.data);
+      }
+
+      setTimeout(() => mediaRecorder.stop(), 10000);
+
+      mediaRecorder.onstop = (e) => {
+        console.log(audioMessageChunks.current)
+        const blob = new Blob(audioMessageChunks.current, { type: { type: 'audio/ogg; codecs=opus' } });
+        audioMessageChunks.current = [];
+        const audioUrl = URL.createObjectURL(blob);
+        console.log(audioUrl)
+
+        setAudioMessage(audioUrl);
+      }
+    } catch (error) {
+      console.log(error.message)
+    }
+  };
+
   if (!chatId) {
     return <div className="chat"></div>
   }
@@ -165,7 +201,7 @@ const Chat = ({ showDetails, setShowDetails, isMobile, showChats }) => {
           </div>
         </div>
         {!isMobile && <div className="icons">
-          <img src="./phone.png" alt="call" />
+          <img src="./phone.png" alt="call" onClick={recordAudioMessage} />
           <img src="./video.png" alt="video" />
           <img src="./info.png" alt="settings" onClick={() => setShowDetails(!showDetails)} />
         </div>}
@@ -222,6 +258,11 @@ const Chat = ({ showDetails, setShowDetails, isMobile, showChats }) => {
           )
         })}
         <div ref={ref}></div>
+        {audioMessage && <div className='audioMessage'>
+          {/* <audio ref={controls} src={audioMessage}></audio>
+          <button onClick={() => controls.current.play()}>Start</button> */}
+          <Audio controls={controls} audioMessage={audioMessage} />
+        </div>}
       </div>
       <div className="bottom">
         <div className="icons">

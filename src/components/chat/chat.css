@@ -129,6 +129,7 @@
                         display: flex;
                         justify-content: space-between;
                         align-items: center;
+
                         svg {
                             width: 15px;
                             height: 15px;
@@ -137,7 +138,7 @@
 
                             &:hover {
                                 transform: scale(1.4);
-                                color:#a5a5a5
+                                color: #a5a5a5
                             }
                         }
                     }
@@ -203,6 +204,57 @@
                     .texts {
                         p {
                             background-color: #5183fe;
+                        }
+                    }
+                }
+            }
+
+            .audioMessage {
+                position: absolute;
+                bottom: 15px;
+                right: 75px;
+
+                .audioControls {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 10px;
+                    button {
+                        background-color: rgba(46, 171, 255, 0.322);
+                        border: none;
+                        padding: 5px;
+                        border-radius: 50%;
+                        width: 30px;
+                        height: 30px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        transition: all .2s ease;
+
+                        svg {
+                            width: 15px;
+                            height: 15px;
+                            margin: 0 auto;
+                            color: white
+                        }
+                    }
+
+                    button:hover {
+                        background-color: rgba(46, 171, 255, 0.116);
+                        border: none;
+                        padding: 5px;
+                        border-radius: 50%;
+                        width: 30px;
+                        height: 30px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+
+                        svg {
+                            width: 15px;
+                            height: 15px;
+                            margin: 0 auto;
+                            color: rgb(46, 171, 255)
                         }
                     }
                 }
