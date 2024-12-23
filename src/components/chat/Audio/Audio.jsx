@@ -15,16 +15,16 @@ const Audio = ({ controls, audioMessage, }) => {
 
     const handleLoadedMetadata = () => {
         if (controls.current) {
-            console.log('duration?')
+            // console.log('duration?')
             setDuration(controls.current.duration);
         }
     };
 
-    useEffect(() => {
-        console.log("Blob URL:", audioMessage);
-        console.log("Audio readyState:", controls.current?.readyState);
-        console.log("Audio duration:", controls.current?.duration);
-    })
+    // useEffect(() => {
+    //     console.log("Blob URL:", audioMessage);
+    //     console.log("Audio readyState:", controls.current?.readyState);
+    //     console.log("Audio duration:", controls.current?.duration);
+    // })
 
     return (
         <div className='audioControls'>

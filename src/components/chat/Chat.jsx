@@ -17,6 +17,7 @@ import Audio from './Audio/Audio';
 
 const Chat = ({ showDetails, setShowDetails, isMobile, showChats }) => {
   const [open, setOpen] = useState(false);
+  const refic = useRef(null);
   const [text, setText] = useState('');
   const [image, setImage] = useState({
     file: null,
@@ -35,6 +36,7 @@ const Chat = ({ showDetails, setShowDetails, isMobile, showChats }) => {
   const ref = useRef(null);
   const reference = useRef();
 
+  // const { mediaRecorder, addMe } = useChatStore();
   const chatId = useChatStore(state => state.chatId);
   const receiver = useChatStore(state => state.user);
   const currentUser = useAuthStore(state => state.currentUser);
@@ -154,10 +156,14 @@ const Chat = ({ showDetails, setShowDetails, isMobile, showChats }) => {
   // Capture audio message
 
   const recordAudioMessage = async () => {
+    let permission;
     try {
-      const permission = await navigator.mediaDevices.getUserMedia({ audio: true });
+      permission = await navigator.mediaDevices.getUserMedia({ audio: true });
 
       const mediaRecorder = new MediaRecorder(permission);
+      refic.current = mediaRecorder;
+      console.log(refic.current)
+      console.log(mediaRecorder)
 
       mediaRecorder.start();
       console.log(mediaRecorder.state);
@@ -177,9 +183,11 @@ const Chat = ({ showDetails, setShowDetails, isMobile, showChats }) => {
         console.log(audioUrl)
 
         setAudioMessage(audioUrl);
+        permission.getTracks().forEach((track) => track.stop());
       }
     } catch (error) {
       console.log(error.message)
+      permission.getTracks().forEach((track) => track.stop());
     }
   };
 

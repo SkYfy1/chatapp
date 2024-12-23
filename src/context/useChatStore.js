@@ -7,6 +7,11 @@ const useChatStore = create((set) => ({
     user: null,
     isReceiverBlocked: false,
     isUserBlocked: false,
+    audioMessage: null,
+
+    addAudio: (ent) => {
+        set({ mediaRecorder: ent })
+    },
 
     changeChat: (chatId, user) => {
         const currentUser = useAuthStore.getState().currentUser;
