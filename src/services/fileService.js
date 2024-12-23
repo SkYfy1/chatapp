@@ -64,4 +64,20 @@ export class fileService {
             console.log(error)
         }
     }
+
+    static async uploadAudio(audio) {
+        try {
+            // const bucket = supabase.storage.from('audio');
+            // console.log(bucket);
+
+            const fileName = `audio-${Date.now()}.ogg`;
+            const { data, error } = await supabase.storage.from('audio').upload(`uploads/${fileName}`, audio);
+            const { data: publicUrl, error: urlError } = supabase.storage.from('audio').getPublicUrl(`uploads/${fileName}`);
+
+            console.log(publicUrl.publicUrl)
+            return publicUrl.publicUrl;
+        } catch (error) {
+            console.log(error.message)
+        }
+    }
 }

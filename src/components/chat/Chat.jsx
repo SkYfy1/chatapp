@@ -14,6 +14,7 @@ import Trail from '../animation/Trail'
 import { chatService } from '../../services/chatsService';
 import Spring from '../animation/Spring';
 import Audio from './Audio/Audio';
+import { audioBufferToWav, wavToMp3 } from '../../utils/convertAudio';
 
 const Chat = ({ showDetails, setShowDetails, isMobile, showChats }) => {
   const [open, setOpen] = useState(false);
@@ -28,7 +29,11 @@ const Chat = ({ showDetails, setShowDetails, isMobile, showChats }) => {
     state: false
   });
   const [file, setFile] = useState(null);
-  const [audioMessage, setAudioMessage] = useState();
+  const [audioMessage, setAudioMessage] = useState({
+    url: null,
+    file: null,
+  });
+  const [isRecording, setRecording] = useState(false);
   const audioMessageChunks = useRef([]);
   const controls = useRef();
   const appState = useAppStore();
@@ -165,24 +170,42 @@ const Chat = ({ showDetails, setShowDetails, isMobile, showChats }) => {
       console.log(refic.current)
       console.log(mediaRecorder)
 
-      mediaRecorder.start();
-      console.log(mediaRecorder.state);
+      refic.current.start();
+      setRecording(true);
+      console.log(refic.current.state);
       console.log('recording started')
 
-      mediaRecorder.ondataavailable = (e) => {
+      refic.current.ondataavailable = (e) => {
         audioMessageChunks.current.push(e.data);
+        console.log(e.data)
       }
 
-      setTimeout(() => mediaRecorder.stop(), 10000);
-
-      mediaRecorder.onstop = (e) => {
+      refic.current.onstop = async (e) => {
         console.log(audioMessageChunks.current)
-        const blob = new Blob(audioMessageChunks.current, { type: { type: 'audio/ogg; codecs=opus' } });
+        const blob = new Blob(audioMessageChunks.current, { type: 'audio/ogg; codecs=opus' });
+        // await fileService.uploadAudio(blob)
+
+
+        // blob to array buffer 
+
+        // const reader = new FileReader();
+        // reader.onload = () => {
+        //   const arrayBuffer = reader.result; // ArrayBuffer
+        //   console.log(arrayBuffer);
+        // };
+        // reader.readAsArrayBuffer(blob);
+
         audioMessageChunks.current = [];
         const audioUrl = URL.createObjectURL(blob);
-        console.log(audioUrl)
+        // console.log(audioUrl)
 
-        setAudioMessage(audioUrl);
+        setRecording(false);
+        setAudioMessage(
+          {
+            url: audioUrl,
+            file: blob
+          }
+        );
         permission.getTracks().forEach((track) => track.stop());
       }
     } catch (error) {
@@ -209,7 +232,7 @@ const Chat = ({ showDetails, setShowDetails, isMobile, showChats }) => {
           </div>
         </div>
         {!isMobile && <div className="icons">
-          <img src="./phone.png" alt="call" onClick={recordAudioMessage} />
+          <img src="./phone.png" alt="call" />
           <img src="./video.png" alt="video" />
           <img src="./info.png" alt="settings" onClick={() => setShowDetails(!showDetails)} />
         </div>}
@@ -266,10 +289,10 @@ const Chat = ({ showDetails, setShowDetails, isMobile, showChats }) => {
           )
         })}
         <div ref={ref}></div>
-        {audioMessage && <div className='audioMessage'>
+        {audioMessage.url && <div className='audioMessage'>
           {/* <audio ref={controls} src={audioMessage}></audio>
           <button onClick={() => controls.current.play()}>Start</button> */}
-          <Audio controls={controls} audioMessage={audioMessage} />
+          <Audio controls={controls} audioMessage={audioMessage.url} />
         </div>}
       </div>
       <div className="bottom">
@@ -304,13 +327,21 @@ const Chat = ({ showDetails, setShowDetails, isMobile, showChats }) => {
             <path strokeLinecap="round" strokeLinejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
           </svg>
           <input disabled={isUserBlocked || isReceiverBlocked} type="file" id='file' onChange={handleAddFile} />
-        </label>
+        </ label>
         <div className="emoji">
           <img src="./emoji.png" alt="" onClick={() => setOpen(prev => !prev)} />
           <div className="picker">
             <EmojiPicker onEmojiClick={(e) => setText(prev => prev + e.emoji)} open={open} theme='dark' width={isMobile ? 320 : 400} />
           </div>
         </div>
+        <div className='audio' onClick={!isRecording ? recordAudioMessage : () => refic.current.stop()}>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={isRecording ? 'rec' : 'not-rec'}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z" />
+          </svg>
+        </div>
+        <button disabled={isUserBlocked || isReceiverBlocked} className='sendButton' onClick={async () => await fileService.uploadAudio(audioMessage.file)}>
+          Send Audio
+        </button>
         <button disabled={isUserBlocked || isReceiverBlocked} className='sendButton' onClick={handleSend}>
           Send
         </button>

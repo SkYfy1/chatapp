@@ -364,6 +364,23 @@
                     right: -20px;
                 }
             }
+
+            .audio {
+                svg {
+                    width: 25px;
+                    height: 25px;
+                    transition: all .3s ease;
+                }
+
+                .rec {
+                    color: #5182febb;
+                    transform: scale(1.5);
+                }
+
+                .not-rec {
+                    color: white;
+                }
+            }
         }
     }
 }
