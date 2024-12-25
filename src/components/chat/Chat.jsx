@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import './chat.css'
 import EmojiPicker from 'emoji-picker-react'
 import { arrayUnion, doc, onSnapshot, updateDoc, getDoc } from 'firebase/firestore';
@@ -16,7 +16,7 @@ import Spring from '../animation/Spring';
 import Audio from './Audio/Audio';
 import Icons from '../ui/Icons';
 
-const Chat = ({ showDetails, setShowDetails, showChats }) => {
+const Chat = React.memo(({ showDetails, setShowDetails }) => {
   const [open, setOpen] = useState(false);
   const refic = useRef(null);
   const [text, setText] = useState('');
@@ -36,7 +36,6 @@ const Chat = ({ showDetails, setShowDetails, showChats }) => {
   const [isRecording, setRecording] = useState(false);
   const isMobile = useAppStore(state => state.isMobile);
   const audioMessageChunks = useRef([]);
-  const appState = useAppStore();
 
   const ref = useRef(null);
   const reference = useRef();
@@ -52,6 +51,10 @@ const Chat = ({ showDetails, setShowDetails, showChats }) => {
     threshold: 0.5
   });
 
+  useEffect(() => {
+    console.log('Rerender chat')
+  })
+
   const handleAddImage = (e) => {
     if (e.target.files[0]) {
       setImage({
@@ -59,7 +62,7 @@ const Chat = ({ showDetails, setShowDetails, showChats }) => {
         url: URL.createObjectURL(e.target.files[0])
       })
     }
-  };
+  }
 
   const handleAddFile = (e) => {
     if (e.target.files[0]) {
@@ -372,9 +375,9 @@ const Chat = ({ showDetails, setShowDetails, showChats }) => {
           //   </label>
           // </div>
           <Icons>
-            <img src="./img.png" alt="" data-change={handleAddImage}/>
-            <img src="./camera.png" alt="" data-change={handleAddImage}/>
-            <img src="./video.png" alt="" data-change={handleAddImage}/>
+            <img src="./img.png" alt="" onChange={handleAddImage} data-handler='onChange' />
+            <img src="./camera.png" alt="" onChange={handleAddImage} data-handler='onChange' />
+            <img src="./video.png" alt="" onChange={handleAddImage} data-handler='onChange' />
           </Icons>
           :
           // <div className="icons">
@@ -386,7 +389,7 @@ const Chat = ({ showDetails, setShowDetails, showChats }) => {
           //   </label>
           // </div>
           <Icons>
-            <svg data-change={handleAddImage} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+            <svg onChange={handleAddImage} data-handler='onChange' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
               <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15a4.5 4.5 0 0 0 4.5 4.5H18a3.75 3.75 0 0 0 1.332-7.257 3 3 0 0 0-3.758-3.848 5.25 5.25 0 0 0-10.233 2.33A4.502 4.502 0 0 0 2.25 15Z" />
             </svg>
           </Icons>
@@ -434,6 +437,6 @@ const Chat = ({ showDetails, setShowDetails, showChats }) => {
       </ModalWindow>}
     </div>
   )
-}
+})
 
 export default Chat

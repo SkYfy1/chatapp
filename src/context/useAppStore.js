@@ -11,10 +11,12 @@ const useAppStore = create((set) => ({
     checkScreen: () => {
             if (window.innerWidth < 720) {
                 console.log('mobile')
-                return set({ isMobile: true });
+                set({ isMobile: true });
+                return;
             } else {
-                console.log('mobile')
-                return set({ isMobile: false });
+                console.log('pc')
+                set({ isMobile: false });
+                return;
             }
     }
 }));

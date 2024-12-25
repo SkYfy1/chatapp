@@ -1,16 +1,24 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import useChatStore from '../../context/useChatStore';
 
-const Icons = ({ children }) => {
-    const { isReceiverBlocked, isUserBlocked } = useChatStore();
+const Icons = React.memo(({ children }) => {
+    const isReceiverBlocked = useChatStore(state => state.isReceiverBlocked);
+    const isUserBlocked = useChatStore(state => state.isReceiverBlocked);
 
-    if (!children.hasOwnProperty('length')) {
+    useEffect(() => {
+        console.log('Rerender icons')
+    })
 
+    console.log(children)
+
+    const isSingleChild = React.Children.count(children) === 1;
+
+    if (isSingleChild) {
         return (
             <div className='icons'>
                 <label htmlFor="img">
                     {children}
-                    <input disabled={isUserBlocked || isReceiverBlocked} type="file" id='img' style={{ display: 'none' }} onChange={children.props['data-change']} />
+                    <input disabled={isUserBlocked || isReceiverBlocked} type="file" id='img' style={{ display: 'none' }} onChange={children.props[children.props['data-handler']]} />
                 </label>
             </div>
         );
@@ -21,11 +29,13 @@ const Icons = ({ children }) => {
             {children.map(el =>
                 <label htmlFor="img">
                     {el}
-                    <input disabled={isUserBlocked || isReceiverBlocked} type="file" id='img' style={{ display: 'none' }} onChange={el.props['data-change']} />
+                    <input disabled={isUserBlocked || isReceiverBlocked} type="file" id='img' style={{ display: 'none' }} onChange={el.props[el.props['data-handler']]} />
                 </label>
             )}
         </div>
     )
-}
+}, (prevProps, nextProps) => {
+    return prevProps.children === nextProps.children;
+})
 
 export default Icons
