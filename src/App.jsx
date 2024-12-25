@@ -4,20 +4,22 @@ import Detail from './components/detail/Detail'
 import Login from "./components/login/Login"
 import Notification from "./components/notification/Notification"
 import { useEffect, useState } from "react"
-import { auth, db} from './lib/firebase'
+import { auth, db } from './lib/firebase'
 import { onAuthStateChanged } from "firebase/auth"
 import { useAuthStore } from "./context/useAuthStore"
 import useChatStore from "./context/useChatStore"
 import UserSettings from "./components/settings/UserSettings"
 import { doc, onSnapshot } from "firebase/firestore"
+import useAppStore from "./context/useAppStore"
 
 const App = () => {
   const [showDetails, setShowDetails] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const { currentUser, isLoading, fetchUserInfo, updateUserInfo } = useAuthStore();
   const chatId = useChatStore(state => state.chatId);
-  const [isMobile, setIsMobile] = useState(false);
+  // const [isMobile, setIsMobile] = useState(false);
   const [toggle, setToggle] = useState(false);
+  const { isMobile, checkScreen } = useAppStore();
 
   const changeSettingsState = () => {
     setShowSettings(prev => !prev)
@@ -25,23 +27,31 @@ const App = () => {
   };
 
   // create an event listener
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     if (window.innerWidth < 720) {
+  //       setIsMobile(true);
+  //       console.log('mobile')
+  //     } else {
+  //       setIsMobile(false);
+  //       console.log('pc')
+  //     }
+  //   }
+
+  //   handleResize();
+
+  //   window.addEventListener("resize", handleResize);
+
+
+  //   return () => window.removeEventListener('resize', handleResize)
+  // }, []);
+
   useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 720) {
-        setIsMobile(true);
-        console.log('mobile')
-      } else {
-        setIsMobile(false);
-        console.log('pc')
-      }
-    }
+    checkScreen()
 
-    handleResize();
+    window.addEventListener("resize", checkScreen);
 
-    window.addEventListener("resize", handleResize);
-
-
-    return () => window.removeEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', checkScreen)
   }, []);
 
 
@@ -80,10 +90,10 @@ const App = () => {
     <div className='container'>
       {currentUser ? (
         <>
-          {!toggle && <List isMobile={isMobile} toggle={setToggle} chatId={chatId} showDetails={showDetails} openSettings={changeSettingsState} />}
+          {!toggle && <List toggle={setToggle} chatId={chatId} showDetails={showDetails} openSettings={changeSettingsState} />}
           {showSettings && <UserSettings close={changeSettingsState} />}
-          {chatId && <Chat showDetails={showDetails} isMobile={isMobile} showChats={setToggle} setShowDetails={setShowDetails} />}
-          {showDetails && <Detail setShowDetails={setShowDetails} isMobile={isMobile} />}
+          {chatId && <Chat showDetails={showDetails} showChats={setToggle} setShowDetails={setShowDetails} />}
+          {showDetails && <Detail setShowDetails={setShowDetails} />}
         </>
       ) : (
         <Login />

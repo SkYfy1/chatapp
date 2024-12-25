@@ -14,9 +14,9 @@ import Trail from '../animation/Trail'
 import { chatService } from '../../services/chatsService';
 import Spring from '../animation/Spring';
 import Audio from './Audio/Audio';
-import { audioBufferToWav, wavToMp3 } from '../../utils/convertAudio';
+import Icons from '../ui/Icons';
 
-const Chat = ({ showDetails, setShowDetails, isMobile, showChats }) => {
+const Chat = ({ showDetails, setShowDetails, showChats }) => {
   const [open, setOpen] = useState(false);
   const refic = useRef(null);
   const [text, setText] = useState('');
@@ -34,6 +34,7 @@ const Chat = ({ showDetails, setShowDetails, isMobile, showChats }) => {
     file: null,
   });
   const [isRecording, setRecording] = useState(false);
+  const isMobile = useAppStore(state => state.isMobile);
   const audioMessageChunks = useRef([]);
   const appState = useAppStore();
 
@@ -126,6 +127,39 @@ const Chat = ({ showDetails, setShowDetails, isMobile, showChats }) => {
             audioMessage: audioUrl,
           })
         })
+
+        const userIDs = [currentUser.id, receiver.id];
+
+        userIDs.forEach(async (id) => {
+          const userChatsRef = doc(db, 'userchats', id);
+          const userChatsSnapshot = await getDoc(userChatsRef);
+
+          if (userChatsSnapshot.exists()) {
+            const userChatsData = userChatsSnapshot.data();
+
+            const chatIndex = userChatsData.chats.findIndex(c => c.chatId === chatId);
+
+            userChatsData.chats[chatIndex].lastMessage = text;
+            userChatsData.chats[chatIndex].isSeen = (id === currentUser.id) ? true : false;
+            userChatsData.chats[chatIndex].updatedAt = Date.now();
+
+            await updateDoc(userChatsRef, {
+              chats: userChatsData.chats
+            })
+
+          }
+        });
+
+        setText('');
+        setImage({
+          file: null,
+          url: null,
+        });
+        setAudioMessage({
+          url: null,
+          file: null,
+        });
+        setFile(null)
 
         return;
       }
@@ -322,20 +356,41 @@ const Chat = ({ showDetails, setShowDetails, isMobile, showChats }) => {
         </div>}
       </div>
       <div className="bottom">
-        <div className="icons">
-          <label htmlFor="img">
-            <img src="./img.png" alt="" />
-            <input disabled={isUserBlocked || isReceiverBlocked} type="file" id='img' style={{ display: 'none' }} onChange={handleAddImage} />
-          </label>
-          <label htmlFor="img">
-            <img src="./camera.png" alt="" />
-            <input disabled={isUserBlocked || isReceiverBlocked} type="file" id='img' style={{ display: 'none' }} onChange={handleAddImage} />
-          </label>
-          <label htmlFor="img">
-            <img src="./video.png" alt="" />
-            <input disabled={isUserBlocked || isReceiverBlocked} type="file" id='img' style={{ display: 'none' }} onChange={handleAddImage} />
-          </label>
-        </div>
+        {!isMobile ?
+          // <div className="icons">
+          //   <label htmlFor="img">
+          //     <img src="./img.png" alt="" />
+          //     <input disabled={isUserBlocked || isReceiverBlocked} type="file" id='img' style={{ display: 'none' }} onChange={handleAddImage} />
+          //   </label>
+          //   <label htmlFor="img">
+          //     <img src="./camera.png" alt="" />
+          //     <input disabled={isUserBlocked || isReceiverBlocked} type="file" id='img' style={{ display: 'none' }} onChange={handleAddImage} />
+          //   </label>
+          //   <label htmlFor="img">
+          //     <img src="./video.png" alt="" />
+          //     <input disabled={isUserBlocked || isReceiverBlocked} type="file" id='img' style={{ display: 'none' }} onChange={handleAddImage} />
+          //   </label>
+          // </div>
+          <Icons>
+            <img src="./img.png" alt="" data-change={handleAddImage}/>
+            <img src="./camera.png" alt="" data-change={handleAddImage}/>
+            <img src="./video.png" alt="" data-change={handleAddImage}/>
+          </Icons>
+          :
+          // <div className="icons">
+          //   <label htmlFor="img">
+          //     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+          //       <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15a4.5 4.5 0 0 0 4.5 4.5H18a3.75 3.75 0 0 0 1.332-7.257 3 3 0 0 0-3.758-3.848 5.25 5.25 0 0 0-10.233 2.33A4.502 4.502 0 0 0 2.25 15Z" />
+          //     </svg>
+          //     <input disabled={isUserBlocked || isReceiverBlocked} type="file" id='img' style={{ display: 'none' }} onChange={handleAddImage} />
+          //   </label>
+          // </div>
+          <Icons>
+            <svg data-change={handleAddImage} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15a4.5 4.5 0 0 0 4.5 4.5H18a3.75 3.75 0 0 0 1.332-7.257 3 3 0 0 0-3.758-3.848 5.25 5.25 0 0 0-10.233 2.33A4.502 4.502 0 0 0 2.25 15Z" />
+            </svg>
+          </Icons>
+        }
         {image.file &&
           <div className='image-preview'>
             <svg onClick={() => setImage({
@@ -365,9 +420,6 @@ const Chat = ({ showDetails, setShowDetails, isMobile, showChats }) => {
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z" />
           </svg>
         </div>
-        <button disabled={isUserBlocked || isReceiverBlocked} className='sendButton' onClick={async () => await fileService.uploadAudio(audioMessage.file)}>
-          Send Audio
-        </button>
         <button disabled={isUserBlocked || isReceiverBlocked} className='sendButton' onClick={handleSend}>
           Send
         </button>

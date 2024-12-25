@@ -11,7 +11,7 @@ import useAppStore from '../../../context/useAppStore'
 import { useTrail, animated } from '@react-spring/web';
 
 
-const ChatList = ({ isMobile, toggle }) => {
+const ChatList = ({ toggle }) => {
   const [addMode, setAddMode] = useState(false);
   // const [chats, setChats] = useState([]);
   const [filter, setFilter] = useState('');
@@ -89,7 +89,7 @@ const ChatList = ({ isMobile, toggle }) => {
 
     await changeChat(chat.chatId, chat.user);
 
-    { isMobile && toggle(); }
+    { appState.isMobile && toggle(); }
   }
 
   useEffect(() => {
@@ -107,12 +107,29 @@ const ChatList = ({ isMobile, toggle }) => {
       </div>
       {trails.map(({ ...style }, index) =>
       (
-        <animated.div style={style}>{chats?.filter((el) => el.user.username.toLowerCase().startsWith(filter.toLowerCase())).map((chat) => (
-          !isMobile ? <Tooltip key={chat.chatId} style={pointer} text={`${language.settings.tooltip[appState.appLanguage]}${chat.user.username}`}>
-            <div
+        <animated.div style={style} key={index}>
+          {chats?.filter((el) => el.user.username.toLowerCase().startsWith(filter.toLowerCase())).map((chat) => (
+            !appState.isMobile ? <Tooltip key={chat.chatId} style={pointer} text={`${language.settings.tooltip[appState.appLanguage]}${chat.user.username}`}>
+              <div
+                className="item"
+                onClick={() => handleSelect(chat)}
+                onMouseMove={(e) => setPointer({ pointerX: e.clientX, pointerY: e.clientY })}
+                style={{
+                  backgroundColor: chat?.isSeen ? 'transparent' : '#5183fe'
+                }}
+              >
+                <img src={chat.user.blocked.includes(currentUser.id)
+                  ? './avatar.png'
+                  : chat.user.avatar || './avatar.png'} alt="" />
+                <div className='texts'>
+                  <span>{chat.user.blocked.includes(currentUser.id) ? 'User' : chat.user.username}</span>
+                  <p>{chat.lastMessage}</p>
+                </div>
+              </div>
+            </Tooltip> : <div
+              key={chat.chatId}
               className="item"
               onClick={() => handleSelect(chat)}
-              onMouseMove={(e) => setPointer({ pointerX: e.clientX, pointerY: e.clientY })}
               style={{
                 backgroundColor: chat?.isSeen ? 'transparent' : '#5183fe'
               }}
@@ -125,23 +142,7 @@ const ChatList = ({ isMobile, toggle }) => {
                 <p>{chat.lastMessage}</p>
               </div>
             </div>
-          </Tooltip> : <div
-            key={chat.chatId}
-            className="item"
-            onClick={() => handleSelect(chat)}
-            style={{
-              backgroundColor: chat?.isSeen ? 'transparent' : '#5183fe'
-            }}
-          >
-            <img src={chat.user.blocked.includes(currentUser.id)
-              ? './avatar.png'
-              : chat.user.avatar || './avatar.png'} alt="" />
-            <div className='texts'>
-              <span>{chat.user.blocked.includes(currentUser.id) ? 'User' : chat.user.username}</span>
-              <p>{chat.lastMessage}</p>
-            </div>
-          </div>
-        ))[index]}
+          ))[index]}
         </animated.div>
       )
       )}
