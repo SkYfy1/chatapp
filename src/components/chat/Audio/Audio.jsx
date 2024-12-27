@@ -1,15 +1,38 @@
 import React, { useEffect, useState, useRef } from 'react'
+import MusicPlayerSlider from '../../ui/Slider';
 
 const Audio = ({ audioMessage }) => {
     const [isPlaying, setIsPlaying] = useState(false);
+    const [position, setPosition] = useState(0);
     const [duration, setDuration] = useState();
     const ref = useRef();
+
+    const timer = useRef();
+
+    useEffect(() => {
+        console.log(Math.ceil(duration), position)
+        const timeout = () => {
+            if (Math.ceil(duration) != position) {
+                setPosition(prev => prev + 1);
+            } else {
+                setPosition(0)
+                clearTimeout(timer.current);
+                setIsPlaying(false);
+            }
+        }
+
+        timer.current = isPlaying && setTimeout(timeout, 1000)
+
+        return () => clearTimeout(timer.current)
+    }, [isPlaying, position])
+
     const handleAudio = () => {
         if (!isPlaying) {
             ref.current?.play();
-            setIsPlaying(true)
+            setIsPlaying(true);
         } else {
             ref.current?.pause();
+            clearInterval(timer.current)
             setIsPlaying(false)
         }
     }
@@ -54,6 +77,8 @@ const Audio = ({ audioMessage }) => {
     return (
         <div className='audioControls'>
             <audio ref={ref} src={audioMessage}></audio>
+            <input className='range' value={position} max={Math.ceil(duration)} type="range" />
+            <MusicPlayerSlider duration={duration} position={position} setPosition={setPosition} isPlaying={isPlaying}/>
             <button onClick={handleAudio}>
                 {isPlaying ? <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" />

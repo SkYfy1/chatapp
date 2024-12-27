@@ -253,6 +253,10 @@
                     align-items: center;
                     gap: 10px;
 
+                    .range {
+                        color: red
+                    }
+
                     button {
                         background-color: rgba(46, 171, 255, 0.322);
                         border: none;
