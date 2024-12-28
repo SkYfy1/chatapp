@@ -104,7 +104,7 @@ const Chat = React.memo(({ showDetails, setShowDetails }) => {
   }, [])
 
   const handleSend = async () => {
-    if (text == '') return;
+    if (text == '' && !audioMessage.file) return;
 
     let imgUrl = null;
     let fileUrl = null;
@@ -142,7 +142,7 @@ const Chat = React.memo(({ showDetails, setShowDetails }) => {
 
             const chatIndex = userChatsData.chats.findIndex(c => c.chatId === chatId);
 
-            userChatsData.chats[chatIndex].lastMessage = text;
+            userChatsData.chats[chatIndex].lastMessage = 'Audio Message';
             userChatsData.chats[chatIndex].isSeen = (id === currentUser.id) ? true : false;
             userChatsData.chats[chatIndex].updatedAt = Date.now();
 
