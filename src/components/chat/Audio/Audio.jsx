@@ -5,9 +5,10 @@ const Audio = ({ audioMessage }) => {
     const [isPlaying, setIsPlaying] = useState(false);
     const [position, setPosition] = useState(0);
     const [duration, setDuration] = useState();
-    const ref = useRef();
-
-    const timer = useRef();
+    
+    const progressBar = useRef(); // ref for progress bar
+    const ref = useRef();   // ref for audio element   
+    const timer = useRef(); // ref for timeout
 
     useEffect(() => {
         console.log(Math.ceil(duration), position)
@@ -32,9 +33,14 @@ const Audio = ({ audioMessage }) => {
             setIsPlaying(true);
         } else {
             ref.current?.pause();
-            clearInterval(timer.current)
+            clearTimeout(timer.current)
             setIsPlaying(false)
         }
+    }
+
+    const changeProgress = (value) => {
+        console.log(ref.current.currentTime)
+        ref.current.currentTime = value;
     }
 
     // const handleLoadedMetadata = () => {
@@ -77,15 +83,17 @@ const Audio = ({ audioMessage }) => {
     return (
         <div className='audioControls'>
             <audio ref={ref} src={audioMessage}></audio>
-            <input className='range' value={position} max={Math.ceil(duration)} type="range" />
-            <MusicPlayerSlider duration={duration} position={position} setPosition={setPosition} isPlaying={isPlaying}/>
             <button onClick={handleAudio}>
-                {isPlaying ? <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" />
-                </svg> : <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" />
-                </svg>}
+                {isPlaying ?
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" />
+                    </svg> :
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" />
+                    </svg>}
             </button>
+            {/* <input className='range' value={position} max={Math.ceil(duration)} type="range" /> */}
+            <MusicPlayerSlider duration={duration} position={position} setPosition={setPosition} isPlaying={isPlaying} ref={ref} changeProgress={changeProgress}/>
             {duration && <span className='time'>{duration.toFixed()} сек</span>}
         </div>
     )

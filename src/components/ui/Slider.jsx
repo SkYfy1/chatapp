@@ -6,20 +6,18 @@ import Slider from '@mui/material/Slider';
 const Widget = styled('div')(({ theme }) => ({
     padding: 5,
     borderRadius: 16,
-    width: 120,
-    height: '100%',
+    width: 80,
     maxWidth: '100%',
-    margin: 'auto',
+    display: 'flex',
     position: 'relative',
     zIndex: 1,
-    backgroundColor: 'rgba(255,255,255,0.4)',
     backdropFilter: 'blur(40px)',
     ...theme.applyStyles('dark', {
         backgroundColor: 'rgba(0,0,0,0.6)',
     }),
 }));
 
-export default function MusicPlayerSlider({ duration, position, setPosition, isPlaying }) {
+export default function MusicPlayerSlider({ duration, position, setPosition, ref, changeProgress }) {
     function formatDuration(value) {
         const minute = Math.floor(value / 60);
         const secondLeft = value - minute * 60;
@@ -34,9 +32,10 @@ export default function MusicPlayerSlider({ duration, position, setPosition, isP
                 min={0}
                 step={1}
                 max={duration}
-                onChange={(_, value) => setPosition(value)}
+                ref={ref}
+                onChange={(_, value) => { setPosition(value); changeProgress(value)}}
                 sx={(t) => ({
-                    color: 'rgba(0,0,0,0.87)',
+                    color: 'rgba(255, 255, 255, 0.87)',
                     height: 3,
                     '& .MuiSlider-thumb': {
                         width: 8,
