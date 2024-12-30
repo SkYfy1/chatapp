@@ -1,6 +1,7 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import './detail.css'
 import { auth, db } from '../../lib/firebase'
+import { a, useSpring } from '@react-spring/web'
 import useChatStore from '../../context/useChatStore'
 import { useAuthStore } from '../../context/useAuthStore'
 import userService from '../../services/userService'
@@ -12,6 +13,7 @@ const Detail = ({ setShowDetails }) => {
   const friend = useChatStore(state => state.user);
   const appState = useAppStore();
   const { changeBlock, isReceiverBlocked, isUserBlocked, chat } = useChatStore();
+  const isMobile = useAppStore(state => state.isMobile);
   const [show, setShow] = useState({
     shared: false,
     settings: false,
@@ -20,48 +22,51 @@ const Detail = ({ setShowDetails }) => {
   })
   const currentUser = useAuthStore(state => state.currentUser);
   const ref = useRef();
+  const [spring, api] = useSpring(() => ({
+    from: {
+      flex: 0,
+      opacity: 0
+    },
+    config: {
+      duration: 700,
+      frequency: 200,
+    }
+  }));
+
+  // useEffect(() => {
+  //   isMobile && api.start({ opacity: 1, flex: 1 })
+  // }, [isMobile])
+
+  useEffect(() => {
+    api.start({ opacity: 1, flex: 1 });
+
+    return () => api.stop();
+  }, [])
 
   const handleBlock = async () => {
     if (!friend) return;
 
-    // const userDoc = doc(db, 'users', currentUser.id);
-
-    // await updateDoc(userDoc, {
-    //   blocked: isReceiverBlocked ? arrayRemove(friend.id) : arrayUnion(friend.id)
-    // })
     await userService.blockUser(isReceiverBlocked, currentUser.id, friend.id);
 
     changeBlock();
   };
 
+  const closeDetails = () => {
+    api.start({ opacity: 0, flex: 0 });
+
+    setTimeout(() => {
+      setShowDetails(false)
+    }, 600);
+  }
   const images = chat.messages.filter(mes => mes.hasOwnProperty('img')).map(mes => mes.img);
   const files = chat.messages.filter(mes => mes.hasOwnProperty('file')).map(mes => mes.file);
 
-  // const handleDownload = async (lin) => {
-  //   try {
-  //     const response = await fetch(lin);
-  //     if (!response.ok) throw new Error("Ошибка загрузки файла");
-
-  //     const blob = await response.blob();
-  //     const url = URL.createObjectURL(blob);
-
-  //     const link = ref.current;
-  //     link.href = url;
-  //     link.download = "11-2.jpg"; // Имя файла при скачивании
-  //     link.click();
-
-  //     URL.revokeObjectURL(url); // Освобождаем память
-  //   } catch (error) {
-  //     console.error("Ошибка при скачивании файла:", error);
-  //   }
-  // }
-
   return (
-    <div className='detail'>
+    <a.div className='detail' style={spring}>
       <div className="user">
-        {appState.isMobile && <svg onClick={() => setShowDetails(false)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="arrowBack">
+        <svg onClick={closeDetails} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="arrowBack">
           <path strokeLinecap="round" strokeLinejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
-        </svg>}
+        </svg>
         <img src={isUserBlocked ? "./avatar.png" : friend?.avatar} alt="avatar" />
         <h2>{friend?.username}</h2>
         <p>Lorem ipsum suk iodj fovej kavler.</p>
@@ -84,8 +89,8 @@ const Detail = ({ setShowDetails }) => {
             <span>{language.settings.details[appState.appLanguage][2]}</span>
             <img onClick={() => setShow(state => ({ ...state, shared: !state.shared }))} src={show.shared ? "./arrowDown.png" : "./arrowUp.png"} alt="" />
           </div>
-          {show.shared && <div className="photos">
-            {images.map((el) => (
+          {(show.shared && images) && <div className="photos">
+            {images?.map((el) => (
               <ImageDownload image={el} key={el} />
             )
             )}
@@ -99,7 +104,7 @@ const Detail = ({ setShowDetails }) => {
           {show.files &&
             <div className='file-list'>
               {files.map((file) => (
-                <a href={"#" + file.name} className='file-list-elem' key={file.name}>{file.name.length > 50 ? file.name.split('.')[0].slice(0, 15) + '.' + file.name.split('.')[1] : file.name }</a>
+                <a href={"#" + file.name} className='file-list-elem' key={file.name}>{file.name.length > 50 ? file.name.split('.')[0].slice(0, 15) + '.' + file.name.split('.')[1] : file.name}</a>
               ))}
             </div>}
         </div>
@@ -110,7 +115,7 @@ const Detail = ({ setShowDetails }) => {
           <button className='logout' onClick={() => auth.signOut()}>{appState.appLanguage == 'en' ? 'Logout' : 'Вийти'}</button>
         </div>
       </div>
-    </div>
+    </ a.div>
   )
 }
 

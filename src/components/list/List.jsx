@@ -19,7 +19,7 @@ const List = ({ toggle, showDetails, openSettings }) => {
           <div className='burger-line'></div>
         </div> : <div className={'list'}>
           <UserInfo openSettings={() => { openSettings(); closeChat() }} />
-          <ChatList toggle={() => setShowBurger(!showBurger)} />
+          <ChatList toggle={() => setShowBurger(prev => !prev)} />
         </div>
     )
   }

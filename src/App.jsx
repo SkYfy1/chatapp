@@ -18,12 +18,13 @@ const App = () => {
   const [showSettings, setShowSettings] = useState(false);
   const { currentUser, isLoading, fetchUserInfo, updateUserInfo } = useAuthStore();
   const chatId = useChatStore(state => state.chatId);
-  const [toggle, setToggle] = useState(false);
+  const [showList, setShowList] = useState(false);
   const checkScreen  = useAppStore(state => state.checkScreen);
+  const isMobile = useAppStore(state => state.isMobile);
 
   const changeSettingsState = () => {
     setShowSettings(prev => !prev)
-    setToggle(prev => !prev)
+    setShowList(prev => !prev)
   };
 
   // create an event listener
@@ -82,7 +83,7 @@ const App = () => {
     <div className='container'>
       {currentUser ? (
         <>
-          {!toggle && <List toggle={setToggle} chatId={chatId} showDetails={showDetails} openSettings={changeSettingsState} />}
+          {!showList && <List toggle={setShowList} chatId={chatId} showDetails={showDetails} openSettings={changeSettingsState} />}
           {showSettings && <UserSettings close={changeSettingsState} />}
           {chatId && <Chat showDetails={showDetails} setShowDetails={setShowDetails} />}
           {showDetails && <Detail setShowDetails={setShowDetails} />}
