@@ -51,6 +51,7 @@ const ChatList = ({ toggle }) => {
   useEffect(() => {
     const unSub = onSnapshot(doc(db, 'userchats', currentUser.id), async (res) => {
       const items = res.data().chats;
+      console.log(items)
 
       const promises = items.map(async (item) => {
         const userDocRef = doc(db, 'users', item.receiverId);
@@ -146,7 +147,7 @@ const ChatList = ({ toggle }) => {
         </animated.div>
       )
       )}
-      {addMode && <AddUser show={addMode} changeShow={() => setAddMode(false)} />}
+      {addMode && <AddUser changeShow={() => setAddMode(false)} />}
     </div>
   )
 }

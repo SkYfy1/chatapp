@@ -1,5 +1,6 @@
 .addUser {
     position: absolute;
+    z-index: 1000;
     width: max-content;
     height: max-content;
     padding: 30px;

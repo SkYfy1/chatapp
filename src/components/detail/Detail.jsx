@@ -27,6 +27,7 @@ const Detail = ({ setShowDetails }) => {
       flex: 0,
       opacity: 0
     },
+    to: { opacity: 1, flex: 1 },
     config: {
       duration: 700,
       frequency: 200,
@@ -37,11 +38,11 @@ const Detail = ({ setShowDetails }) => {
   //   isMobile && api.start({ opacity: 1, flex: 1 })
   // }, [isMobile])
 
-  useEffect(() => {
-    api.start({ opacity: 1, flex: 1 });
+  // useEffect(() => {
+  //   api.start({ opacity: 1, flex: 1 });
 
-    return () => api.stop();
-  }, [])
+  //   return () => api.stop();
+  // }, [])
 
   const handleBlock = async () => {
     if (!friend) return;

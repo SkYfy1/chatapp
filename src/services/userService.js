@@ -112,15 +112,28 @@ class userService {
     static async findUser(name) {
         try {
             const userRef = collection(db, 'users');
-            const q = query(userRef, where('username', '==', name));
+            // const q = query(userRef, where('username', '==', name));
+
+            const searchTerm = name.toLowerCase();
+            const strlength = searchTerm.length;
+            const strFrontCode = searchTerm.slice(0, strlength - 1);
+            const strEndCode = searchTerm.slice(strlength - 1, searchTerm.length);
+            // This is an important bit..
+            const endCode = strFrontCode + String.fromCharCode(strEndCode.charCodeAt(0) + 1);
+            const q = query(userRef, where('username', ">=", searchTerm), where('username', "<", endCode))
             console.log(q);
 
             const querySnapShot = await getDocs(q);
 
             if (!querySnapShot.empty) {
-                console.log(querySnapShot.docs[0].data())
-                return querySnapShot.docs[0].data();
+                const docs = querySnapShot.docs.map((el) => el.data());
+                return docs;
             }
+
+            // if (!querySnapShot.empty) {
+            //     console.log(querySnapShot.docs[0].data())
+            //     return querySnapShot.docs[0].data();
+            // }
         } catch (error) {
             console.log(error.message)
         }
