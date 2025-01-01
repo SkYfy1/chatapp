@@ -9,6 +9,8 @@ import Tooltip from '../../ui/Tooltip';
 import language from '../../../utils/language.js'
 import useAppStore from '../../../context/useAppStore'
 import { useTrail, animated } from '@react-spring/web';
+import MiniAvatar from '../../ui/MiniAvatar.jsx';
+import UserListElem from './userListElem/userListElem.jsx';
 
 
 const ChatList = ({ toggle }) => {
@@ -49,9 +51,10 @@ const ChatList = ({ toggle }) => {
   // }, [])
 
   useEffect(() => {
-    const unSub = onSnapshot(doc(db, 'userchats', currentUser.id), async (res) => {
+    const unSubs = onSnapshot(doc(db, 'userchats', currentUser.id), async (res) => {
       const items = res.data().chats;
-      console.log(items)
+      console.log(items);
+      console.log('sub')
 
       const promises = items.map(async (item) => {
         const userDocRef = doc(db, 'users', item.receiverId);
@@ -67,7 +70,7 @@ const ChatList = ({ toggle }) => {
 
       updateChats(chatData.sort((a, b) => b.updatedAt - a.updatedAt));
     })
-    return () => unSub()
+    return () => unSubs()
   }, [currentUser.id]);
 
   async function handleSelect(chat) {
@@ -94,7 +97,8 @@ const ChatList = ({ toggle }) => {
   }
 
   useEffect(() => {
-    console.log(chats?.map((chat) => chat.chatId))
+    console.log(chats?.map((chat) => chat.chatId));
+    console.log(chats)
   }, [chats])
 
   return (
@@ -119,13 +123,16 @@ const ChatList = ({ toggle }) => {
                   backgroundColor: chat?.isSeen ? 'transparent' : '#5183fe'
                 }}
               >
-                <img src={chat.user.blocked.includes(currentUser.id)
+                {/* {chat.user.status === 'offline' ? <img src={chat.user.blocked.includes(currentUser.id)
                   ? './avatar.png'
-                  : chat.user.avatar || './avatar.png'} alt="" />
+                  : chat.user.avatar || './avatar.png'} alt="" /> : <MiniAvatar img={chat.user.blocked.includes(currentUser.id)
+                    ? './avatar.png'
+                    : chat.user.avatar || './avatar.png'} />}
                 <div className='texts'>
                   <span>{chat.user.blocked.includes(currentUser.id) ? 'User' : chat.user.username}</span>
                   <p>{chat.lastMessage}</p>
-                </div>
+                </div> */}
+                <UserListElem chat={chat}/>
               </div>
             </Tooltip> : <div
               key={chat.chatId}
@@ -135,9 +142,11 @@ const ChatList = ({ toggle }) => {
                 backgroundColor: chat?.isSeen ? 'transparent' : '#5183fe'
               }}
             >
-              <img src={chat.user.blocked.includes(currentUser.id)
+              {chat.user.status === 'offline' ? <img src={chat.user.blocked.includes(currentUser.id)
                 ? './avatar.png'
-                : chat.user.avatar || './avatar.png'} alt="" />
+                : chat.user.avatar || './avatar.png'} alt="" /> : <MiniAvatar img={chat.user.blocked.includes(currentUser.id)
+                  ? './avatar.png'
+                  : chat.user.avatar || './avatar.png'} />}
               <div className='texts'>
                 <span>{chat.user.blocked.includes(currentUser.id) ? 'User' : chat.user.username}</span>
                 <p>{chat.lastMessage}</p>

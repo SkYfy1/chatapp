@@ -1,7 +1,7 @@
 import { auth, db } from '../lib/firebase'
 import supabase from '../lib/supabase'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
-import { setDoc, doc, getDoc, collection, query, where, getDocs, arrayUnion, arrayRemove, updateDoc } from 'firebase/firestore';
+import { setDoc, doc, getDoc, collection, query, where, getDocs, arrayUnion, arrayRemove, updateDoc, onSnapshot } from 'firebase/firestore';
 import { toast } from 'react-toastify';
 import { fileService } from './fileService';
 
@@ -183,7 +183,7 @@ class userService {
                 ...(imgLink && { avatar: imgLink }),
             });
         } catch (error) {
-            console.log(error)
+            console.log(error.message)
         }
     }
 
@@ -201,7 +201,21 @@ class userService {
             });
 
         } catch (error) {
-            console.log(error)
+            console.log(error.message)
+        }
+    }
+
+    static async changeStatus(id, status) {
+        try {
+            const docRef = doc(db, 'users', id);
+
+            await updateDoc(docRef, {
+                status: status
+            });
+
+            console.log('User ' + status)
+        } catch (error) {
+            console.log(error.message)
         }
     }
 }

@@ -92,10 +92,11 @@ const Chat = React.memo(({ showDetails, setShowDetails }) => {
   useEffect(() => {
     const unSub = onSnapshot(doc(db, 'chat', chatId), (res) => {
       updateChat(res.data())
+      console.log('new message')
     })
 
     return () => unSub()
-  }, [chatId])
+  }, [chatId]);
 
   useEffect(() => {
     window.addEventListener('keydown', onKeyDown)

@@ -12,6 +12,7 @@ import UserSettings from "./components/settings/UserSettings"
 import { doc, onSnapshot } from "firebase/firestore"
 import useAppStore from "./context/useAppStore"
 import { throttle } from "lodash"
+import userService from "./services/userService"
 
 const App = () => {
   const [showDetails, setShowDetails] = useState(false);
@@ -19,7 +20,7 @@ const App = () => {
   const { currentUser, isLoading, fetchUserInfo, updateUserInfo } = useAuthStore();
   const chatId = useChatStore(state => state.chatId);
   const [showList, setShowList] = useState(false);
-  const checkScreen  = useAppStore(state => state.checkScreen);
+  const checkScreen = useAppStore(state => state.checkScreen);
   const isMobile = useAppStore(state => state.isMobile);
 
   const changeSettingsState = () => {
@@ -70,6 +71,42 @@ const App = () => {
       currentUser?.id && onSub();
     }
   }, [fetchUserInfo]);
+
+
+
+
+  // Change online status
+
+  useEffect(() => {
+    currentUser?.id && userService.changeStatus(currentUser.id, 'online');
+
+    return () => {
+      userService.changeStatus(currentUser?.id, 'offline')
+    }
+  }, [currentUser?.id]);
+
+  // useEffect(() => {
+  //   const listener = async (e) => {
+  //     e.preventDefault()
+  //     await userService.changeStatus(currentUser.id, 'offline');
+  //     console.log('changing status')
+  //   }
+
+  //   // Event when page closing (making some time for beforeunload async firebase update)
+  //   const listener2 = () => {
+  //     function sleep(delay) {
+  //       const start = new Date().getTime();
+  //       while (new Date().getTime() < start + delay);
+  //     }
+  //     // unloading won't finish until 10 full seconds pass!
+  //     sleep(3000);
+  //   }
+  //   window.addEventListener('unload', listener2);
+  //   window.addEventListener('beforeunload', listener);
+
+  //   return () => {window.removeEventListener('beforeunload', listener); window.removeEventListener('unload', listener2);}
+  // }, [currentUser]);
+
 
 
   if (isLoading) {
