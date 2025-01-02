@@ -179,7 +179,7 @@ class userService {
                 username,
                 phoneNumber: phone || 'No number',
                 about: about || 'Nothing...',
-                prevImgs: userDoc.hasOwnProperty("prevImgs") ? arrayUnion(userDoc.avatar) : [],
+                prevImgs: ((imgLink && userDoc.hasOwnProperty("prevImgs")) ? arrayUnion(userDoc.avatar) : []),
                 ...(imgLink && { avatar: imgLink }),
             });
         } catch (error) {
