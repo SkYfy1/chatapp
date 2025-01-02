@@ -11,6 +11,7 @@ import useAppStore from '../../context/useAppStore';
 import DataComponent from './DataMemory/DataComponent';
 import { useSpring, a } from '@react-spring/web';
 import UiSwitch from '../ui/Switch';
+import Status from '../list/userInfo/status/Status';
 
 const UserSettings = ({ close }) => {
     const userInfo = useAuthStore((state) => state.currentUser);
@@ -149,6 +150,9 @@ const UserSettings = ({ close }) => {
                             <p>{userInfo.about || 'Nothing to say...'}</p>
                             <span>{language.settings.information[appState.appLanguage][2]}</span>
                         </div>
+                    </div>
+                    <div>
+                        <Status />
                     </div>
                 </div>
                 <div className='settings-list2'>

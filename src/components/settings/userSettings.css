@@ -171,6 +171,12 @@
                 gap: 15px;
                 border-bottom: 2px solid #dddddd35;
 
+                .form {
+                    * {
+                        color: white;
+                    }
+                }
+
                 .settings-list-item {
                     display: flex;
                     align-items: center;
