@@ -1,11 +1,13 @@
 import React from 'react'
 import { Badge, Avatar } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { statusColor } from '../../utils/statusColor';
+import useAppStore from '../../context/useAppStore';
 
-const StyledBadge = styled(Badge)(({ theme }) => ({
+const StyledBadge = styled(Badge)(({ theme, badgeColor, anim }) => ({
     '& .MuiBadge-badge': {
-        backgroundColor: '#44b700',
-        color: '#44b700',
+        backgroundColor: badgeColor,
+        color: badgeColor,
         boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
         '&::after': {
             position: 'absolute',
@@ -14,7 +16,7 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
             width: '100%',
             height: '100%',
             borderRadius: '50%',
-            animation: 'ripple 1.2s infinite ease-in-out',
+            animation: `${anim && 'ripple'} 1.2s infinite ease-in-out`,
             border: '1px solid currentColor',
             content: '""',
         },
@@ -31,14 +33,25 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
     },
 }));
 
-const MiniAvatar = ({ img }) => {
+const MiniAvatar = ({ img, status }) => {
+    const animation = useAppStore(state => state.animation);
+    if (status === 'offline') {
+        return (
+            <img src={!img
+                ? './avatar.png'
+                : img || './avatar.png'} alt="" />
+        )
+    };
+
     return (
         <StyledBadge
             overlap="circular"
             anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
             variant="dot"
+            badgeColor={statusColor[status]}
+            anim={animation}
         >
-            <Avatar alt="Remy Sharp" src={img} sx={{ height: '50px', width: '50px' }}/>
+            <Avatar alt="Remy Sharp" src={img} sx={{ height: '50px', width: '50px' }} />
         </StyledBadge>
     )
 }

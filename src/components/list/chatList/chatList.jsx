@@ -34,9 +34,9 @@ const ChatList = ({ toggle }) => {
     }
   }))
 
-  useEffect(() => {
-    console.log(filter)
-  }, [filter])
+  // useEffect(() => {
+  //   console.log(filter)
+  // }, [filter])
 
   // useEffect(() => {
   //   const getPointer = (e) => {
@@ -96,10 +96,10 @@ const ChatList = ({ toggle }) => {
     { appState.isMobile && toggle(); }
   }
 
-  useEffect(() => {
-    console.log(chats?.map((chat) => chat.chatId));
-    console.log(chats)
-  }, [chats])
+  // useEffect(() => {
+  //   console.log(chats?.map((chat) => chat.chatId));
+  //   console.log(chats)
+  // }, [chats])
 
   return (
     <div className='chatList'>
@@ -112,7 +112,7 @@ const ChatList = ({ toggle }) => {
       </div>
       {trails.map(({ ...style }, index) =>
       (
-        <animated.div style={style} key={index}>
+        <animated.div style={appState.animation ? style : {}} key={index}>
           {chats?.filter((el) => el.user.username.toLowerCase().startsWith(filter.toLowerCase())).map((chat) => (
             !appState.isMobile ? <Tooltip key={chat.chatId} style={pointer} text={`${language.settings.tooltip[appState.appLanguage]}${chat.user.username}`}>
               <div

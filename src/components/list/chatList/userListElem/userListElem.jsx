@@ -24,9 +24,7 @@ const UserListElem = ({ chat }) => {
 
     return (
         <>
-            {chat.user.status === 'offline' ? <img src={chat.user.blocked.includes(currentUser.id)
-                ? './avatar.png'
-                : chat.user.avatar || './avatar.png'} alt="" /> : <MiniAvatar img={chat.user.blocked.includes(currentUser.id)
+            {chat.user.status && <MiniAvatar status={chat.user.status} img={chat.user.blocked.includes(currentUser.id)
                     ? './avatar.png'
                     : chat.user.avatar || './avatar.png'} />}
             <div className='texts'>
