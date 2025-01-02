@@ -1,7 +1,6 @@
 import React from 'react'
 import { FormControlLabel, Switch } from '@mui/material'
 import { styled } from '@mui/material/styles';
-import useAppStore from '../../context/useAppStore';
 
 const StyledSwitch = styled(Switch)(({ theme }) => ({
     width: 28,

@@ -32,7 +32,9 @@ const ChatList = ({ toggle }) => {
       opacity: 1,
       x: 0
     }
-  }))
+  }));
+
+  const anims = currentUser?.hasOwnProperty('settings') ? currentUser?.settings?.animations : true;
 
   // useEffect(() => {
   //   console.log(filter)
@@ -112,7 +114,7 @@ const ChatList = ({ toggle }) => {
       </div>
       {trails.map(({ ...style }, index) =>
       (
-        <animated.div style={appState.animation ? style : {}} key={index}>
+        <animated.div style={anims ? style : {}} key={index}>
           {chats?.filter((el) => el.user.username.toLowerCase().startsWith(filter.toLowerCase())).map((chat) => (
             !appState.isMobile ? <Tooltip key={chat.chatId} style={pointer} text={`${language.settings.tooltip[appState.appLanguage]}${chat.user.username}`}>
               <div

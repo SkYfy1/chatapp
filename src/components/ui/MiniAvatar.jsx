@@ -2,7 +2,7 @@ import React from 'react'
 import { Badge, Avatar } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { statusColor } from '../../utils/statusColor';
-import useAppStore from '../../context/useAppStore';
+import { useAuthStore } from '../../context/useAuthStore';
 
 const StyledBadge = styled(Badge)(({ theme, badgeColor, anim }) => ({
     '& .MuiBadge-badge': {
@@ -34,7 +34,8 @@ const StyledBadge = styled(Badge)(({ theme, badgeColor, anim }) => ({
 }));
 
 const MiniAvatar = ({ img, status }) => {
-    const animation = useAppStore(state => state.animation);
+    const currentUser = useAuthStore(state => state.currentUser);
+    const anims = currentUser.hasOwnProperty('settings') ? currentUser?.settings?.animations : true;
     if (status === 'offline') {
         return (
             <img src={!img
@@ -49,7 +50,7 @@ const MiniAvatar = ({ img, status }) => {
             anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
             variant="dot"
             badgeColor={statusColor[status]}
-            anim={animation}
+            anim={anims}
         >
             <Avatar alt="Remy Sharp" src={img} sx={{ height: '50px', width: '50px' }} />
         </StyledBadge>

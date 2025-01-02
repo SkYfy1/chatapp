@@ -34,6 +34,8 @@ const Detail = ({ setShowDetails }) => {
     }
   }));
 
+  const anims = currentUser.hasOwnProperty('settings') ? currentUser?.settings?.animations : true;
+
   // useEffect(() => {
   //   isMobile && api.start({ opacity: 1, flex: 1 })
   // }, [isMobile])
@@ -63,7 +65,7 @@ const Detail = ({ setShowDetails }) => {
   const files = chat.messages.filter(mes => mes.hasOwnProperty('file')).map(mes => mes.file);
 
   return (
-    <a.div className='detail' style={appState.animation ? spring : {}}>
+    <a.div className='detail' style={anims ? spring : {}}>
       <div className="user">
         <svg onClick={closeDetails} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="arrowBack">
           <path strokeLinecap="round" strokeLinejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />

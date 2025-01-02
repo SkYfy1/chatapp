@@ -218,6 +218,33 @@ class userService {
             console.log(error.message)
         }
     }
+
+    static async toggleAnims(id) {
+        try {
+            const docRef = doc(db, 'users', id);
+
+            const data = (await getDoc(docRef)).data();
+
+            if(data.hasOwnProperty('settings')) {
+                await updateDoc(docRef, {
+                    settings: {
+                        animations: !data.settings.animations
+                    }
+                });
+                return;
+            }
+
+            await updateDoc(docRef, {
+                settings: {
+                    animations: false
+                }
+            });
+
+            console.log('User ' + JSON.stringify(data))
+        } catch (error) {
+            console.log(error.message)
+        }
+    }
 }
 
 export default userService;

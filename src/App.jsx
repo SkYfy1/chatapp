@@ -70,7 +70,7 @@ const App = () => {
     return () => {
       currentUser?.id && onSub();
     }
-  }, [fetchUserInfo]);
+  }, []);
 
 
 
