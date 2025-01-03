@@ -71,4 +71,37 @@ export class chatService {
 
         console.log(chat)
     }
+
+    static async messageAction(chatid, createdAt) {
+        const chatRef = doc(db, 'chat', chatid);
+
+        const chatData = await getDoc(chatRef);
+
+
+        const chat = chatData.data();
+        // map messages array to find message and update state
+        const updatedMessages = chat.messages.map((mes) => {
+            // find message
+            if ((mes.createdAt.seconds + mes.createdAt.nanoseconds) === createdAt) {
+                // check if message deleted
+                return ({
+                    ...mes,
+                    like: mes.like ? false : true
+                })
+            } else {
+                return mes;
+            }
+        });
+
+        console.log(updatedMessages)
+
+        await updateDoc(chatRef, {
+            messages: updatedMessages
+        })
+
+        // const q = query(chatRef, where('text', '==', text));
+        // console.log(q);
+
+        console.log(chat)
+    }
 }

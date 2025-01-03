@@ -11,7 +11,7 @@ const Widget = styled('div')(({ theme }) => ({
     display: 'flex',
     position: 'relative',
     zIndex: 1,
-    backdropFilter: 'blur(40px)',
+    // backdropFilter: 'blur(40px)',
     ...theme.applyStyles('dark', {
         backgroundColor: 'rgba(0,0,0,0.6)',
     }),

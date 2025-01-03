@@ -27,7 +27,8 @@ const Audio = ({ audioMessage }) => {
         return () => clearTimeout(timer.current)
     }, [isPlaying, position])
 
-    const handleAudio = () => {
+    const handleAudio = (event) => {
+        event.stopPropagation()
         if (!isPlaying) {
             ref.current?.play();
             setIsPlaying(true);
