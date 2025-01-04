@@ -21,6 +21,10 @@
         cursor: pointer;
     }
 
+    .pointer {
+        cursor: pointer;
+    }
+
     .icons {
         display: flex;
         gap: 20px;

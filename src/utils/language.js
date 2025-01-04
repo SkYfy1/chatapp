@@ -3,22 +3,32 @@ const language = {
         information: {
             ua: ["Номер телефону",
                 "Ім'я користувача",
-                "Про мене"],
+                "Про мене",
+                'Змінити статус'],
             en: ["Phone number",
                 "User name",
-                "About"]
+                "About",
+                'Change Status']
         },
         settingsList: {
             ua: ["Усі налаштування",
                 "Налаштування анімації",
                 "Сповіщення",
                 "Дані та пам'ять",
-                "Мова"],
+                "Мова",
+                {
+                    on: 'Вимкнути анімації',
+                    off: 'Увімкнути анімації'
+                }],
             en: ["All settings",
                 "Animation settings",
                 "Notifications",
                 "Data and memory",
-                "Language"]
+                "Language",
+                {
+                    on: 'Turn off animations',
+                    off: 'Turn on animations'
+                }]
         },
         form: {
             ua: ["Ім'я користувача (Обов'язково)",
