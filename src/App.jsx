@@ -21,7 +21,6 @@ const App = () => {
   const chatId = useChatStore(state => state.chatId);
   const [showList, setShowList] = useState(false);
   const checkScreen = useAppStore(state => state.checkScreen);
-  const isMobile = useAppStore(state => state.isMobile);
 
   const changeSettingsState = () => {
     setShowSettings(prev => !prev)
@@ -70,7 +69,7 @@ const App = () => {
     return () => {
       currentUser?.id && onSub();
     }
-  }, []);
+  }, [currentUser?.id]);
 
 
 
@@ -85,27 +84,27 @@ const App = () => {
     }
   }, [currentUser?.id]);
 
-  // useEffect(() => {
-  //   const listener = async (e) => {
-  //     e.preventDefault()
-  //     await userService.changeStatus(currentUser.id, 'offline');
-  //     console.log('changing status')
-  //   }
+  useEffect(() => {
+    const listener = async (e) => {
+      e.preventDefault()
+      await userService.changeStatus(currentUser.id, 'offline');
+      console.log('changing status')
+    }
 
-  //   // Event when page closing (making some time for beforeunload async firebase update)
-  //   const listener2 = () => {
-  //     function sleep(delay) {
-  //       const start = new Date().getTime();
-  //       while (new Date().getTime() < start + delay);
-  //     }
-  //     // unloading won't finish until 10 full seconds pass!
-  //     sleep(3000);
-  //   }
-  //   window.addEventListener('unload', listener2);
-  //   window.addEventListener('beforeunload', listener);
+    // Event when page closing (making some time for beforeunload async firebase update)
+    const listener2 = () => {
+      function sleep(delay) {
+        const start = new Date().getTime();
+        while (new Date().getTime() < start + delay);
+      }
+      // unloading won't finish until 10 full seconds pass!
+      sleep(3000);
+    }
+    window.addEventListener('unload', listener2);
+    window.addEventListener('beforeunload', listener);
 
-  //   return () => {window.removeEventListener('beforeunload', listener); window.removeEventListener('unload', listener2);}
-  // }, [currentUser]);
+    return () => {window.removeEventListener('beforeunload', listener); window.removeEventListener('unload', listener2);}
+  }, [currentUser]);
 
 
 

@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Badge, Avatar } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { statusColor } from '../../utils/statusColor';
 import { useAuthStore } from '../../context/useAuthStore';
+import useAppStore from '../../context/useAppStore';
 
 const StyledBadge = styled(Badge)(({ theme, badgeColor, anim }) => ({
     '& .MuiBadge-badge': {
@@ -36,6 +37,13 @@ const StyledBadge = styled(Badge)(({ theme, badgeColor, anim }) => ({
 const MiniAvatar = ({ img, status }) => {
     const currentUser = useAuthStore(state => state.currentUser);
     const anims = currentUser.hasOwnProperty('settings') ? currentUser?.settings?.animations : true;
+    const isMobile = useAppStore(state => state.isMobile);
+
+
+    useEffect(() => {
+        console.log('tel ' + isMobile);
+        console.log(status);
+    }, [isMobile])
     if (status === 'offline') {
         return (
             <img src={!img
@@ -43,7 +51,6 @@ const MiniAvatar = ({ img, status }) => {
                 : img || './avatar.png'} alt="" />
         )
     };
-
     return (
         <StyledBadge
             overlap="circular"

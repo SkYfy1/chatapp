@@ -125,18 +125,10 @@ const ChatList = ({ toggle }) => {
                   backgroundColor: chat?.isSeen ? 'transparent' : '#5183fe'
                 }}
               >
-                {/* {chat.user.status === 'offline' ? <img src={chat.user.blocked.includes(currentUser.id)
-                  ? './avatar.png'
-                  : chat.user.avatar || './avatar.png'} alt="" /> : <MiniAvatar img={chat.user.blocked.includes(currentUser.id)
-                    ? './avatar.png'
-                    : chat.user.avatar || './avatar.png'} />}
-                <div className='texts'>
-                  <span>{chat.user.blocked.includes(currentUser.id) ? 'User' : chat.user.username}</span>
-                  <p>{chat.lastMessage}</p>
-                </div> */}
                 <UserListElem chat={chat}/>
               </div>
-            </Tooltip> : <div
+            </Tooltip> : 
+            <div
               key={chat.chatId}
               className="item"
               onClick={() => handleSelect(chat)}
@@ -148,7 +140,7 @@ const ChatList = ({ toggle }) => {
                 ? './avatar.png'
                 : chat.user.avatar || './avatar.png'} alt="" /> : <MiniAvatar img={chat.user.blocked.includes(currentUser.id)
                   ? './avatar.png'
-                  : chat.user.avatar || './avatar.png'} />}
+                  : chat.user.avatar || './avatar.png'} status={chat.user.status}/>}
               <div className='texts'>
                 <span>{chat.user.blocked.includes(currentUser.id) ? 'User' : chat.user.username}</span>
                 <p>{chat.lastMessage}</p>
