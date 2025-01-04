@@ -3,7 +3,7 @@ import List from "./components/list/List"
 import Detail from './components/detail/Detail'
 import Login from "./components/login/Login"
 import Notification from "./components/notification/Notification"
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useEffect, useState } from "react"
 import { auth, db } from './lib/firebase'
 import { onAuthStateChanged } from "firebase/auth"
 import { useAuthStore } from "./context/useAuthStore"
@@ -111,9 +111,6 @@ const App = () => {
   if (isLoading) {
     return <div className="loading">Loading...</div>
   };
-  // const ChatComp = useMemo(() => {
-  //   return <Chat showDetails={showDetails} showChats={setToggle} setShowDetails={changeDetail} />
-  // }, [showDetails, setToggle, changeDetail])
 
   return (
     <div className='container'>

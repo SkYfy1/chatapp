@@ -54,7 +54,6 @@ const UiSwitch = ({ value, handler }) => {
         <FormControlLabel
             control={<StyledSwitch checked={value} onChange={handler} />}
         />
-        // <StyledSwitch defaultChecked/>
     )
 }
 
