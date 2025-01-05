@@ -22,7 +22,9 @@ const ChatList = ({ toggle }) => {
 
   const currentUser = useAuthStore((state) => state.currentUser);
   const { userChats: chats, updateChats } = useAuthStore();
-  const { changeChat } = useChatStore();
+  const changeChat = useChatStore(state => state.changeChat);
+  // const { changeChat } = useChatStore();
+  const chatId = useChatStore(state => state.chatId);
   const [trails, api] = useTrail(chats.length, () => ({
     from: {
       opacity: 0,
@@ -122,7 +124,7 @@ const ChatList = ({ toggle }) => {
                 onClick={() => handleSelect(chat)}
                 onMouseMove={(e) => setPointer({ pointerX: e.clientX, pointerY: e.clientY })}
                 style={{
-                  backgroundColor: chat?.isSeen ? 'transparent' : '#5183fe'
+                  backgroundColor: !chat?.isSeen ? '#5183fe' : chatId === chat.chatId ? 'rgba(17, 25, 40, 0.5)' : 'transparent'
                 }}
               >
                 <UserListElem chat={chat}/>
