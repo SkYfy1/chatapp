@@ -592,148 +592,165 @@
                 }
             }
 
-            .message {
-                max-width: fit-content;
+            .outer {
                 display: flex;
-                gap: 20px;
-                font-size: 15px;
+                align-items: center;
+                gap: 5px;
 
-                img {
-                    width: 30px;
-                    height: 30px;
-                    border-radius: 50%;
-                    object-fit: cover;
+                &.own {
+                    align-self: flex-end;
                 }
 
-                .texts {
-                    flex: 1;
+                .heart {
+                    color: rgba(240, 96, 96, 0.76);
+                    transform: translateY(-50%);
+                    width: 15px;
+                    height: 15px;
+                }
+
+                .message {
+                    max-width: fit-content;
                     display: flex;
-                    flex-direction: column;
-                    gap: 5px;
+                    gap: 20px;
+                    font-size: 15px;
 
-                    .audioControls {
-                        display: flex;
-                        justify-content: space-between;
-                        align-items: center;
-                        padding: 10px;
-                        background-color: #5183fe;
-                        border-radius: 5px;
-
-                        button {
-                            background-color: rgba(46, 171, 255, 0.322);
-                            border: none;
-                            padding: 5px;
-                            border-radius: 50%;
-                            width: 30px;
-                            height: 30px;
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                            transition: all .2s ease;
-
-                            svg {
-                                width: 15px;
-                                height: 15px;
-                                margin: 0 auto;
-                                color: white
-                            }
-                        }
-
-                        span {
-                            font-size: 12px;
-                        }
+                    img {
+                        width: 30px;
+                        height: 30px;
+                        border-radius: 50%;
+                        object-fit: cover;
                     }
 
-                    p {
+                    .texts {
+                        flex: 1;
                         display: flex;
-                        justify-content: space-between;
-                        align-items: center;
-
-                        svg {
-                            width: 12px;
-                            height: 12px;
-                            transition: all .3s ease;
-                            margin-left: 5px;
-
-                            &:hover {
-                                transform: scale(1.4);
-                                color: #a5a5a5
-                            }
-                        }
-                    }
-
-
-                    .message-file {
-                        display: flex;
-                        align-items: center;
-                        padding: 10px;
-                        border-radius: 5px;
-                        background-color: rgba(17, 25, 40, 0.3);
+                        flex-direction: column;
                         gap: 5px;
 
-                        /* div {
+                        .audioControls {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            padding: 10px;
+                            background-color: #5183fe;
+                            border-radius: 5px;
+
+                            button {
+                                background-color: rgba(46, 171, 255, 0.322);
+                                border: none;
+                                padding: 5px;
+                                border-radius: 50%;
+                                width: 30px;
+                                height: 30px;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                transition: all .2s ease;
+
+                                svg {
+                                    width: 15px;
+                                    height: 15px;
+                                    margin: 0 auto;
+                                    color: white
+                                }
+                            }
+
+                            span {
+                                font-size: 12px;
+                            }
+                        }
+
+                        p {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+
+                            svg {
+                                width: 12px;
+                                height: 12px;
+                                transition: all .3s ease;
+                                margin-left: 5px;
+
+                                &:hover {
+                                    transform: scale(1.4);
+                                    color: #a5a5a5
+                                }
+                            }
+                        }
+
+
+                        .message-file {
+                            display: flex;
+                            align-items: center;
+                            padding: 10px;
+                            border-radius: 5px;
+                            background-color: rgba(17, 25, 40, 0.3);
+                            gap: 5px;
+
+                            /* div {
                             overflow: hidden;
                             border: 1px solid red;
                         } */
 
-                        span {
-                            font-size: 16px;
-                            word-wrap: break-word;
+                            span {
+                                font-size: 16px;
+                                word-wrap: break-word;
+                                width: 100px;
+                            }
+
+                            .svg-wrapper {
+                                width: 40px;
+                                height: 40px;
+                                color: white;
+                                cursor: pointer;
+                                position: relative;
+                            }
+
+                            .svg-inner {
+                                width: 40px;
+                                height: 40px;
+                            }
+
+                            .svg-innerD {
+                                width: 15px;
+                                height: 15px;
+                                position: absolute;
+                                top: 50%;
+                                left: 50%;
+                                transform: translateX(-50%) translateY(-40%);
+                            }
+
+                            &.own {
+                                background-color: #5183fe;
+                            }
+                        }
+
+                        img {
                             width: 100px;
-                        }
-
-                        .svg-wrapper {
-                            width: 40px;
-                            height: 40px;
-                            color: white;
+                            height: 100px;
+                            border-radius: 15px;
+                            object-fit: cover;
                             cursor: pointer;
-                            position: relative;
                         }
 
-                        .svg-inner {
-                            width: 40px;
-                            height: 40px;
-                        }
-
-                        .svg-innerD {
-                            width: 15px;
-                            height: 15px;
-                            position: absolute;
-                            top: 50%;
-                            left: 50%;
-                            transform: translateX(-50%) translateY(-40%);
-                        }
-
-                        &.own {
-                            background-color: #5183fe;
-                        }
-                    }
-
-                    img {
-                        width: 100px;
-                        height: 100px;
-                        border-radius: 15px;
-                        object-fit: cover;
-                        cursor: pointer;
-                    }
-
-                    p {
-                        background-color: rgba(17, 25, 40, 0.3);
-                        padding: 10px;
-                        border-radius: 5px;
-                    }
-
-                    span {
-                        font-size: 9px;
-                    }
-                }
-
-                &.own {
-                    align-self: flex-end;
-
-                    .texts {
                         p {
-                            background-color: #5183fe;
+                            background-color: rgba(17, 25, 40, 0.3);
+                            padding: 10px;
+                            border-radius: 5px;
+                        }
+
+                        span {
+                            font-size: 9px;
+                        }
+                    }
+
+                    &.own {
+                        align-self: flex-end;
+
+                        .texts {
+                            p {
+                                background-color: #5183fe;
+                            }
                         }
                     }
                 }

@@ -28,7 +28,8 @@ const Audio = ({ audioMessage }) => {
     }, [isPlaying, position])
 
     const handleAudio = (event) => {
-        event.stopPropagation()
+        event.stopPropagation();
+        console.log(ref.current)
         if (!isPlaying) {
             ref.current?.play();
             setIsPlaying(true);
@@ -94,7 +95,7 @@ const Audio = ({ audioMessage }) => {
                     </svg>}
             </button>
             {/* <input className='range' value={position} max={Math.ceil(duration)} type="range" /> */}
-            <MusicPlayerSlider duration={duration} position={position} setPosition={setPosition} isPlaying={isPlaying} reference={ref} changeProgress={changeProgress}/>
+            <MusicPlayerSlider duration={duration} position={position} setPosition={setPosition} isPlaying={isPlaying} changeProgress={changeProgress}/>
             {duration && <span className='time'>{duration.toFixed()} сек</span>}
         </div>
     )

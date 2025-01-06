@@ -17,22 +17,22 @@ const Widget = styled('div')(({ theme }) => ({
     }),
 }));
 
-export default function MusicPlayerSlider({ duration, position, setPosition, reference, changeProgress }) {
-    function formatDuration(value) {
-        const minute = Math.floor(value / 60);
-        const secondLeft = value - minute * 60;
-        return `${minute}:${secondLeft < 10 ? `0${secondLeft}` : secondLeft}`;
-    }
+export default function MusicPlayerSlider({ duration, position, setPosition, changeProgress }) {
+    // function formatDuration(value) {
+    //     const minute = Math.floor(value / 60);
+    //     const secondLeft = value - minute * 60;
+    //     return `${minute}:${secondLeft < 10 ? `0${secondLeft}` : secondLeft}`;
+    // }
     return (
         <Widget>
             <Slider
+                onClick={(e) => e.stopPropagation()}
                 aria-label="time-indicator"
                 size="small"
                 value={position}
                 min={0}
                 step={1}
                 max={duration}
-                ref={reference}
                 onChange={(_, value) => { setPosition(value); changeProgress(value)}}
                 sx={(t) => ({
                     color: 'rgba(255, 255, 255, 0.87)',
