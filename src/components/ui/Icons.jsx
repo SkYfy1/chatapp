@@ -1,13 +1,9 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import useChatStore from '../../context/useChatStore';
 
 const Icons = React.memo(({ children }) => {
     const isReceiverBlocked = useChatStore(state => state.isReceiverBlocked);
     const isUserBlocked = useChatStore(state => state.isReceiverBlocked);
-
-    useEffect(() => {
-        console.log('Rerender icons')
-    })
 
     console.log(children)
 

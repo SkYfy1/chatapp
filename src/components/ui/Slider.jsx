@@ -17,7 +17,7 @@ const Widget = styled('div')(({ theme }) => ({
     }),
 }));
 
-export default function MusicPlayerSlider({ duration, position, setPosition, ref, changeProgress }) {
+export default function MusicPlayerSlider({ duration, position, setPosition, reference, changeProgress }) {
     function formatDuration(value) {
         const minute = Math.floor(value / 60);
         const secondLeft = value - minute * 60;
@@ -32,7 +32,7 @@ export default function MusicPlayerSlider({ duration, position, setPosition, ref
                 min={0}
                 step={1}
                 max={duration}
-                ref={ref}
+                ref={reference}
                 onChange={(_, value) => { setPosition(value); changeProgress(value)}}
                 sx={(t) => ({
                     color: 'rgba(255, 255, 255, 0.87)',

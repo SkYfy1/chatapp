@@ -94,7 +94,7 @@ const Audio = ({ audioMessage }) => {
                     </svg>}
             </button>
             {/* <input className='range' value={position} max={Math.ceil(duration)} type="range" /> */}
-            <MusicPlayerSlider duration={duration} position={position} setPosition={setPosition} isPlaying={isPlaying} ref={ref} changeProgress={changeProgress}/>
+            <MusicPlayerSlider duration={duration} position={position} setPosition={setPosition} isPlaying={isPlaying} reference={ref} changeProgress={changeProgress}/>
             {duration && <span className='time'>{duration.toFixed()} сек</span>}
         </div>
     )

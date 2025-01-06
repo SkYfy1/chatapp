@@ -266,7 +266,6 @@ const Chat = React.memo(({ showDetails, setShowDetails }) => {
 
         audioMessageChunks.current = [];
         const audioUrl = URL.createObjectURL(blob);
-        // console.log(audioUrl)
 
         setRecording(false);
         setAudioMessage(
@@ -282,6 +281,14 @@ const Chat = React.memo(({ showDetails, setShowDetails }) => {
       permission.getTracks().forEach((track) => track.stop());
     }
   };
+
+  const icons = useMemo(() => (
+    <>
+      <img key={'./img.png'} src="./img.png" alt="" onChange={handleAddImage} data-handler='onChange' />
+      <img key={"./camera.png"} src="./camera.png" alt="" onChange={handleAddImage} data-handler='onChange' />
+      <img key={"./video.png"} src="./video.png" alt="" onChange={handleAddImage} data-handler='onChange' />
+    </>
+  ), [])
 
   if (!chatId) {
     return <div className="chat"></div>
@@ -383,40 +390,15 @@ const Chat = React.memo(({ showDetails, setShowDetails }) => {
         </div>}
       </div>
       <div className="bottom">
-        {!isMobile ?
-          // <div className="icons">
-          //   <label htmlFor="img">
-          //     <img src="./img.png" alt="" />
-          //     <input disabled={isUserBlocked || isReceiverBlocked} type="file" id='img' style={{ display: 'none' }} onChange={handleAddImage} />
-          //   </label>
-          //   <label htmlFor="img">
-          //     <img src="./camera.png" alt="" />
-          //     <input disabled={isUserBlocked || isReceiverBlocked} type="file" id='img' style={{ display: 'none' }} onChange={handleAddImage} />
-          //   </label>
-          //   <label htmlFor="img">
-          //     <img src="./video.png" alt="" />
-          //     <input disabled={isUserBlocked || isReceiverBlocked} type="file" id='img' style={{ display: 'none' }} onChange={handleAddImage} />
-          //   </label>
-          // </div>
-          <Icons>
-            <img src="./img.png" alt="" onChange={handleAddImage} data-handler='onChange' />
-            <img src="./camera.png" alt="" onChange={handleAddImage} data-handler='onChange' />
-            <img src="./video.png" alt="" onChange={handleAddImage} data-handler='onChange' />
-          </Icons>
-          :
-          // <div className="icons">
-          //   <label htmlFor="img">
-          //     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-          //       <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15a4.5 4.5 0 0 0 4.5 4.5H18a3.75 3.75 0 0 0 1.332-7.257 3 3 0 0 0-3.758-3.848 5.25 5.25 0 0 0-10.233 2.33A4.502 4.502 0 0 0 2.25 15Z" />
-          //     </svg>
-          //     <input disabled={isUserBlocked || isReceiverBlocked} type="file" id='img' style={{ display: 'none' }} onChange={handleAddImage} />
-          //   </label>
-          // </div>
-          <Icons>
-            <svg onChange={handleAddImage} data-handler='onChange' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15a4.5 4.5 0 0 0 4.5 4.5H18a3.75 3.75 0 0 0 1.332-7.257 3 3 0 0 0-3.758-3.848 5.25 5.25 0 0 0-10.233 2.33A4.502 4.502 0 0 0 2.25 15Z" />
-            </svg>
-          </Icons>
+        {
+          !isMobile ?
+            <Icons>
+              {icons}
+            </Icons> : <Icons>
+              <svg onChange={handleAddImage} data-handler='onChange' xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15a4.5 4.5 0 0 0 4.5 4.5H18a3.75 3.75 0 0 0 1.332-7.257 3 3 0 0 0-3.758-3.848 5.25 5.25 0 0 0-10.233 2.33A4.502 4.502 0 0 0 2.25 15Z" />
+              </svg>
+            </Icons>
         }
         {image.file &&
           <div className='image-preview'>
