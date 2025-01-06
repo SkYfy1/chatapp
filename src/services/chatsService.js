@@ -32,7 +32,7 @@ export class chatService {
                     chatId: newChatRef.id,
                     lastMessage: '',
                     receiverId: fid,
-                    upadatedAt: Date.now(),
+                    updatedAt: Date.now(),
                 })
             })
         } catch (error) {

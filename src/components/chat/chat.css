@@ -486,16 +486,12 @@
 
         .top {
             padding: 10px;
-            display: flex;
-            gap: 15px;
-            align-items: center;
             border-bottom: 1px solid #dddddd35;
 
             .user {
                 display: flex;
                 align-items: center;
-                gap: 5px;
-                text-align: center;
+                justify-content: space-around;
 
                 img {
                     width: 50px;
@@ -639,9 +635,10 @@
                                 background-color: rgba(46, 171, 255, 0.322);
                                 border: none;
                                 padding: 5px;
+                                margin-right: 10px;
                                 border-radius: 50%;
-                                width: 30px;
-                                height: 30px;
+                                width: 40px;
+                                height: 40px;
                                 display: flex;
                                 justify-content: center;
                                 align-items: center;
@@ -656,7 +653,7 @@
                             }
 
                             span {
-                                font-size: 12px;
+                                font-size: 11px;
                             }
                         }
 

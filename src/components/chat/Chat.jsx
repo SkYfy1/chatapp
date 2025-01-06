@@ -305,7 +305,7 @@ const Chat = React.memo(({ showDetails, setShowDetails }) => {
           <img src={receiver?.avatar || "./avatar.png"} alt="" />
           <div className="texts">
             <span>{receiver?.username}</span>
-            <p>{receiver?.about}</p>
+            {receiver?.about && <p>{receiver?.about}</p>}
           </div>
         </div>
         {!isMobile && <div className="icons">

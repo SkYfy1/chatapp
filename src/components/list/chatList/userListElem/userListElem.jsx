@@ -4,10 +4,14 @@ import "../chatList.css"
 import { db } from '../../../../lib/firebase';
 import { useEffect } from 'react';
 import MiniAvatar from '../../../ui/MiniAvatar';
+import useAppStore from '../../../../context/useAppStore';
+import { Input } from '@mui/material';
+import ControlledCheckbox from '../../../ui/Checkbox';
 
 const UserListElem = ({ chat }) => {
     const currentUser = useAuthStore((state) => state.currentUser);
     const { userChats: chats, updateChats } = useAuthStore();
+    const creatingGroup = useAppStore(state => state.creatingGroup);
 
     useEffect(() => {
         const unSube = onSnapshot(doc(db, 'users', chat.user.id), async (res) => {
@@ -25,12 +29,14 @@ const UserListElem = ({ chat }) => {
     return (
         <>
             {chat.user.status && <MiniAvatar status={chat.user.status} img={chat.user.blocked.includes(currentUser.id)
-                    ? './avatar.png'
-                    : chat.user.avatar || './avatar.png'} />}
+                ? './avatar.png'
+                : chat.user.avatar || './avatar.png'} />}
             <div className='texts'>
                 <span>{chat.user.blocked.includes(currentUser.id) ? 'User' : chat.user.username}</span>
                 <p>{chat.lastMessage}</p>
             </div>
+            {/* {creatingGroup && <input className='checkbox' type='checkbox' onClick={(e) => e.stopPropagation()} />} */}
+            {creatingGroup && <ControlledCheckbox user={chat.user.id}/>}
         </>
     )
 }

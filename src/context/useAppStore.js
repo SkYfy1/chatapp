@@ -3,6 +3,33 @@ import { create } from "zustand";
 const useAppStore = create((set) => ({
     appLanguage: 'en',
     isMobile: false,
+    showButton: false,
+    creatingGroup: false,
+    groupMembers: [],
+
+    addGroupMembers: (newMember) => {
+        set((state) => ({
+            groupMembers: [...state.groupMembers, newMember]
+        }))
+    },
+
+    deleteGroupMembers: (newMember) => {
+        set((state) => ({
+            groupMembers: state.groupMembers.filter(el => el != newMember)
+        }))
+    },
+
+    changeShowButton: () => {
+        set((state) => ({
+            showButton: !state.showButton
+        }))
+    },
+
+    changeGroup: () => {
+        set((state) => ({
+            creatingGroup: !state.creatingGroup
+        }))
+    },
 
     changeLanguage: (lang) => set({
         appLanguage: lang
