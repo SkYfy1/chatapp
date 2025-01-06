@@ -11,7 +11,7 @@ const Audio = ({ audioMessage }) => {
     const timer = useRef(); // ref for timeout
 
     useEffect(() => {
-        console.log(Math.ceil(duration), position)
+        // console.log(Math.ceil(duration), position)
         const timeout = () => {
             if (Math.ceil(duration) != position) {
                 setPosition(prev => prev + 1);
