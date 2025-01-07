@@ -12,11 +12,13 @@ import { useTrail, animated } from '@react-spring/web';
 import MiniAvatar from '../../ui/MiniAvatar.jsx';
 import UserListElem from './userListElem/userListElem.jsx';
 import Button from '../../ui/Button.jsx';
+import { chatService } from '../../../services/chatsService.js';
+import { toast } from 'react-toastify';
 
 
 const ChatList = ({ toggle }) => {
   const [addMode, setAddMode] = useState(false);
-  const [createButton, setCreateButton] = useState(false);
+  const [groupName, setGroupName] = useState('');
   // const [chats, setChats] = useState([]);
   const [filter, setFilter] = useState('');
   const [pointer, setPointer] = useState({ pointerX: null, pointerY: null });
@@ -39,6 +41,10 @@ const ChatList = ({ toggle }) => {
     }
   }));
 
+  useEffect(() => {
+    // console.log(chats.user?.username.toLowerCase().startsWith(filter.toLowerCase()) || chats.groupName.toLowerCase().startsWith(filter.toLowerCase()))
+  })
+
   const anims = currentUser?.hasOwnProperty('settings') ? currentUser?.settings?.animations : true;
   const showBtn = () => appState.changeShowButton();
 
@@ -49,25 +55,39 @@ const ChatList = ({ toggle }) => {
     }
 
     return () => {
-      listRef.current.removeEventListener('mouseenter', showBtn);
-      listRef.current.removeEventListener('mouseleave', showBtn);
+      listRef.current?.removeEventListener('mouseenter', showBtn);
+      listRef.current?.removeEventListener('mouseleave', showBtn);
     }
   }, [appState.creatingGroup])
 
+  // Updating chats, gettign receivers data (doc)
+
   useEffect(() => {
     const unSubs = onSnapshot(doc(db, 'userchats', currentUser.id), async (res) => {
-      const items = res.data().chats;
-      console.log(items);
+      const userChats = res.data().chats;
+      console.log(userChats);
       console.log('sub')
 
-      const promises = items.map(async (item) => {
-        const userDocRef = doc(db, 'users', item.receiverId);
+      const promises = userChats.map(async (chat) => {
+        if (chat.hasOwnProperty('groupMembers')) {
+          const members = await Promise.all(chat.groupMembers.map(async (user) => {
+            const userDocRef = doc(db, 'users', user);
+
+            const userDocSnap = await getDoc(userDocRef);
+
+            return userDocSnap.data();
+          }));
+
+          return { ...chat, members };
+        }
+
+        const userDocRef = doc(db, 'users', chat.receiverId);
 
         const userDocSnap = await getDoc(userDocRef);
 
         const user = userDocSnap.data();
 
-        return { ...item, user }
+        return { ...chat, user }
       })
 
       const chatData = await Promise.all(promises);
@@ -77,9 +97,16 @@ const ChatList = ({ toggle }) => {
     return () => unSubs()
   }, [currentUser.id]);
 
+  // Select chat
+
   async function handleSelect(chat) {
     const userChats = chats.map(item => {
-      const { user, ...rest } = item;
+      if (item?.user) {
+        const { user, ...rest } = item;
+        return rest;
+      }
+
+      const { members, ...rest } = item;
       return rest;
     })
 
@@ -95,15 +122,23 @@ const ChatList = ({ toggle }) => {
       chats: userChats
     })
 
-    await changeChat(chat.chatId, chat.user);
+    chat.hasOwnProperty('user') && await changeChat(chat.chatId, chat.user);
+
+    // Fix kostil
+
+    chat.hasOwnProperty('groupName') && await changeChat(chat.chatId, undefined , { avatar: chat.groupAvatar, username: chat.groupName});
 
     { appState.isMobile && toggle(); }
   }
 
-  // useEffect(() => {
-  //   console.log(chats?.map((chat) => chat.chatId));
-  //   console.log(chats)
-  // }, [chats])
+  const createGroup = async () => {
+    if (appState.groupMembers?.length >= 1) {
+      await chatService.createGroupChat([...appState.groupMembers, currentUser.id], groupName);
+      appState.changeGroup();
+    } else {
+      toast.error('You cannot create empty group!')
+    }
+  };
 
   return (
     <div className='chatList' ref={listRef}>
@@ -117,8 +152,8 @@ const ChatList = ({ toggle }) => {
       {trails.map(({ ...style }, index) =>
       (
         <animated.div style={anims ? style : {}} key={index}>
-          {chats?.filter((el) => el.user.username.toLowerCase().startsWith(filter.toLowerCase())).map((chat) => (
-            !appState.isMobile ? <Tooltip key={chat.chatId} style={pointer} text={`${language.settings.tooltip[appState.appLanguage]}${chat.user.username}`}>
+          {chats?.filter((el) => el.user?.username.toLowerCase().startsWith(filter.toLowerCase()) || el.groupName.toLowerCase().startsWith(filter.toLowerCase())).map((chat) => (
+            !appState.isMobile ? <Tooltip key={chat.chatId} style={pointer} text={`${language.settings.tooltip[appState.appLanguage]}${chat?.user?.username || chat?.groupName}`}>
               <div
                 className="item"
                 onClick={() => handleSelect(chat)}
@@ -127,7 +162,7 @@ const ChatList = ({ toggle }) => {
                   backgroundColor: !chat?.isSeen ? '#5183fe' : chatId === chat.chatId ? 'rgba(17, 25, 40, 0.5)' : 'transparent'
                 }}
               >
-                <UserListElem chat={chat} />
+                <UserListElem chat={chat} type={chat.hasOwnProperty('groupName') ? 'group' : 'chat'} />
               </div>
             </Tooltip> :
               <div
@@ -153,12 +188,22 @@ const ChatList = ({ toggle }) => {
       )
       )}
       {addMode && <AddUser changeShow={() => setAddMode(false)} />}
-      {appState.showButton && <Button>
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
-        </svg>
-      </Button>}
-      {appState.creatingGroup && <button onClick={appState.changeGroup} className='groupBtn'>Create Group</button>}
+      {appState.showButton &&
+        <Button>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+          </svg>
+        </Button>}
+      {appState.creatingGroup &&
+        <div className='group'>
+          <div className='groupName'>
+            <h1>Enter Group Name</h1>
+            <div className='groupInput'>
+              <input type="text" value={groupName} onChange={(e) => setGroupName(e.target.value)} />
+            </div>
+          </div>
+          <button onClick={createGroup} className='groupBtn'>Create Group</button>
+        </div>}
     </div>
   )
 }

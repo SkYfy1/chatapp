@@ -16,14 +16,6 @@ export default function ControlledCheckbox({ user }) {
 
     const inArray = groupMembers.find((el) => el == user) ? true : false
 
-    React.useEffect(() => {
-        console.log(groupMembers)
-    }, [groupMembers]);
-
-    // React.useEffect(() => {
-    //     console.log(inArray)
-    // }, [])
-
     return (
         <Checkbox
             onClick={(e) => { e.stopPropagation() }}

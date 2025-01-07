@@ -40,6 +40,35 @@ export class chatService {
         }
     }
 
+    static async createGroupChat(users, name) {
+        try {
+            const chatRef = collection(db, 'chat');
+            const userChatRef = collection(db, 'userchats');
+
+            const newChatRef = doc(chatRef);
+
+            await setDoc(newChatRef, {
+                createdAt: serverTimestamp(),
+                messages: []
+            })
+
+            await Promise.all(users.map(async (uid) => {
+                await updateDoc(doc(userChatRef, uid), {
+                    chats: arrayUnion({
+                        chatId: newChatRef.id,
+                        lastMessage: '',
+                        groupMembers: users,
+                        groupName: name,
+                        groupAvatar: '',
+                        updatedAt: Date.now(),
+                    })
+                });
+            }))
+        } catch (error) {
+            console.log(error.message)
+        }
+    }
+
     static async changeMessageState(chatid, text) {
         const chatRef = doc(db, 'chat', chatid);
 

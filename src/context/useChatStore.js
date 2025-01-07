@@ -13,8 +13,13 @@ const useChatStore = create((set) => ({
         set({ mediaRecorder: ent })
     },
 
-    changeChat: (chatId, user) => {
+    changeChat: (chatId, user, group) => {
         const currentUser = useAuthStore.getState().currentUser;
+        // Check if group chat
+        if(group) {
+            return set({ user: group, chatId: chatId })
+        }
+
         // CHECK IF CURRENT USER IS BLOCKED
 
         if (user.blocked.includes(currentUser.id)) {

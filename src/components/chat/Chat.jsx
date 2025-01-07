@@ -8,11 +8,8 @@ import { useAuthStore } from '../../context/useAuthStore';
 import { fileService } from '../../services/fileService';
 import ModalWindow from '../ui/ModalWindow';
 import { useInView } from 'react-intersection-observer';
-import FileDownload from '../download/FileDownload';
 import useAppStore from '../../context/useAppStore';
-import Trail from '../animation/Trail'
 import { chatService } from '../../services/chatsService';
-import Spring from '../animation/Spring';
 import Audio from './Audio/Audio';
 import Icons from '../ui/Icons';
 import Message from './Message/Message';
