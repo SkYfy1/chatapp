@@ -8,9 +8,11 @@ import userService from '../../services/userService'
 import ImageDownload from '../download/ImageDownload'
 import useAppStore from '../../context/useAppStore'
 import language from '../../utils/language'
+import GroupSettings from './groupDetails/groupSettings'
 
 const Detail = ({ setShowDetails }) => {
   const friend = useChatStore(state => state.user);
+  const groupInfo = useChatStore(state => state.groupInfo);
   const appState = useAppStore();
   const { changeBlock, isReceiverBlocked, isUserBlocked, chat } = useChatStore();
   const isMobile = useAppStore(state => state.isMobile);
@@ -33,6 +35,10 @@ const Detail = ({ setShowDetails }) => {
       frequency: 200,
     }
   }));
+
+  useEffect(() => {
+    console.log(groupInfo)
+  }, [])
 
   const anims = currentUser.hasOwnProperty('settings') ? currentUser?.settings?.animations : true;
 
@@ -64,16 +70,31 @@ const Detail = ({ setShowDetails }) => {
   const images = chat.messages.filter(mes => mes.hasOwnProperty('img')).map(mes => mes.img);
   const files = chat.messages.filter(mes => mes.hasOwnProperty('file')).map(mes => mes.file);
 
+  // if(groupInfo) {
+  //   return (
+  //     <div>Meow</div>
+  //   );
+  // }
+
   return (
     <a.div className='detail' style={anims ? spring : {}}>
-      <div className="user">
+      {friend && <div className="user">
         <svg onClick={closeDetails} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="arrowBack">
           <path strokeLinecap="round" strokeLinejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
         </svg>
         <img src={isUserBlocked ? "./avatar.png" : friend?.avatar} alt="avatar" />
         <h2>{friend?.username}</h2>
         <p>Lorem ipsum suk iodj fovej kavler.</p>
-      </div>
+      </div>}
+      {groupInfo && <div className="user">
+        <svg onClick={closeDetails} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="arrowBack">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+        </svg>
+        <img src={groupInfo?.avatar || "./avatar.png"} alt="avatar" />
+        <h2>{groupInfo?.groupName}</h2>
+        <p>{groupInfo.members.length + ' members'}</p>
+      </div>}
+      {groupInfo && <GroupSettings />}
       <div className="info">
         <div className="option">
           <div className="title">
@@ -111,12 +132,19 @@ const Detail = ({ setShowDetails }) => {
               ))}
             </div>}
         </div>
-        <div className='btn-div'>
+        {friend && <div className='btn-div'>
           <button onClick={handleBlock}>{
             isUserBlocked ? 'You are blocked' : isReceiverBlocked ? (appState.appLanguage == 'en' ? "User blocked" : 'Заблоковано') : (appState.appLanguage == 'en' ? "Block user" : 'Заблокувати')
           }</button>
           <button className='logout' onClick={() => auth.signOut()}>{appState.appLanguage == 'en' ? 'Logout' : 'Вийти'}</button>
-        </div>
+        </div>}
+        {groupInfo &&
+          <div className='btn-div'>
+            <button onClick={handleBlock}>{
+              appState.appLanguage == 'en' ? "Leave group" : 'Вийти з группи'
+            }</button>
+            <button className='logout' onClick={() => auth.signOut()}>{appState.appLanguage == 'en' ? 'Logout' : 'Вийти'}</button>
+          </div>}
       </div>
     </ a.div>
   )

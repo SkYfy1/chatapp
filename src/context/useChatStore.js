@@ -5,6 +5,7 @@ const useChatStore = create((set) => ({
     chatId: null,
     chat: null,
     user: null,
+    groupInfo: null,
     isReceiverBlocked: false,
     isUserBlocked: false,
     audioMessage: null,
@@ -15,25 +16,26 @@ const useChatStore = create((set) => ({
 
     changeChat: (chatId, user, group) => {
         const currentUser = useAuthStore.getState().currentUser;
+        console.log(group)
         // Check if group chat
-        if(group) {
-            return set({ user: group, chatId: chatId })
+        if (group) {
+            return set({ groupInfo: group, chatId: chatId, user: null })
         }
 
         // CHECK IF CURRENT USER IS BLOCKED
 
         if (user.blocked.includes(currentUser.id)) {
-            return set({ isUserBlocked: true, user: null, chatId: chatId })
+            return set({ isUserBlocked: true, user: null, chatId: chatId, groupInfo: null })
         }
 
         // CHECK IF RECIEVER USER IS BLOCKED
 
         if (currentUser.blocked.includes(user.id)) {
-            return set({ isReceiverBlocked: true, user, chatId: chatId })
+            return set({ isReceiverBlocked: true, user, chatId: chatId, groupInfo: null })
         }
         console.log('chat changing', chatId, user)
 
-        set({ chatId: chatId, user: user })
+        set({ chatId: chatId, user: user, groupInfo: null })
     },
 
     updateChat: (data) => {

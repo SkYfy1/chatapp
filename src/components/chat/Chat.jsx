@@ -14,7 +14,7 @@ import Audio from './Audio/Audio';
 import Icons from '../ui/Icons';
 import Message from './Message/Message';
 
-const Chat = React.memo(({ showDetails, setShowDetails }) => {
+const Chat = React.memo(({ showDetails, setShowDetails, groupDetails, setGroupDetails }) => {
   const [open, setOpen] = useState(false);
   const refic = useRef(null);
   const [text, setText] = useState('');
@@ -38,8 +38,8 @@ const Chat = React.memo(({ showDetails, setShowDetails }) => {
   const ref = useRef(null);
   const reference = useRef();
 
-  // const { mediaRecorder, addMe } = useChatStore();
   const chatId = useChatStore(state => state.chatId);
+  const groupInfo = useChatStore(state => state.groupInfo) // !!!!!!!!!!
   const receiver = useChatStore(state => state.user);
   const currentUser = useAuthStore(state => state.currentUser);
   const { isReceiverBlocked, isUserBlocked, updateChat, chat } = useChatStore();
@@ -288,6 +288,14 @@ const Chat = React.memo(({ showDetails, setShowDetails }) => {
     </svg>
   ), []);
 
+  const showChatDetails = () => setShowDetails(!showDetails);
+
+  const showGroupDetails = () => setGroupDetails(!groupDetails);
+
+  useEffect(() => {
+    console.log(groupInfo)
+  }, [groupInfo])
+
   if (!chatId) {
     return <div className="chat"></div>
   }
@@ -296,19 +304,21 @@ const Chat = React.memo(({ showDetails, setShowDetails }) => {
   return (
     <div className={showDetails ? 'chat mobile' : 'chat'}>
       <div className="top">
-        <div className="user" onClick={() => setShowDetails(!showDetails)} style={{
+        <div className="user" onClick={groupInfo ? showGroupDetails : showChatDetails} style={{
           marginLeft: isMobile && 60
         }}>
-          <img src={receiver?.avatar || "./avatar.png"} alt="" />
+          <img src={receiver?.avatar || groupInfo?.avatar || "./avatar.png"} alt="" />
           <div className="texts">
-            <span>{receiver?.username}</span>
+            <span>{groupInfo?.groupName || receiver.username}</span>
             {receiver?.about && <p>{receiver?.about}</p>}
+            {groupInfo?.members && <p>{groupInfo?.members.length + ' members'}</p>}
           </div>
         </div>
         {!isMobile && <div className="icons">
           <img src="./phone.png" alt="call" />
           <img src="./video.png" alt="video" />
-          <img src="./info.png" alt="settings" onClick={() => setShowDetails(!showDetails)} />
+          {/* Detail button */}
+          <img src="./info.png" alt="settings" onClick={groupInfo ? showGroupDetails : showChatDetails} />
         </div>}
       </div>
       <div ref={reference} className="center">

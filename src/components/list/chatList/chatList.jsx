@@ -19,7 +19,6 @@ import { toast } from 'react-toastify';
 const ChatList = ({ toggle }) => {
   const [addMode, setAddMode] = useState(false);
   const [groupName, setGroupName] = useState('');
-  // const [chats, setChats] = useState([]);
   const [filter, setFilter] = useState('');
   const [pointer, setPointer] = useState({ pointerX: null, pointerY: null });
   const appState = useAppStore();
@@ -41,9 +40,9 @@ const ChatList = ({ toggle }) => {
     }
   }));
 
-  useEffect(() => {
-    // console.log(chats.user?.username.toLowerCase().startsWith(filter.toLowerCase()) || chats.groupName.toLowerCase().startsWith(filter.toLowerCase()))
-  })
+  // useEffect(() => {
+  //   // console.log(chats.user?.username.toLowerCase().startsWith(filter.toLowerCase()) || chats.groupName.toLowerCase().startsWith(filter.toLowerCase()))
+  // })
 
   const anims = currentUser?.hasOwnProperty('settings') ? currentUser?.settings?.animations : true;
   const showBtn = () => appState.changeShowButton();
@@ -60,13 +59,18 @@ const ChatList = ({ toggle }) => {
     }
   }, [appState.creatingGroup])
 
+
+  // useEffect(() => {
+  //   console.log(chats);
+  // }, [chats])
+
   // Updating chats, gettign receivers data (doc)
 
   useEffect(() => {
     const unSubs = onSnapshot(doc(db, 'userchats', currentUser.id), async (res) => {
       const userChats = res.data().chats;
       console.log(userChats);
-      console.log('sub')
+      console.log('sub');
 
       const promises = userChats.map(async (chat) => {
         if (chat.hasOwnProperty('groupMembers')) {
@@ -77,6 +81,8 @@ const ChatList = ({ toggle }) => {
 
             return userDocSnap.data();
           }));
+
+          // Members eto documenti s bd s infoi pro userov v gruppe
 
           return { ...chat, members };
         }
@@ -102,21 +108,20 @@ const ChatList = ({ toggle }) => {
   async function handleSelect(chat) {
     const userChats = chats.map(item => {
       if (item?.user) {
+        // console.log(item)
         const { user, ...rest } = item;
         return rest;
       }
 
+      // Tyt oni uberautsa iz chata pered obnovleniem doc chata (isSeen), chtobi ne pushnut ih na bd!
+      // console.log(item)
       const { members, ...rest } = item;
       return rest;
-    })
-
-    // console.log(userChats);
+    });
 
     const chatIndex = userChats.findIndex(item => item.chatId === chat.chatId);
 
     userChats[chatIndex].isSeen = true;
-
-    // console.log(userChats[0]);
 
     await updateDoc(doc(db, 'userchats', currentUser.id), {
       chats: userChats
@@ -126,7 +131,7 @@ const ChatList = ({ toggle }) => {
 
     // Fix kostil
 
-    chat.hasOwnProperty('groupName') && await changeChat(chat.chatId, undefined , { avatar: chat.groupAvatar, username: chat.groupName});
+    chat.hasOwnProperty('groupName') && await changeChat(chat.chatId, null, { avatar: chat.groupAvatar, groupName: chat.groupName, members: chat.members });
 
     { appState.isMobile && toggle(); }
   }
@@ -135,6 +140,7 @@ const ChatList = ({ toggle }) => {
     if (appState.groupMembers?.length >= 1) {
       await chatService.createGroupChat([...appState.groupMembers, currentUser.id], groupName);
       appState.changeGroup();
+      setGroupName('');
     } else {
       toast.error('You cannot create empty group!')
     }

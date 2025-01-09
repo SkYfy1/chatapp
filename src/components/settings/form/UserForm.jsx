@@ -11,7 +11,7 @@ const UserForm = ({ headBack }) => {
     const appState = useAppStore()
     const [img, setImg] = useState({
         file: null,
-        name: null,
+        url: null,
     })
     const {
         register,

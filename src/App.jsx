@@ -16,6 +16,7 @@ import userService from "./services/userService"
 
 const App = () => {
   const [showDetails, setShowDetails] = useState(false);
+  const [showGroupDetails, setShowGroupDetails] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const { currentUser, isLoading, fetchUserInfo, updateUserInfo } = useAuthStore();
   const chatId = useChatStore(state => state.chatId);
@@ -118,8 +119,9 @@ const App = () => {
         <>
           {!showList && <List toggle={setShowList} chatId={chatId} showDetails={showDetails} openSettings={changeSettingsState} />}
           {showSettings && <UserSettings close={changeSettingsState} />}
-          {chatId && <Chat showDetails={showDetails} setShowDetails={setShowDetails} />}
+          {chatId && <Chat showDetails={showDetails} setShowDetails={setShowDetails} setGroupDetails={setShowGroupDetails} groupDetails={showGroupDetails}/>}
           {showDetails && <Detail setShowDetails={setShowDetails} />}
+          {showGroupDetails && <Detail setShowDetails={setShowGroupDetails} />}
         </>
       ) : (
         <Login />
