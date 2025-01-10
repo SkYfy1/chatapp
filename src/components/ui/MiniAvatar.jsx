@@ -37,13 +37,13 @@ const StyledBadge = styled(Badge)(({ theme, badgeColor, anim }) => ({
 const MiniAvatar = ({ img, status }) => {
     const currentUser = useAuthStore(state => state.currentUser);
     const anims = currentUser.hasOwnProperty('settings') ? currentUser?.settings?.animations : true;
-    // const isMobile = useAppStore(state => state.isMobile);
+    const isMobile = useAppStore(state => state.isMobile);
 
 
-    // useEffect(() => {
-    //     console.log('tel ' + isMobile);
-    //     console.log(status);
-    // }, [isMobile]);
+    useEffect(() => {
+        console.log('tel ' + isMobile);
+        console.log(status);
+    }, [isMobile]);
 
     if (status === 'offline') {
         return (

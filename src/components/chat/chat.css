@@ -599,6 +599,12 @@
                 align-items: center;
                 gap: 5px;
 
+                .senderAvatar {
+                    width: 30px;
+                    height: 30px;
+                    transform: translateY(-40%);
+                }
+
                 &.own {
                     align-self: flex-end;
                 }

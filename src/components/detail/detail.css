@@ -265,7 +265,7 @@
 
 @media (min-width: 300px) and (max-width: 1000px) {
     .detail {
-        /* flex: 1; */
+        flex: 1;
         /* Eto toje */
         display: flex;
         flex-direction: column;
@@ -291,6 +291,109 @@
                 position: absolute;
                 top: 40px;
                 left: 15px;
+            }
+        }
+
+        .groupSettings {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            border-bottom: 1px solid #dddddd35;
+
+            .btn-div {
+                font-size: 15px;
+                background-color: rgba(17, 25, 40, 0.5);
+                color: white;
+                padding: 10px 15px;
+                text-align: center;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: all .5s ease;
+
+                &:hover {
+                    background-color: rgba(32, 48, 78, 0.5);
+                }
+            }
+
+            button {
+                background-color: rgba(17, 25, 40, 0.5);
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: all .5s ease;
+
+                &:hover {
+                    background-color: rgba(32, 48, 78, 0.5);
+                }
+            }
+
+            .nameChange {
+                display: flex;
+                gap: 10px;
+                justify-content: space-between;
+                width: 100%;
+
+                button {
+                    order: 2;
+                    transition: all .5s ease;
+                }
+
+                input {
+                    background: transparent;
+                    width: 50%;
+                    border: none;
+                    outline: none;
+                    color: white;
+                    background-color: rgba(17, 25, 40, 0.5);
+                    border-radius: 5px;
+                    order: 1;
+                    transition: all .5s ease;
+                    padding: 0 15px;
+                }
+            }
+
+            .members {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+
+                .userElem {
+                    display: flex;
+                    justify-content: space-between;
+
+                    .userData {
+                        display: flex;
+                        gap: 10px;
+
+                        img {
+                            width: 25px;
+                            height: 25px;
+                            border-radius: 50%;
+                        }
+
+                        span {
+                            font-size: 15px;
+                        }
+                    }
+
+                    button {
+                        background-color: rgba(17, 25, 40, 0.5);
+                        color: white;
+                        padding: 5px 10px;
+                        border: none;
+                        border-radius: 5px;
+                        cursor: pointer;
+                        transition: all .3s ease;
+
+                        &:hover {
+                            background-color: rgba(18, 45, 95, 0.5);
+                        }
+                    }
+                }
             }
         }
 

@@ -300,7 +300,7 @@ const Chat = React.memo(({ showDetails, setShowDetails, groupDetails, setGroupDe
   return (
     <div className={showDetails ? 'chat mobile' : 'chat'}>
       <div className="top">
-        <div className="user" onClick={groupInfo ? showGroupDetails : showChatDetails} style={{
+        <div className="user" onClick={showChatDetails} style={{
           marginLeft: isMobile && 60
         }}>
           <img src={receiver?.avatar || groupInfo?.avatar || "./avatar.png"} alt="" />
@@ -314,7 +314,7 @@ const Chat = React.memo(({ showDetails, setShowDetails, groupDetails, setGroupDe
           <img src="./phone.png" alt="call" />
           <img src="./video.png" alt="video" />
           {/* Detail button */}
-          <img src="./info.png" alt="settings" onClick={groupInfo ? showGroupDetails : showChatDetails} />
+          <img src="./info.png" alt="settings" onClick={showChatDetails} />
         </div>}
       </div>
       <div ref={reference} className="center">
