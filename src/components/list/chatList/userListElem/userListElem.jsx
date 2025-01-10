@@ -36,8 +36,10 @@ const UserListElem = ({ chat, type }) => {
                 {/* {chat.groupAvatar && <MiniAvatar status={'online'} img={chat.groupAvatar !== '' ? chat.groupAvatar : './avatar.png'} />} */}
                 <MiniAvatar status={'dnd'} img={chat.groupAvatar !== '' ? chat.groupAvatar : './avatar.png'} />
                 <div className='texts'>
-                    <span style={{fontSize: '10px'}}>Group</span>
-                    <span>{chat.groupName}</span>
+                    <div>
+                        <span style={{ fontSize: '15px', marginRight: '5px' }}>Group</span>
+                        <span style={{ fontSize: '12px' }}>{chat.groupName}</span>
+                    </div>
                     <p>{chat.lastMessage}</p>
                 </div>
             </>

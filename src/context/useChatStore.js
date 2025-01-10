@@ -14,6 +14,10 @@ const useChatStore = create((set) => ({
         set({ mediaRecorder: ent })
     },
 
+    updateGroupInfo: (group) => {
+        set({ groupInfo: group })
+    },
+
     changeChat: (chatId, user, group) => {
         const currentUser = useAuthStore.getState().currentUser;
         console.log(group)

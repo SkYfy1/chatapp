@@ -112,6 +112,12 @@
                 align-items: center;
                 gap: 5px;
 
+                .senderAvatar {
+                    width: 40px;
+                    height: 40px;
+                    transform: translateY(-35%);
+                }
+
                 &.own {
                     align-self: flex-end;
                 }

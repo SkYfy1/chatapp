@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import '../detail.css'
 import useChatStore from '../../../context/useChatStore';
+import { groupService } from '../../../services/groupService';
+import { useAuthStore } from '../../../context/useAuthStore';
 
 const GroupSettings = () => {
     const [img, setImg] = useState({
@@ -12,11 +14,20 @@ const GroupSettings = () => {
     const [kickForm, setKickForm] = useState(false);
 
     const groupInfo = useChatStore(state => state.groupInfo);
+    const chatId = useChatStore(state => state.chatId);
 
     useEffect(() => {
         groupInfo.groupName && setText(groupInfo.groupName)
     }, [])
 
+    const members = groupInfo.members.map(members => members.id)
+
+    const changeName = () => setChange(prev => !prev);
+
+    const confirmChanging = async () => {
+        await groupService.changeGroupName(members, chatId, text);
+        setChange(prev => !prev);
+    }
     return (
         <div className='groupSettings'>
             <div>
@@ -27,7 +38,7 @@ const GroupSettings = () => {
                 <input type="file" id='groupAvatar' style={{ display: 'none' }} onChange={(e) => setImg({ file: e.target.files[0], url: URL.createObjectURL(e.target.files[0]) })} />
             </div>
             <div className='nameChange'>
-                <button style={{ width: changeText ? '50%' : '100%' }} onClick={() => setChange(prev => !prev)}>{changeText ? 'Confirm' : 'Change group name'}</button>
+                <button style={{ width: changeText ? '50%' : '100%' }} onClick={changeText ? confirmChanging : changeName}>{changeText ? 'Confirm' : 'Change group name'}</button>
                 {changeText && <input type="text" value={text} onChange={(e) => setText(e.target.value)} />}
             </div>
             <button onClick={() => setKickForm(prev => !prev)}>Kick users</button>

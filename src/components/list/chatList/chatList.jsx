@@ -25,6 +25,7 @@ const ChatList = ({ toggle }) => {
   const listRef = useRef(null)
 
   const currentUser = useAuthStore((state) => state.currentUser);
+  const updateGroupInfo = useChatStore((state) => state.updateGroupInfo);
   const { userChats: chats, updateChats } = useAuthStore();
   const changeChat = useChatStore(state => state.changeChat);
   // const { changeChat } = useChatStore();
@@ -59,14 +60,10 @@ const ChatList = ({ toggle }) => {
     }
   }, [appState.creatingGroup])
 
-
-  // useEffect(() => {
-  //   console.log(chats);
-  // }, [chats])
-
   // Updating chats, gettign receivers data (doc)
 
   useEffect(() => {
+    // If doc in collection changes update chat list
     const unSubs = onSnapshot(doc(db, 'userchats', currentUser.id), async (res) => {
       const userChats = res.data().chats;
       console.log(userChats);
@@ -82,7 +79,11 @@ const ChatList = ({ toggle }) => {
             return userDocSnap.data();
           }));
 
-          // Members eto documenti s bd s infoi pro userov v gruppe
+          // If group data changes -> doc in coll updates -> update groupInfo state
+
+          updateGroupInfo({ avatar: chat.groupAvatar, groupName: chat.groupName, members: members })
+
+          // Members - docs in db w/ information of group users (eto documenti s bd s infoi pro userov v gruppe)
 
           return { ...chat, members };
         }
@@ -179,13 +180,13 @@ const ChatList = ({ toggle }) => {
                   backgroundColor: chat?.isSeen ? 'transparent' : '#5183fe'
                 }}
               >
-                {chat.user.status === 'offline' ? <img src={chat.user.blocked.includes(currentUser.id)
+                {chat?.user?.status === 'offline' ? <img src={chat?.user?.blocked.includes(currentUser.id)
                   ? './avatar.png'
-                  : chat.user.avatar || './avatar.png'} alt="" /> : <MiniAvatar img={chat.user.blocked.includes(currentUser.id)
+                  : chat?.user?.avatar || './avatar.png'} alt="" /> : <MiniAvatar img={chat?.user?.blocked.includes(currentUser.id)
                     ? './avatar.png'
-                    : chat.user.avatar || './avatar.png'} status={chat.user.status} />}
+                    : chat?.user?.avatar || './avatar.png'} status={chat?.user?.status} />}
                 <div className='texts'>
-                  <span>{chat.user.blocked.includes(currentUser.id) ? 'User' : chat.user.username}</span>
+                  <span>{chat?.user?.blocked.includes(currentUser.id) ? 'User' : chat?.user?.username}</span>
                   <p>{chat.lastMessage}</p>
                 </div>
               </div>
