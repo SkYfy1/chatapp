@@ -5,84 +5,100 @@ import supabase from "../lib/supabase";
 
 export class groupService {
     static async changeGroupName(users, chatId, newName) {
-        await Promise.all(users.map(async (userId) => {
-            const chatRef = doc(db, 'userchats', userId);
+        try {
+            await Promise.all(users.map(async (userId) => {
+                const chatRef = doc(db, 'userchats', userId);
 
-            const snapshot = await getDoc(chatRef);
+                const snapshot = await getDoc(chatRef);
 
-            const chats = snapshot.data();
+                const chats = snapshot.data();
 
-            const chatIndex = chats.chats.findIndex(c => c.chatId === chatId);
+                const chatIndex = chats.chats.findIndex(c => c.chatId === chatId);
 
-            chats.chats[chatIndex].groupName = newName;
-            chats.chats[chatIndex].updatedAt = Date.now();
+                chats.chats[chatIndex].groupName = newName;
+                chats.chats[chatIndex].updatedAt = Date.now();
 
-            await updateDoc(chatRef, {
-                chats: chats.chats
-            })
-        }))
+                await updateDoc(chatRef, {
+                    chats: chats.chats
+                })
+            }))
+        } catch (error) {
+            console.log(error.message)
+        }
     }
 
     static async changeGroupAvatar(users, chatId, newAvatar) {
-        const imgLink = fileService.uploadFileAndGetLink(newAvatar, 'avatars');
+        try {
+            const imgLink = await fileService.uploadFileAndGetLink(newAvatar, 'avatars');
 
-        await Promise.all(users.map(async (userId) => {
-            const chatRef = doc(db, 'userchats', userId);
+            await Promise.all(users.map(async (userId) => {
+                const chatRef = doc(db, 'userchats', userId);
 
-            const snapshot = await getDoc(chatRef);
+                const snapshot = await getDoc(chatRef);
 
-            const chats = snapshot.data();
+                const chats = snapshot.data();
 
-            const chatIndex = chats.chats.findIndex(c => c.chatId === chatId);
+                const chatIndex = chats.chats.findIndex(c => c.chatId === chatId);
 
-            chats.chats[chatIndex].groupAvatar = imgLink;
-            chats.chats[chatIndex].updatedAt = Date.now();
+                chats.chats[chatIndex].groupAvatar = imgLink;
+                chats.chats[chatIndex].updatedAt = Date.now();
 
-            await updateDoc(chatRef, {
-                chats: chats.chats
-            })
-        }))
+                await updateDoc(chatRef, {
+                    chats: chats.chats
+                })
+            }))
+        } catch (error) {
+            console.log(error.message)
+        }
     }
 
     static async kickGroupUser(users, chatId, uid) {
-        await Promise.all(users.map(async (userId) => {
-            const chatRef = doc(db, 'userchats', userId);
+        try {
+            await Promise.all(users.map(async (userId) => {
+                const chatRef = doc(db, 'userchats', userId);
 
-            const snapshot = await getDoc(chatRef);
+                const snapshot = await getDoc(chatRef);
 
-            const chats = snapshot.data();
+                const chats = snapshot.data();
 
-            const chatIndex = chats.chats.findIndex(c => c.chatId === chatId);
+                const chatIndex = chats.chats.findIndex(c => c.chatId === chatId);
 
-            const newArray = chats.chats[chatIndex].groupMembers.filter((id) => id !== uid);
+                const newArray = chats.chats[chatIndex].groupMembers.filter((id) => id !== uid);
 
-            chats.chats[chatIndex].groupMembers = newArray;
-            chats.chats[chatIndex].updatedAt = Date.now();
+                chats.chats[chatIndex].groupMembers = newArray;
+                chats.chats[chatIndex].updatedAt = Date.now();
 
-            await updateDoc(chatRef, {
-                chats: chats.chats
-            })
-        }))
+                await updateDoc(chatRef, {
+                    chats: chats.chats
+                })
+            }))
+        } catch (error) {
+            console.log(error.message)
+        }
     }
 
     static async addGroupUser(users, chatId, uid) {
-        await Promise.all(users.map(async (userId) => {
-            const chatRef = doc(db, 'userchats', userId);
+        try {
+            await Promise.all(users.map(async (userId) => {
+                const chatRef = doc(db, 'userchats', userId);
 
-            const snapshot = await getDoc(chatRef);
+                const snapshot = await getDoc(chatRef);
 
-            const chats = snapshot.data();
+                const chats = snapshot.data();
 
-            const chatIndex = chats.chats.findIndex(c => c.chatId === chatId)
+                const chatIndex = chats.chats.findIndex(c => c.chatId === chatId)
 
-            const newArray = [...chats.chats[chatIndex].groupMembers, uid];
+                const newArray = [...chats.chats[chatIndex].groupMembers, uid];
 
-            chats.chats[chatIndex].groupMembers = newArray;
-            chats.chats[chatIndex].updatedAt = Date.now();
+                chats.chats[chatIndex].groupMembers = newArray;
+                chats.chats[chatIndex].updatedAt = Date.now();
 
-            await updateDoc(chatRef, {
-                chats: chats.chats
-            })
-        }))
+                await updateDoc(chatRef, {
+                    chats: chats.chats
+                })
+            }))
+        } catch (error) {
+            console.log(error.message)
+        }
     }
 }

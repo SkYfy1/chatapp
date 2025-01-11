@@ -5,6 +5,7 @@ import { groupService } from '../../../services/groupService';
 import { useTrail, a } from '@react-spring/web';
 import { useAuthStore } from '../../../context/useAuthStore';
 import List from '../../ui/List';
+import { toast } from 'react-toastify';
 
 const GroupSettings = () => {
     const [img, setImg] = useState({
@@ -30,13 +31,19 @@ const GroupSettings = () => {
         await groupService.changeGroupName(members, chatId, text);
         setChange(prev => !prev);
     }
+
+    const confirmUpdatingImg = async () => {
+        await groupService.changeGroupAvatar(members, chatId, img?.file);
+        toast.success('Image Updated!')
+    };
+
     return (
         <div className='groupSettings'>
             <div>
                 {/* Чомусь якщо в лейблі елемент бтн, то не відкриваеться окно для додавання файлу ????? */}
-                <label htmlFor='groupAvatar'>
+                {!img.file ? <label htmlFor='groupAvatar'>
                     <div className='btn-div'>Change group avatar</div>
-                </label>
+                </label> : <div className='btn-div' onClick={confirmUpdatingImg}>Update Avatar</div>}
                 <input type="file" id='groupAvatar' style={{ display: 'none' }} onChange={(e) => setImg({ file: e.target.files[0], url: URL.createObjectURL(e.target.files[0]) })} />
             </div>
             <div className='nameChange'>
