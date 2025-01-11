@@ -147,6 +147,26 @@ const ChatList = ({ toggle }) => {
     }
   };
 
+  const handleAdd = async (fId) => {
+    // Get userchat doc to find out, is the user already friend
+    const userChats = doc(db, 'userchats', currentUser.id)
+
+    const data = await getDoc(userChats)
+
+    // console.log(data.data().chats.find(el => el.receiverId === fId));
+
+    // Check if user already friend
+
+    if (data.data().chats.find(el => el.receiverId === fId)) {
+      toast.error('The user is already your friend')
+    } else {
+      await chatService.createChat(fId, currentUser.id);
+      setTimeout(() => changeShow(), 1000)
+    }
+
+    setAddMode(false);
+  }
+
   return (
     <div className='chatList' ref={listRef}>
       <div className="search">
@@ -186,7 +206,7 @@ const ChatList = ({ toggle }) => {
         </animated.div>
       )
       )}
-      {addMode && <AddUser changeShow={() => setAddMode(false)} />}
+      {addMode && <AddUser handler={handleAdd} />}
       {appState.showButton &&
         <Button>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">

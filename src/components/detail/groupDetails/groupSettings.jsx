@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react'
 import '../detail.css'
 import useChatStore from '../../../context/useChatStore';
 import { groupService } from '../../../services/groupService';
-import { useTrail, a } from '@react-spring/web';
-import { useAuthStore } from '../../../context/useAuthStore';
 import List from '../../ui/List';
 import { toast } from 'react-toastify';
+import AddUser from '../../list/chatList/addUser/addUser';
 
 const GroupSettings = () => {
     const [img, setImg] = useState({
@@ -15,6 +14,7 @@ const GroupSettings = () => {
     const [text, setText] = useState('');
     const [changeText, setChange] = useState(false);
     const [kickForm, setKickForm] = useState(false);
+    const [addForm, setAddForm] = useState(false);
 
     const groupInfo = useChatStore(state => state.groupInfo);
     const chatId = useChatStore(state => state.chatId);
@@ -37,6 +37,12 @@ const GroupSettings = () => {
         toast.success('Image Updated!')
     };
 
+    const handleAdd = async (fid) => {
+        await groupService.addGroupUser(members, chatId, fid);
+        toast.info('User added')
+        setAddForm(false);
+    }
+
     return (
         <div className='groupSettings'>
             <div>
@@ -51,8 +57,9 @@ const GroupSettings = () => {
                 {changeText && <input type="text" value={text} onChange={(e) => setText(e.target.value)} />}
             </div>
             <button onClick={() => setKickForm(prev => !prev)}>Kick users</button>
-            {kickForm &&
-                <List list={groupInfo.members} />}
+            {kickForm && <List list={groupInfo.members} />}
+            <button onClick={() => setAddForm(prev => !prev)}>Add user</button>
+            {addForm && <AddUser handler={handleAdd} />}
         </div>
     )
 }

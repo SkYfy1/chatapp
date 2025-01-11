@@ -7,7 +7,7 @@ import { getDoc, doc } from 'firebase/firestore';
 import { db } from '../../../../lib/firebase';
 import { toast } from 'react-toastify';
 
-const AddUser = ({ changeShow }) => {
+const AddUser = ({ handler }) => {
     const [friends, setFriends] = useState(null);
     const currentUser = useAuthStore(state => state.currentUser)
     const handleSearch = async (e) => {
@@ -20,25 +20,25 @@ const AddUser = ({ changeShow }) => {
             setFriends(query.filter(u => u.id != currentUser.id));
         }
     }
+    
+    // const handleAdd = async (fId) => {
+    //     // Get userchat doc to find out, is the user already friend
+    //     const userChats = doc(db, 'userchats', currentUser.id)
 
-    const handleAdd = async (fId) => {
-        // Get userchat doc to find out, is the user already friend
-        const userChats = doc(db, 'userchats', currentUser.id)
+    //     const data = await getDoc(userChats)
 
-        const data = await getDoc(userChats)
+    //     // console.log(data.data().chats.find(el => el.receiverId === fId));
 
-        // console.log(data.data().chats.find(el => el.receiverId === fId));
+    //     // Check if user already friend
 
-        // Check if user already friend
+    //     if (data.data().chats.find(el => el.receiverId === fId)) {
+    //         toast.error('The user is already your friend')
+    //     } else {
+    //         await chatService.createChat(fId, currentUser.id);
+    //         setTimeout(() => changeShow(), 1000)
+    //     }
+    // }
 
-        if (data.data().chats.find(el => el.receiverId === fId)) {
-            toast.error('The user is already your friend')
-        } else {
-            await chatService.createChat(fId, currentUser.id);
-            setTimeout(() => changeShow(), 1000)
-        }
-
-    }
     return (
         <div className='addUser'>
             <form onSubmit={handleSearch}>
@@ -49,12 +49,12 @@ const AddUser = ({ changeShow }) => {
                 friends
                 &&
                 friends.map(friend =>
-                    <div className='user' key={friend.username}>
+                    <div className='userElem' key={friend.username}>
                         <div className="details">
                             <img src={friend.avatar} alt="" />
                             <span>{friend.username}</span>
                         </div>
-                        <button onClick={() => handleAdd(friend.id)}>
+                        <button onClick={() => handler(friend.id)}>
                             Add User
                         </button>
                     </div>)

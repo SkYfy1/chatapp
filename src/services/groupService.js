@@ -1,7 +1,6 @@
-import { collection, doc, getDoc, updateDoc } from "firebase/firestore";
+import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../lib/firebase";
 import { fileService } from "./fileService";
-import supabase from "../lib/supabase";
 
 export class groupService {
     static async changeGroupName(users, chatId, newName) {
@@ -63,13 +62,25 @@ export class groupService {
 
                 const chatIndex = chats.chats.findIndex(c => c.chatId === chatId);
 
+                // Delete id of kicked user from groupMembers
+
                 const newArray = chats.chats[chatIndex].groupMembers.filter((id) => id !== uid);
 
                 chats.chats[chatIndex].groupMembers = newArray;
                 chats.chats[chatIndex].updatedAt = Date.now();
 
+                // Delete chat from user which are kicked
+
+                const updatedChats = chats.chats.filter(chat => chat.chatId !== chatId);
+
+                // if (userId === uid) {
+                //     await updateDoc(chatRef, {
+                //         chats: arrayRemove()
+                //     })
+                // }
+
                 await updateDoc(chatRef, {
-                    chats: chats.chats
+                    chats: userId === uid ? updatedChats : chats.chats
                 })
             }))
         } catch (error) {
@@ -79,7 +90,11 @@ export class groupService {
 
     static async addGroupUser(users, chatId, uid) {
         try {
-            await Promise.all(users.map(async (userId) => {
+            let chatCopy = null;
+
+            const userList = users.filter((id) => id != uid);
+
+            await Promise.all(userList.map(async (userId) => {
                 const chatRef = doc(db, 'userchats', userId);
 
                 const snapshot = await getDoc(chatRef);
@@ -95,8 +110,17 @@ export class groupService {
 
                 await updateDoc(chatRef, {
                     chats: chats.chats
-                })
+                });
+
+                chatCopy = !chatCopy && chats.chats[chatIndex]
             }))
+
+            const chatRef = doc(db, 'userchats', uid);
+
+            await updateDoc(chatRef, {
+                chats: arrayUnion(chatCopy)
+            });
+
         } catch (error) {
             console.log(error.message)
         }
