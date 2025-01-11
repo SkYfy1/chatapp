@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react'
 import '../detail.css'
 import useChatStore from '../../../context/useChatStore';
 import { groupService } from '../../../services/groupService';
+import { useTrail, a } from '@react-spring/web';
 import { useAuthStore } from '../../../context/useAuthStore';
+import List from '../../ui/List';
 
 const GroupSettings = () => {
     const [img, setImg] = useState({
@@ -43,18 +45,7 @@ const GroupSettings = () => {
             </div>
             <button onClick={() => setKickForm(prev => !prev)}>Kick users</button>
             {kickForm &&
-                <div className='members'>
-                    {/* Sdelat animaciy spiska!!~!!!!!!!!!!!!~~~!!~!~!~!~!!!!!~~!!!!! */}
-                    {groupInfo.members.map((user) => (
-                        <div className='userElem'>
-                            <div className='userData'>
-                                <img src={user.avatar} alt="avatar" />
-                                <span>{user.username}</span>
-                            </div>
-                            <button>Kick user</button>
-                        </div>
-                    ))}
-                </div>}
+                <List list={groupInfo.members} />}
         </div>
     )
 }
