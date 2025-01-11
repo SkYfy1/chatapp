@@ -23,15 +23,66 @@ export class groupService {
         }))
     }
 
-    static async changeGroupAvatar(chatId, newAvatar) {
+    static async changeGroupAvatar(users, chatId, newAvatar) {
+        const imgLink = fileService.uploadFileAndGetLink(newAvatar, 'avatars');
 
+        await Promise.all(users.map(async (userId) => {
+            const chatRef = doc(db, 'userchats', userId);
+
+            const snapshot = await getDoc(chatRef);
+
+            const chats = snapshot.data();
+
+            const chatIndex = chats.chats.findIndex(c => c.chatId === chatId);
+
+            chats.chats[chatIndex].groupAvatar = imgLink;
+            chats.chats[chatIndex].updatedAt = Date.now();
+
+            await updateDoc(chatRef, {
+                chats: chats.chats
+            })
+        }))
     }
 
-    static async kickGroupUser(chatId, user) {
+    static async kickGroupUser(users, chatId, uid) {
+        await Promise.all(users.map(async (userId) => {
+            const chatRef = doc(db, 'userchats', userId);
 
+            const snapshot = await getDoc(chatRef);
+
+            const chats = snapshot.data();
+
+            const chatIndex = chats.chats.findIndex(c => c.chatId === chatId);
+
+            const newArray = chats.chats[chatIndex].groupMembers.filter((id) => id !== uid);
+
+            chats.chats[chatIndex].groupMembers = newArray;
+            chats.chats[chatIndex].updatedAt = Date.now();
+
+            await updateDoc(chatRef, {
+                chats: chats.chats
+            })
+        }))
     }
 
-    static async addGroupUser(chatId, user) {
+    static async addGroupUser(users, chatId, uid) {
+        await Promise.all(users.map(async (userId) => {
+            const chatRef = doc(db, 'userchats', userId);
 
+            const snapshot = await getDoc(chatRef);
+
+            const chats = snapshot.data();
+
+            const chatIndex = chats.chats.findIndex(c => c.chatId === chatId)
+
+            const newArray = [...chats.chats[chatIndex].groupMembers, uid];
+
+            chats.chats[chatIndex].groupMembers = newArray;
+            chats.chats[chatIndex].updatedAt = Date.now();
+
+            await updateDoc(chatRef, {
+                chats: chats.chats
+            })
+        }))
     }
 }
