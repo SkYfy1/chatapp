@@ -18,17 +18,28 @@ const UserListElem = ({ chat, type }) => {
     // !!! mogut bit trabls
 
     useEffect(() => {
-        console.log(chat.user)
-        const unSube = chat.user != undefined && onSnapshot(doc(db, 'users', chat.user.id), async (res) => {
-            const user = res.data();
+        let unSubs;
+        if (type != 'group' && chat.user?.id) {
+            console.log(chat.hasOwnProperty('user'))
+            console.log(chat.user)
+            unSubs = onSnapshot(doc(db, 'users', chat.user.id), async (res) => {
+                const user = res.data();
 
-            // console.log(chats.find(el => el.user.username === user.username))
-
-            const updatedChats = chats.map((el) => (el.user?.username === user?.username && !el.hasOwnProperty('groupName')) ? { ...el, user: user } : el);
-
-            updateChats(updatedChats.sort((a, b) => b.updatedAt - a.updatedAt));
-        })
-        return () => chat?.user !== undefined && unSube()
+                if (!user) {
+                    console.error("No user data found for document:", chat.user.id);
+                    return;
+                } else {
+                    console.log(user)
+                }
+    
+                // console.log(chats.find(el => el.user.username === user.username))
+    
+                const updatedChats = chats.map((el) => el.user?.id === user?.id ? { ...el, user: user } : el);
+    
+                updateChats(updatedChats.sort((a, b) => b.updatedAt - a.updatedAt));
+            })
+        }
+        return () => type != 'group' && unSubs?.()
     }, []);
 
     // Nujno 4toto sdelat so statusom gruppi
