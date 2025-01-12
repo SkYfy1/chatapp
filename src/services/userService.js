@@ -9,14 +9,6 @@ import { fileService } from './fileService';
 class userService {
     static async createUser(user, image) {
         try {
-            // Use the JS library to create a bucket.
-
-            // const { data1, error1 } = await supabase.storage.createBucket('avatars', {
-            //     public: true, // или false, в зависимости от ваших требований
-            //   })
-
-
-
             // Image upload
 
             if (image) {

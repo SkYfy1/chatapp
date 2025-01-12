@@ -330,11 +330,10 @@ const Chat = React.memo(({ showDetails, setShowDetails, groupDetails, setGroupDe
           return (<Message message={message} setShowBig={(value) => setShowBig(value)} />)
         })}
         <div ref={ref}></div>
-        {audioMessage.url && <div className='audioMessage'>
-          {/* <audio ref={controls} src={audioMessage}></audio>
-          <button onClick={() => controls.current.play()}>Start</button> */}
-          <Audio audioMessage={audioMessage.url} />
-        </div>}
+        {audioMessage.url &&
+          <div className='audioMessage'>
+            <Audio audioMessage={audioMessage.url} />
+          </div>}
       </div>
       <div className="bottom">
         {

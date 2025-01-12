@@ -27,7 +27,7 @@ const UserForm = ({ headBack }) => {
 
     const onSubmit = (data) => {
         // alert(JSON.stringify(data));
-        console.log(JSON.stringify(data));
+        // console.log(JSON.stringify(data));
         if (!formState.dirtyFields.username) {
             userService.updateUserData(img?.file, userData.username, userData.id, data.phone, data.about);
         } else {
