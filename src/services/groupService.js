@@ -1,16 +1,19 @@
 import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../lib/firebase";
 import { fileService } from "./fileService";
+import { getDocData } from "../utils/firebaseFunc";
 
 export class groupService {
     static async changeGroupName(users, chatId, newName) {
         try {
             await Promise.all(users.map(async (userId) => {
-                const chatRef = doc(db, 'userchats', userId);
+                // const chatRef = doc(db, 'userchats', userId);
 
-                const snapshot = await getDoc(chatRef);
+                // const snapshot = await getDoc(chatRef);
 
-                const chats = snapshot.data();
+                // const chats = snapshot.data();
+
+                const chats = await getDocData('userchats', userId);
 
                 const chatIndex = chats.chats.findIndex(c => c.chatId === chatId);
 
@@ -31,11 +34,13 @@ export class groupService {
             const imgLink = await fileService.uploadFileAndGetLink(newAvatar, 'avatars');
 
             await Promise.all(users.map(async (userId) => {
-                const chatRef = doc(db, 'userchats', userId);
+                // const chatRef = doc(db, 'userchats', userId);
 
-                const snapshot = await getDoc(chatRef);
+                // const snapshot = await getDoc(chatRef);
 
-                const chats = snapshot.data();
+                // const chats = snapshot.data();
+
+                const chats = await getDocData('userchats', userId);
 
                 const chatIndex = chats.chats.findIndex(c => c.chatId === chatId);
 
@@ -54,11 +59,13 @@ export class groupService {
     static async kickGroupUser(users, chatId, uid) {
         try {
             await Promise.all(users.map(async (userId) => {
-                const chatRef = doc(db, 'userchats', userId);
+                // const chatRef = doc(db, 'userchats', userId);
 
-                const snapshot = await getDoc(chatRef);
+                // const snapshot = await getDoc(chatRef);
 
-                const chats = snapshot.data();
+                // const chats = snapshot.data();
+
+                const chats = await getDocData('userchats', userId);
 
                 const chatIndex = chats.chats.findIndex(c => c.chatId === chatId);
 
@@ -95,11 +102,13 @@ export class groupService {
             const userList = users.filter((id) => id != uid);
 
             await Promise.all(userList.map(async (userId) => {
-                const chatRef = doc(db, 'userchats', userId);
+                // const chatRef = doc(db, 'userchats', userId);
 
-                const snapshot = await getDoc(chatRef);
+                // const snapshot = await getDoc(chatRef);
 
-                const chats = snapshot.data();
+                // const chats = snapshot.data();
+
+                const chats = await getDocData('userchats', userId);
 
                 const chatIndex = chats.chats.findIndex(c => c.chatId === chatId)
 
