@@ -3,9 +3,9 @@ import '../list/chatList/chatList.css'
 import { animated, useSpring } from '@react-spring/web'
 import useAppStore from '../../context/useAppStore'
 
-const Button = ({ children }) => {
-    const changeGroup = useAppStore((state) => state.changeGroup);
-    const closeButton = useAppStore((state) => state.changeShowButton)
+const Button = ({ handler, children }) => {
+    // const changeGroup = useAppStore((state) => state.changeGroup);
+    // const closeButton = useAppStore((state) => state.changeShowButton);
     const [spring, api] = useSpring(() => ({
         from: {
             y: 0,
@@ -18,10 +18,12 @@ const Button = ({ children }) => {
     }));
 
     return (
-        <animated.button style={spring} className='btn' onClick={() => { changeGroup(); closeButton()}}>
+        <animated.button style={spring} className='btn' onClick={handler}>
             {children}
         </animated.button>
     )
 }
 
 export default Button
+
+// onClick={() => { changeGroup(); closeButton()}}
