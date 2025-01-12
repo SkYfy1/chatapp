@@ -13,7 +13,7 @@ export class groupService {
 
                 // const chats = snapshot.data();
 
-                const chats = await getDocData('userchats', userId);
+                const [chats, chatRef] = await getDocData('userchats', userId);
 
                 const chatIndex = chats.chats.findIndex(c => c.chatId === chatId);
 
@@ -40,7 +40,7 @@ export class groupService {
 
                 // const chats = snapshot.data();
 
-                const chats = await getDocData('userchats', userId);
+                const [chats, chatRef] = await getDocData('userchats', userId);
 
                 const chatIndex = chats.chats.findIndex(c => c.chatId === chatId);
 
@@ -65,7 +65,7 @@ export class groupService {
 
                 // const chats = snapshot.data();
 
-                const chats = await getDocData('userchats', userId);
+                const [chats, chatRef] = await getDocData('userchats', userId);
 
                 const chatIndex = chats.chats.findIndex(c => c.chatId === chatId);
 
@@ -108,7 +108,7 @@ export class groupService {
 
                 // const chats = snapshot.data();
 
-                const chats = await getDocData('userchats', userId);
+                const [chats, chatRef] = await getDocData('userchats', userId);
 
                 const chatIndex = chats.chats.findIndex(c => c.chatId === chatId)
 

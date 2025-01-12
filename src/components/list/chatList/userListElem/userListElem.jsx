@@ -18,16 +18,17 @@ const UserListElem = ({ chat, type }) => {
     // !!! mogut bit trabls
 
     useEffect(() => {
-        const unSube = onSnapshot(doc(db, 'users', chat.user.id), async (res) => {
+        console.log(chat.user)
+        const unSube = chat.user != undefined && onSnapshot(doc(db, 'users', chat.user.id), async (res) => {
             const user = res.data();
 
             // console.log(chats.find(el => el.user.username === user.username))
 
-            const updatedChats = chats.map((el) => (el.user.username === user.username && !el.hasOwnProperty('groupName')) ? { ...el, user: user } : el);
+            const updatedChats = chats.map((el) => (el.user?.username === user?.username && !el.hasOwnProperty('groupName')) ? { ...el, user: user } : el);
 
             updateChats(updatedChats.sort((a, b) => b.updatedAt - a.updatedAt));
         })
-        return () => unSube()
+        return () => chat?.user !== undefined && unSube()
     }, []);
 
     // Nujno 4toto sdelat so statusom gruppi

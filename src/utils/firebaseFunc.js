@@ -6,5 +6,5 @@ export const getDocData = async (path, key) => {
 
     const docSnapshot = await getDoc(docRef);
 
-    return docSnapshot.data();
+    return [docSnapshot.data(), docRef];
 }

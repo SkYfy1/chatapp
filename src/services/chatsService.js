@@ -76,7 +76,7 @@ export class chatService {
 
         // const chat = chatData.data();
 
-        const chat = await getDocData('chat', chatid);
+        const [chat, chatRef] = await getDocData('chat', chatid);
 
         // map messages array to find message and update state
         const updatedMessages = chat.messages.map((mes) => {
@@ -112,7 +112,7 @@ export class chatService {
 
         // const chat = chatData.data();
 
-        const chat = await getDocData('chat', chatid);
+        const [chat, chatRef] = await getDocData('chat', chatid);
         // map messages array to find message and update state
         const updatedMessages = chat.messages.map((mes) => {
             // find message

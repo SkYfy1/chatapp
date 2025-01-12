@@ -160,7 +160,7 @@ class userService {
 
             // const userDoc = data.data();
 
-            const userDoc = await getDocData('users', uid);
+            const [userDoc, docRef] = await getDocData('users', uid);
 
             // Checking existing name or not
             const nameRef = collection(db, 'users');
@@ -168,13 +168,13 @@ class userService {
 
             const querySnapShot = await getDocs(q);
 
-            if (!querySnapShot.empty && data.data().username !== username) {
+            if (!querySnapShot.empty && userDoc.username !== username) {
                 throw new Error('Username is taken by another user')
             }
 
             console.log('About: ' + about)
 
-            await updateDoc(userRef, {
+            await updateDoc(docRef, {
                 username,
                 phoneNumber: phone || 'No number',
                 about: about || 'Nothing...',
@@ -224,7 +224,7 @@ class userService {
 
             // const data = (await getDoc(docRef)).data();
 
-            const data = await getDocData('users', id);
+            const [data, docRef] = await getDocData('users', id);
 
             if (data.hasOwnProperty('settings')) {
                 await updateDoc(docRef, {
