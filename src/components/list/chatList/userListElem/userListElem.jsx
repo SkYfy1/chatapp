@@ -11,21 +11,24 @@ const UserListElem = ({ chat, type }) => {
     const currentUser = useAuthStore((state) => state.currentUser);
     const { userChats: chats, updateChats } = useAuthStore();
     const creatingGroup = useAppStore(state => state.creatingGroup);
+    const groupMembers = useAppStore(state => state.creatingGroup);
 
     // Fix nado dlya obnovlenii ne chata, a esli user izmenit imya obnovit chat spisok!!!!!
 
-    // useEffect(() => {
-    //     const unSube = onSnapshot(doc(db, 'users', chat.user.id), async (res) => {
-    //         const user = res.data();
+    // !!! mogut bit trabls
 
-    //         // console.log(chats.find(el => el.user.username === user.username))
+    useEffect(() => {
+        const unSube = onSnapshot(doc(db, 'users', chat.user.id), async (res) => {
+            const user = res.data();
 
-    //         const updatedChats = chats.map((el) => el.user.username === user.username ? { ...el, user: user } : el);
+            // console.log(chats.find(el => el.user.username === user.username))
 
-    //         updateChats(updatedChats.sort((a, b) => b.updatedAt - a.updatedAt));
-    //     })
-    //     return () => unSube()
-    // }, []);
+            const updatedChats = chats.map((el) => (el.user.username === user.username && !el.hasOwnProperty('groupName')) ? { ...el, user: user } : el);
+
+            updateChats(updatedChats.sort((a, b) => b.updatedAt - a.updatedAt));
+        })
+        return () => unSube()
+    }, []);
 
     // Nujno 4toto sdelat so statusom gruppi
 
