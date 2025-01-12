@@ -11,7 +11,7 @@ export class chatService {
             const userChatRef = collection(db, 'userchats');
 
 
-            const newChatRef = doc(chatRef)
+            const newChatRef = doc(chatRef);
 
             await setDoc(newChatRef, {
                 createdAt: serverTimestamp(),
@@ -70,11 +70,14 @@ export class chatService {
     }
 
     static async changeMessageState(chatid, text) {
-        const chatRef = doc(db, 'chat', chatid);
+        // const chatRef = doc(db, 'chat', chatid);
 
-        const chatData = await getDoc(chatRef);
+        // const chatData = await getDoc(chatRef);
 
-        const chat = chatData.data();
+        // const chat = chatData.data();
+
+        const chat = await getDocData('chat', chatid);
+
         // map messages array to find message and update state
         const updatedMessages = chat.messages.map((mes) => {
             // find message
@@ -102,12 +105,14 @@ export class chatService {
     }
 
     static async messageAction(chatid, createdAt) {
-        const chatRef = doc(db, 'chat', chatid);
+        // const chatRef = doc(db, 'chat', chatid);
 
-        const chatData = await getDoc(chatRef);
+        // const chatData = await getDoc(chatRef);
 
 
-        const chat = chatData.data();
+        // const chat = chatData.data();
+
+        const chat = await getDocData('chat', chatid);
         // map messages array to find message and update state
         const updatedMessages = chat.messages.map((mes) => {
             // find message
