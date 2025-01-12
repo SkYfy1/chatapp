@@ -4,6 +4,7 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'fire
 import { setDoc, doc, getDoc, collection, query, where, getDocs, arrayUnion, arrayRemove, updateDoc, onSnapshot } from 'firebase/firestore';
 import { toast } from 'react-toastify';
 import { fileService } from './fileService';
+import { getDocData } from '../utils/firebaseFunc';
 
 
 class userService {
@@ -90,14 +91,18 @@ class userService {
     }
 
     static async getUserInfo(uid) {
-        const docRef = doc(db, 'users', uid);
-        const docSnap = await getDoc(docRef);
+        try {
+            const docRef = doc(db, 'users', uid);
+            const docSnap = await getDoc(docRef);
 
-        if (docSnap.exists()) {
-            console.log('Document data: ', docSnap.data());
-            return docSnap.data();
-        } else {
-            console.log('No such document')
+            if (docSnap.exists()) {
+                console.log('Document data: ', docSnap.data());
+                return docSnap.data();
+            } else {
+                console.log('No such document');
+            }
+        } catch (error) {
+            console.log(error.message);
         }
     }
 
@@ -149,11 +154,13 @@ class userService {
 
             console.log(phone)
 
-            const userRef = doc(db, 'users', uid);
+            // const userRef = doc(db, 'users', uid);
 
-            const data = await getDoc(userRef);
+            // const data = await getDoc(userRef);
 
-            const userDoc = data.data();
+            // const userDoc = data.data();
+
+            const userDoc = await getDocData('users', uid);
 
             // Checking existing name or not
             const nameRef = collection(db, 'users');
@@ -213,11 +220,13 @@ class userService {
 
     static async toggleAnims(id) {
         try {
-            const docRef = doc(db, 'users', id);
+            // const docRef = doc(db, 'users', id);
 
-            const data = (await getDoc(docRef)).data();
+            // const data = (await getDoc(docRef)).data();
 
-            if(data.hasOwnProperty('settings')) {
+            const data = await getDocData('users', id);
+
+            if (data.hasOwnProperty('settings')) {
                 await updateDoc(docRef, {
                     settings: {
                         animations: !data.settings.animations
