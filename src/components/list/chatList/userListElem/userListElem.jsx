@@ -25,17 +25,8 @@ const UserListElem = ({ chat, type }) => {
             unSubs = onSnapshot(doc(db, 'users', chat.user.id), async (res) => {
                 const user = res.data();
 
-                if (!user) {
-                    console.error("No user data found for document:", chat.user.id);
-                    return;
-                } else {
-                    console.log(user)
-                }
-    
-                // console.log(chats.find(el => el.user.username === user.username))
-    
                 const updatedChats = chats.map((el) => el.user?.id === user?.id ? { ...el, user: user } : el);
-    
+
                 updateChats(updatedChats.sort((a, b) => b.updatedAt - a.updatedAt));
             })
         }
