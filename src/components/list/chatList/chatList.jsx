@@ -8,12 +8,13 @@ import useChatStore from '../../../context/useChatStore';
 import Tooltip from '../../ui/Tooltip';
 import language from '../../../utils/language.js'
 import useAppStore from '../../../context/useAppStore'
-import { useTrail, animated } from '@react-spring/web';
+import { useTrail, animated, useSpring } from '@react-spring/web';
 import MiniAvatar from '../../ui/MiniAvatar.jsx';
 import UserListElem from './userListElem/userListElem.jsx';
 import Button from '../../ui/Button.jsx';
 import { chatService } from '../../../services/chatsService.js';
 import { toast } from 'react-toastify';
+import { useDrag } from '@use-gesture/react';
 
 
 const ChatList = ({ toggle }) => {
@@ -21,18 +22,23 @@ const ChatList = ({ toggle }) => {
   const [groupName, setGroupName] = useState('');
   const [filter, setFilter] = useState('');
   const [pointer, setPointer] = useState({ pointerX: null, pointerY: null });
+
   const changeGroup = useAppStore((state) => state.changeGroup);
   const closeButton = useAppStore((state) => state.changeShowButton);
+
+  const updateGroupInfo = useChatStore((state) => state.updateGroupInfo);
+  const changeChat = useChatStore(state => state.changeChat);
+  const chatId = useChatStore(state => state.chatId);
+
+  const { userChats: chats, updateChats } = useAuthStore();
+  const currentUser = useAuthStore((state) => state.currentUser);
   const appState = useAppStore();
+
+
+  // const { changeChat } = useChatStore();
   const listRef = useRef(null);
 
 
-  const currentUser = useAuthStore((state) => state.currentUser);
-  const updateGroupInfo = useChatStore((state) => state.updateGroupInfo);
-  const { userChats: chats, updateChats } = useAuthStore();
-  const changeChat = useChatStore(state => state.changeChat);
-  // const { changeChat } = useChatStore();
-  const chatId = useChatStore(state => state.chatId);
   const [trails, api] = useTrail(chats.length, () => ({
     from: {
       opacity: 0,
@@ -43,6 +49,13 @@ const ChatList = ({ toggle }) => {
       x: 0
     }
   }));
+
+  // const [{ x, y }, api2] = useSpring(() => ({
+  //   x: 0,
+  //   y: 0
+  // }))
+
+  // const drag = useDrag((state) => { api2.start({ x: state.offset[0], y: state.offset[1] }) }, {})
 
   // useEffect(() => {
   //   // console.log(chats.user?.username.toLowerCase().startsWith(filter.toLowerCase()) || chats.groupName.toLowerCase().startsWith(filter.toLowerCase()))
@@ -170,18 +183,22 @@ const ChatList = ({ toggle }) => {
     setAddMode(false);
   }
 
-  const clickButton = () => {
+  const openGroupForm = () => {
     changeGroup();
     closeButton();
+  }
+
+  const closeGroupForm = () => {
+    changeGroup();
   }
 
   return (
     <div className='chatList' ref={listRef}>
       <div className="search">
-        <div className="searchBar">
+        <animated.div className="searchBar">
           <img src="./search.png" alt="" />
           <input type="text" placeholder='Search' value={filter} onChange={(e) => setFilter(e.target.value)} />
-        </div>
+        </animated.div>
         <img onClick={() => setAddMode(prev => !prev)} src={addMode ? './minus.png' : "./plus.png"} alt="" className='add' />
       </div>
       {trails.map(({ ...style }, index) =>
@@ -216,21 +233,29 @@ const ChatList = ({ toggle }) => {
       )}
       {addMode && <AddUser handler={handleAdd} />}
       {appState.showButton &&
-        <Button handler={clickButton}>
+        <Button handler={openGroupForm}>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
           </svg>
         </Button>}
       {appState.creatingGroup &&
-        <div className='group'>
-          <div className='groupName'>
-            <h1>Enter Group Name</h1>
-            <div className='groupInput'>
-              <input type="text" value={groupName} onChange={(e) => setGroupName(e.target.value)} />
+        <>
+          <div className='group'>
+            <div className='groupName'>
+              <h1>Enter Group Name</h1>
+              <div className='groupInput'>
+                <input type="text" value={groupName} onChange={(e) => setGroupName(e.target.value)} />
+              </div>
             </div>
+            <button onClick={createGroup} className='groupBtn'>Create Group</button>
           </div>
-          <button onClick={createGroup} className='groupBtn'>Create Group</button>
-        </div>}
+          <Button handler={closeGroupForm}>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+          </Button>
+        </>
+      }
     </div>
   )
 }

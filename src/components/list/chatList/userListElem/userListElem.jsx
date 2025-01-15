@@ -44,7 +44,7 @@ const UserListElem = ({ chat, type }) => {
                 <div className='texts'>
                     <div>
                         <span style={{ fontSize: '15px', marginRight: '5px' }}>Group</span>
-                        <span style={{ fontSize: '12px' }}>{chat.groupName}</span>
+                        <span style={{ fontSize: '12px' }}>{chat.groupName}</span>  
                     </div>
                     <p>{chat.lastMessage}</p>
                 </div>
