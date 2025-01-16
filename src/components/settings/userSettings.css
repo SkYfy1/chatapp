@@ -210,7 +210,18 @@
                 gap: 15px;
                 border-bottom: 2px solid #dddddd35;
 
-                div:not(.popup) {
+                .anim {
+                    display: flex;
+                    flex-direction: column;
+                    align-self: start;
+                    gap: 15px;
+
+                    div:first-child {
+                        align-self: start;
+                    }
+                }
+
+                div:not(.popup):not(.anim) {
                     display: flex;
                     gap: 25px;
                     align-items: center;

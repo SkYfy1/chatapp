@@ -66,21 +66,3 @@ const GroupSettings = () => {
 
 export default GroupSettings
 
-{/* <div className='nameChange'>
-<button style={{ width: changeText ? '50%' : '100%' }} onClick={() => setChange(prev => !prev)}>{changeText ? 'Confirm' : 'Change group name'}</button>
-{changeText && <input type="text" value={text} onChange={(e) => setText(e.target.value)} />}
-</div>
-<button onClick={() => setKickForm(prev => !prev)}>Kick users</button>
-{kickForm &&
-<div className='members'>
-    {/* Sdelat animaciy spiska!!~!!!!!!!!!!!!~~~!!~!~!~!~!!!!!~~!!!!! */}
-// {groupInfo.members.map((user) => (
-//     <div className='userElem'>
-//         <div className='userData'>
-//             <img src={user.avatar} alt="avatar" />
-//             <span>{user.username}</span>
-//         </div>
-//         <button>Kick user</button>
-//     </div>
-// ))}
-// </div>} */}
