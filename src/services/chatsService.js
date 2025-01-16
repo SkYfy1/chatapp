@@ -3,6 +3,7 @@ import supabase from '../lib/supabase'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { setDoc, doc, getDoc, collection, query, where, getDocs, serverTimestamp, updateDoc, arrayUnion } from 'firebase/firestore';
 import { toast } from 'react-toastify';
+import { getDocData } from '../utils/firebaseFunc';
 
 export class chatService {
     static async createChat(uid, fid) {
