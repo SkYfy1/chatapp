@@ -13,7 +13,7 @@ import Audio from './Audio/Audio';
 import Icons from '../ui/Icons';
 import Message from './Message/Message';
 
-const Chat = React.memo(({ showDetails, setShowDetails, groupDetails, setGroupDetails }) => {
+const Chat = React.memo(({ showDetails, setShowDetails }) => {
   const [open, setOpen] = useState(false);
   const refic = useRef(null);
   const [text, setText] = useState('');

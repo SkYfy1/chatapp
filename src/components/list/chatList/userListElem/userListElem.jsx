@@ -6,16 +6,23 @@ import { useEffect } from 'react';
 import MiniAvatar from '../../../ui/MiniAvatar';
 import useAppStore from '../../../../context/useAppStore';
 import ControlledCheckbox from '../../../ui/Checkbox';
+import useChatStore from '../../../../context/useChatStore';
 
 const UserListElem = ({ chat, type }) => {
     const currentUser = useAuthStore((state) => state.currentUser);
     const { userChats: chats, updateChats } = useAuthStore();
+
     const creatingGroup = useAppStore(state => state.creatingGroup);
     const groupMembers = useAppStore(state => state.creatingGroup);
+
+    const updateUserInfo = useChatStore(state => state.updateUserInfo)
+    const receiver = useChatStore(state => state.user);
 
     // Fix nado dlya obnovlenii ne chata, a esli user izmenit imya obnovit chat spisok!!!!!
 
     // !!! mogut bit trabls
+
+    // Update user info in chatList
 
     useEffect(() => {
         let unSubs;
@@ -28,6 +35,16 @@ const UserListElem = ({ chat, type }) => {
                 const updatedChats = chats.map((el) => el.user?.id === user?.id ? { ...el, user: user } : el);
 
                 updateChats(updatedChats.sort((a, b) => b.updatedAt - a.updatedAt));
+                // chatId == chat.chatId checks if chat which maps are the same as picked (chat) and update data in Chat component
+
+                // console.log(user.id)
+                // console.log(chat.user.id)
+
+                console.log('Condition:', user.id === receiver.id);
+                user.id === receiver.id && console.log('Condition passed, function will be called');
+                user.id === receiver.id && updateUserInfo(user)
+
+                // user.id !== chat.user.id && updateUserInfo(user);
             })
         }
         return () => type != 'group' && unSubs?.()
@@ -44,7 +61,7 @@ const UserListElem = ({ chat, type }) => {
                 <div className='texts'>
                     <div>
                         <span style={{ fontSize: '15px', marginRight: '5px' }}>Group</span>
-                        <span style={{ fontSize: '12px' }}>{chat.groupName}</span>  
+                        <span style={{ fontSize: '12px' }}>{chat.groupName}</span>
                     </div>
                     <p>{chat.lastMessage}</p>
                 </div>

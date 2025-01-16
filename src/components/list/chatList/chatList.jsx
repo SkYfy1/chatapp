@@ -29,6 +29,7 @@ const ChatList = ({ toggle }) => {
   const updateGroupInfo = useChatStore((state) => state.updateGroupInfo);
   const changeChat = useChatStore(state => state.changeChat);
   const chatId = useChatStore(state => state.chatId);
+  const updateUserInfo = useChatStore(state => state.updateUserInfo)
 
   const { userChats: chats, updateChats } = useAuthStore();
   const currentUser = useAuthStore((state) => state.currentUser);
@@ -76,14 +77,14 @@ const ChatList = ({ toggle }) => {
     }
   }, [appState.creatingGroup])
 
-  // Updating chats, gettign receivers data (doc)
+  // Updating chats, getting receivers data (doc)
 
   useEffect(() => {
     // If doc in collection changes update chat list
     const unSubs = onSnapshot(doc(db, 'userchats', currentUser.id), async (res) => {
       const userChats = res.data().chats;
-      console.log(userChats);
-      console.log('sub');
+      // console.log(userChats);
+      // console.log('sub');
 
       const promises = userChats.map(async (chat) => {
         if (chat.hasOwnProperty('groupMembers')) {
@@ -96,8 +97,13 @@ const ChatList = ({ toggle }) => {
           }));
 
           // If group data changes -> doc in coll updates -> update groupInfo state
-
-          chatId == chat.chatId && updateGroupInfo({ avatar: chat.groupAvatar, groupName: chat.groupName, members: members })
+          // chatId == chat.chatId checks if chat which maps are the same as picked (chat) and update data in Chat component
+          console.log('Condition:', chatId === chat.chatId);
+          chatId === chat.chatId && console.log('Condition passed, function will be called');
+          chatId === chat.chatId && updateGroupInfo({ avatar: chat.groupAvatar, groupName: chat.groupName, members: members });
+          // if (chatId == chat.chatId) {
+          //   updateGroupInfo({ avatar: chat.groupAvatar, groupName: chat.groupName, members: members })
+          // }
 
           // Members - docs in db w/ information of group users (eto documenti s bd s infoi pro userov v gruppe)
 
