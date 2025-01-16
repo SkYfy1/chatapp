@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import { useAuthStore } from '../../../context/useAuthStore'
 import useChatStore from '../../../context/useChatStore';
 
-const UserInfo = ({ openSettings, isMobile }) => {
+const UserInfo = ({ openSettings }) => {
   const userInfo = useAuthStore((state) => state.currentUser);
 
   return (

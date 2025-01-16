@@ -29,7 +29,7 @@ const UserSettings = ({ close }) => {
     const [showPop, setShowPop] = useState(false);
     const [styles, api] = useSpring(() => ({
         from: { opacity: 0, y: -100 },
-        // to: { opacity: 1, y: 0 }
+        // to: { opacity: 1, y: 0 },
     }));
 
     const [spring, api1] = useSpring(() => ({
