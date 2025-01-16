@@ -9,7 +9,6 @@ import { fileService } from '../../services/fileService';
 import ModalWindow from '../ui/ModalWindow';
 import { useInView } from 'react-intersection-observer';
 import useAppStore from '../../context/useAppStore';
-import { chatService } from '../../services/chatsService';
 import Audio from './Audio/Audio';
 import Icons from '../ui/Icons';
 import Message from './Message/Message';

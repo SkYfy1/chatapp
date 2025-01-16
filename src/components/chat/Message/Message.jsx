@@ -55,7 +55,7 @@ const Message = ({ message, setShowBig }) => {
                     {/* Text */}
                     {message.text &&
                         <p className='p'>
-                            {message.deleted ? <Trail>Message-deleted</Trail> : message.text}
+                            {message.deleted ? <div>Message-deleted</div> : message.text}
                             {!message.deleted && <svg onClick={async (e) => {
                                 e.stopPropagation(); await changeMessageState(message.text)
                             }} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">

@@ -9,6 +9,8 @@ import ImageDownload from '../download/ImageDownload'
 import useAppStore from '../../context/useAppStore'
 import language from '../../utils/language'
 import GroupSettings from './groupDetails/groupSettings'
+import Spring from '../animation/Spring'
+import Trail from '../animation/Trail'
 
 const Detail = ({ setShowDetails }) => {
   const friend = useChatStore(state => state.user);
@@ -114,10 +116,11 @@ const Detail = ({ setShowDetails }) => {
             <img onClick={() => setShow(state => ({ ...state, shared: !state.shared }))} src={show.shared ? "./arrowDown.png" : "./arrowUp.png"} alt="" />
           </div>
           {(show.shared && images) && <div className="photos">
-            {images?.map((el) => (
-              <ImageDownload image={el} key={el} />
-            )
-            )}
+            <Trail>
+              {images?.map((el) => (
+                <ImageDownload image={el} key={el} />
+              ))}
+            </Trail>
           </div>}
         </div>
         <div className="option">
