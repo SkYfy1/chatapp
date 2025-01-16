@@ -97,7 +97,7 @@ const ChatList = ({ toggle }) => {
 
           // If group data changes -> doc in coll updates -> update groupInfo state
 
-          updateGroupInfo({ avatar: chat.groupAvatar, groupName: chat.groupName, members: members })
+          chatId == chat.chatId && updateGroupInfo({ avatar: chat.groupAvatar, groupName: chat.groupName, members: members })
 
           // Members - docs in db w/ information of group users (eto documenti s bd s infoi pro userov v gruppe)
 
