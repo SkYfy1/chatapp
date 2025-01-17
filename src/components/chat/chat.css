@@ -624,7 +624,7 @@
                     max-width: fit-content;
                     display: flex;
                     gap: 20px;
-                    font-size: 15px;
+                    font-size: 12px;
 
                     img {
                         width: 30px;
@@ -677,6 +677,9 @@
                             display: flex;
                             justify-content: space-between;
                             align-items: center;
+                            background-color: rgba(17, 25, 40, 0.3);
+                            padding: 12px;
+                            border-radius: 5px;
 
                             svg {
                                 width: 12px;
@@ -746,11 +749,11 @@
                             cursor: pointer;
                         }
 
-                        p {
+                        /* p {
                             background-color: rgba(17, 25, 40, 0.3);
-                            padding: 10px;
+                            padding: 12px;
                             border-radius: 5px;
-                        }
+                        } */
 
                         span {
                             font-size: 9px;
@@ -758,8 +761,6 @@
                     }
 
                     &.own {
-                        align-self: flex-end;
-
                         .texts {
                             p {
                                 background-color: #5183fe;
