@@ -155,7 +155,7 @@ const ChatList = ({ toggle }) => {
     // Fix kostil
 
     chat.hasOwnProperty('groupName') && await changeChat(chat.chatId, null, { avatar: chat.groupAvatar, groupName: chat.groupName, members: chat.members });
-
+    // toggle();
     { appState.isMobile && toggle(); }
   }
 

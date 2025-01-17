@@ -492,12 +492,16 @@
 
         .top {
             padding: 10px;
+            display: flex;
+            justify-content: space-between;
             border-bottom: 1px solid #dddddd35;
 
             .user {
                 display: flex;
                 align-items: center;
-                justify-content: space-around;
+                padding-left: 15px;
+                gap: 35px;
+                width: 100%;
 
                 img {
                     width: 50px;

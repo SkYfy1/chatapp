@@ -63,7 +63,7 @@
 
   .container {
     width: 80vw;
-    height: 80vh;
+    height: 86vh;
     background: rgba(14, 25, 40, 0.75);
     backdrop-filter: blur(19px) saturate(180%);
     border-radius: 15px;
