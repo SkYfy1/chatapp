@@ -6,12 +6,15 @@ import { auth, db, testFirestore } from '../../lib/firebase'
 import { doc, setDoc } from 'firebase/firestore';
 import supabase from '../../lib/supabase'
 import userService from '../../services/userService';
+import useAppStore from '../../context/useAppStore';
 
 const Login = () => {
     const [image, setImage] = useState({
         file: null,
         url: ''
     });
+    const isMobile = useAppStore(state => state.isMobile);
+    const [register, setRegister] = useState(false);
 
     const [loading, setLoading] = useState(false);
 
@@ -46,6 +49,47 @@ const Login = () => {
         await userService.createUser({ username, email, password }, image);
 
         setLoading(false);
+    }
+
+    const changeFormStatus = () => {
+        setRegister(prev => !prev)
+    }
+
+    if (isMobile) {
+        return (
+            <>
+                {register ?
+                    <div className='login'>
+                        < div className="item" >
+                            <h2 onClick={testFirestore}>Welcome back</h2>
+                            <form onSubmit={handleLogin}>
+                                <input type="text" placeholder='Email' name='email' />
+                                <input type="text" placeholder='Password' name='password' />
+                                <button disabled={loading}>{loading ? 'Loggining' : 'Sign Up'}</button>
+                            </form>
+                            <button className='changeForm' onClick={changeFormStatus}>Or Register an Account</button>
+                        </div >
+                    </div > :
+                    <div className='login'>
+                        <div className="item">
+                            <h2>Create an Account</h2>
+                            <form onSubmit={handleRegister}>
+                                <input type="file" id='file' onChange={handleAddImage} style={{ display: 'none' }} />
+                                <label htmlFor="file">
+                                    <img src={image.url || './avatar.png'} alt="" />
+                                    Upload an image
+                                </label>
+                                <input type="text" placeholder='Username' name='username' />
+                                <input type="text" placeholder='Email' name='email' />
+                                <input type="text" placeholder='Password' name='password' />
+                                <button disabled={loading}>{loading ? 'Creating account' : 'Sign Up'}</button>
+                            </form>
+                            <button className='changeForm' onClick={changeFormStatus}>Login</button>
+                        </div>
+                    </div>
+                }
+            </>
+        )
     }
 
     return (
