@@ -34,6 +34,7 @@ const App = () => {
       checkScreen();
     }, 600);
 
+    checkScreen();
 
     window.addEventListener("resize", handleResize);
 
