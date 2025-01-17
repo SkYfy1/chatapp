@@ -117,7 +117,7 @@ const App = () => {
     <div className='container'>
       {currentUser ? (
         <>
-          {!showList && <List toggle={setShowList} chatId={chatId} showDetails={showDetails} openSettings={changeSettingsState} />}
+          {!showList && <List showDetails={showDetails} openSettings={changeSettingsState} />}
           {showSettings && <UserSettings close={changeSettingsState} />}
           {chatId && <Chat showDetails={showDetails} setShowDetails={setShowDetails}/>}
           {showDetails && <Detail setShowDetails={setShowDetails} />}

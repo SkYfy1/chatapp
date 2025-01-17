@@ -6,7 +6,7 @@ import useChatStore from '../../context/useChatStore'
 import useAppStore from '../../context/useAppStore'
 
 
-const List = ({ toggle, showDetails, openSettings }) => {
+const List = ({ showDetails, openSettings }) => {
   const [showBurger, setShowBurger] = useState(false);
   const isMobile = useAppStore(state => state.isMobile);
   const closeChat = useChatStore((state) => state.closeChat);
@@ -26,7 +26,7 @@ const List = ({ toggle, showDetails, openSettings }) => {
   return (
     <div className={'list'}>
       <UserInfo openSettings={openSettings} />
-      <ChatList toggle={toggle} />
+      <ChatList />
     </div>
   )
 }

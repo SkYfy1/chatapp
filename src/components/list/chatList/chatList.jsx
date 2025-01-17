@@ -14,7 +14,6 @@ import UserListElem from './userListElem/userListElem.jsx';
 import Button from '../../ui/Button.jsx';
 import { chatService } from '../../../services/chatsService.js';
 import { toast } from 'react-toastify';
-import { useDrag } from '@use-gesture/react';
 
 
 const ChatList = ({ toggle }) => {
@@ -155,8 +154,8 @@ const ChatList = ({ toggle }) => {
     // Fix kostil
 
     chat.hasOwnProperty('groupName') && await changeChat(chat.chatId, null, { avatar: chat.groupAvatar, groupName: chat.groupName, members: chat.members });
-    // toggle();
-    { appState.isMobile && toggle(); }
+    
+    appState.isMobile && toggle();
   }
 
   const createGroup = async () => {

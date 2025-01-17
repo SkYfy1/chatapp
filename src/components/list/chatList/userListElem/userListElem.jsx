@@ -35,13 +35,8 @@ const UserListElem = ({ chat, type }) => {
                 const updatedChats = chats.map((el) => el.user?.id === user?.id ? { ...el, user: user } : el);
 
                 updateChats(updatedChats.sort((a, b) => b.updatedAt - a.updatedAt));
-                // chatId == chat.chatId checks if chat which maps are the same as picked (chat) and update data in Chat component
 
-                // console.log(user.id)
-                // console.log(chat.user.id)
-
-                console.log('Condition:', user.id === receiver.id);
-                user.id === receiver.id && console.log('Condition passed, function will be called');
+                // user.id === receiver.id checks if user which maps are the same as picked (chat with user) and update data in Chat component
                 user.id === receiver.id && updateUserInfo(user)
 
                 // user.id !== chat.user.id && updateUserInfo(user);
