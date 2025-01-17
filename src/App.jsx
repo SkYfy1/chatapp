@@ -97,7 +97,7 @@ const App = () => {
         const start = new Date().getTime();
         while (new Date().getTime() < start + delay);
       }
-      // unloading won't finish until 10 full seconds pass!
+      // unloading won't finish until 3 full seconds pass!
       sleep(3000);
     }
     window.addEventListener('unload', listener2);
