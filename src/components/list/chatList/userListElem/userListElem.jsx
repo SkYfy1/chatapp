@@ -37,7 +37,9 @@ const UserListElem = ({ chat, type }) => {
                 updateChats(updatedChats.sort((a, b) => b.updatedAt - a.updatedAt));
 
                 // user.id === receiver.id checks if user which maps are the same as picked (chat with user) and update data in Chat component
-                user.id === receiver.id && updateUserInfo(user)
+                if(receiver?.id) {
+                    user.id === receiver.id && updateUserInfo(user);
+                };
 
                 // user.id !== chat.user.id && updateUserInfo(user);
             })
