@@ -7,6 +7,16 @@
         justify-content: space-between;
     }
 
+    .btn {
+        background-color: rgb(81, 131, 254);
+        border-radius: 5px 10px;
+        padding: 5px 10px;
+        border: none;
+        color: white;
+        font-size: 12px;
+        cursor: pointer;
+    }
+
     .user {
         display: flex;
         align-items: center;
@@ -37,12 +47,21 @@
     }
 }
 
-@media (min-width: 300px) {
+@media (min-width: 300px) and (max-width: 1000px) {
     .userInfo {
         padding: 15px;
         display: flex;
         align-items: center;
         justify-content: space-between;
+    }
+
+    .btn {
+        background-color: rgb(81, 131, 254);
+        border-radius: 10px 5px;
+        padding: 5px 7px;
+        border: none;
+        color: white;
+        font-size: 11px;
     }
 
     .user {

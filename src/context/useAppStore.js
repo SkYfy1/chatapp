@@ -6,6 +6,13 @@ const useAppStore = create((set) => ({
     showButton: false,
     creatingGroup: false,
     groupMembers: [],
+    subscriptionWindow: false,
+
+    changeSubWindowMode: () => { 
+        set((state) => ({
+            subscriptionWindow: !state.subscriptionWindow
+        }))
+    },
 
     addGroupMembers: (newMember) => {
         set((state) => ({

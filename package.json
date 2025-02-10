@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "server": "node --watch --env-file=.env server/server.js",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
@@ -19,7 +20,9 @@
     "@react-spring/web": "^9.7.5",
     "@supabase/supabase-js": "^2.46.1",
     "@use-gesture/react": "^10.3.1",
+    "cors": "^2.8.5",
     "emoji-picker-react": "^4.12.0",
+    "express": "^4.21.2",
     "firebase": "^11.0.2",
     "lodash": "^4.17.21",
     "react": "^18.2.0",
@@ -27,6 +30,7 @@
     "react-hook-form": "^7.53.2",
     "react-intersection-observer": "^9.13.1",
     "react-toastify": "^10.0.6",
+    "stripe": "^17.6.0",
     "styled-components": "^6.1.13",
     "zustand": "^5.0.1"
   },

@@ -13,6 +13,7 @@ import { doc, onSnapshot } from "firebase/firestore"
 import useAppStore from "./context/useAppStore"
 import { throttle } from "lodash"
 import userService from "./services/userService"
+import Subscription from "./components/subscription/Subscription"
 
 const App = () => {
   const [showDetails, setShowDetails] = useState(false);
@@ -21,6 +22,28 @@ const App = () => {
   const chatId = useChatStore(state => state.chatId);
   const [showList, setShowList] = useState(false);
   const checkScreen = useAppStore(state => state.checkScreen);
+  const subscriptionWindow = useAppStore((state) => state.subscriptionWindow);
+
+  let [message, setMessage] = useState('');
+  let [success, setSuccess] = useState(false);
+  let [sessionId, setSessionId] = useState('');
+
+  useEffect(() => {
+    // Check to see if this is a redirect back from Checkout
+    const query = new URLSearchParams(window.location.search);
+
+    if (query.get('success')) {
+      setSuccess(true);
+      setSessionId(query.get('session_id'));
+    }
+
+    if (query.get('canceled')) {
+      setSuccess(false);
+      setMessage(
+        "Order canceled -- continue to shop around and checkout when you're ready."
+      );
+    }
+  }, [sessionId]);
 
   const changeSettingsState = () => {
     setShowSettings(prev => !prev)
@@ -104,7 +127,7 @@ const App = () => {
     window.addEventListener('unload', listener2);
     window.addEventListener('beforeunload', listener);
 
-    return () => {window.removeEventListener('beforeunload', listener); window.removeEventListener('unload', listener2);}
+    return () => { window.removeEventListener('beforeunload', listener); window.removeEventListener('unload', listener2); }
   }, [currentUser]);
 
 
@@ -119,8 +142,9 @@ const App = () => {
         <>
           {!showList && <List showDetails={showDetails} openSettings={changeSettingsState} />}
           {showSettings && <UserSettings close={changeSettingsState} />}
-          {chatId && <Chat showDetails={showDetails} setShowDetails={setShowDetails}/>}
+          {chatId && <Chat showDetails={showDetails} setShowDetails={setShowDetails} />}
           {showDetails && <Detail setShowDetails={setShowDetails} />}
+          {subscriptionWindow && <Subscription message={message} success={success} sessionId={sessionId}/>}
         </>
       ) : (
         <Login />

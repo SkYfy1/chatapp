@@ -1,0 +1,23 @@
+.subscriptionWindow {
+    position: absolute;
+    z-index: 100;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%);
+    display: flex;
+    gap: 15px;
+    background: rgba(14, 25, 40, 0.75);
+    backdrop-filter: blur(50%) saturate(180%);
+    padding: 25px;
+    border-radius: 10px;
+    align-items: center;
+
+    img {
+        width: 50px;
+        height: 50px;
+    }
+
+    form {
+        height: fit-content;
+    }
+}
