@@ -5,7 +5,7 @@
 
 ## 🤖 Introduction
 
-Built with Next.js, TypeScript, and Postgres, Library Management System platform featuring a public-facing app and an admin interface.
+Built with React, Firebase, Zustand, and Supabase, Real-time chat application with friend/group chats.
 
 
 ## ⚙️ Tech Stack
