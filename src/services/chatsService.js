@@ -102,7 +102,7 @@ export class chatService {
         // const q = query(chatRef, where('text', '==', text));
         // console.log(q);
 
-        console.log(chat)
+        // console.log(chat)
     }
 
     static async messageAction(chatid, createdAt) {
@@ -137,6 +137,6 @@ export class chatService {
         // const q = query(chatRef, where('text', '==', text));
         // console.log(q);
 
-        console.log(chat)
+        // console.log(chat)
     }
 }

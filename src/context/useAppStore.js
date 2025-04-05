@@ -8,7 +8,7 @@ const useAppStore = create((set) => ({
     groupMembers: [],
     subscriptionWindow: false,
 
-    changeSubWindowMode: () => { 
+    changeSubWindowMode: () => {
         set((state) => ({
             subscriptionWindow: !state.subscriptionWindow
         }))
@@ -44,11 +44,9 @@ const useAppStore = create((set) => ({
 
     checkScreen: () => {
         if (window.innerWidth < 720) {
-            console.log('mobile')
             set({ isMobile: true });
             return;
         } else {
-            console.log('pc')
             set({ isMobile: false });
             return;
         }

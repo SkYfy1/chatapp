@@ -20,7 +20,6 @@ const useChatStore = create((set) => ({
 
     changeChat: (chatId, user, group) => {
         const currentUser = useAuthStore.getState().currentUser;
-        console.log(group)
         // Check if group chat
         if (group) {
             return set({ groupInfo: group, chatId: chatId, user: null })
@@ -37,7 +36,6 @@ const useChatStore = create((set) => ({
         if (currentUser.blocked.includes(user.id)) {
             return set({ isReceiverBlocked: true, user, chatId: chatId, groupInfo: null })
         }
-        console.log('chat changing', chatId, user)
 
         set({ chatId: chatId, user: user, groupInfo: null })
     },

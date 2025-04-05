@@ -9,7 +9,9 @@ export class fileService {
 
             console.log(file)
 
-            const { data, error } = await supabase.storage.from(dest).upload(`uploads/${file.name}`, file);
+            const { data, error: uploadError } = await supabase.storage.from(dest).upload(`uploads/${file.name}`, file);
+
+            if (uploadError) console.log(uploadError)
 
             console.log('Uploaded image or file', data)
 

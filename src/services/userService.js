@@ -33,7 +33,7 @@ class userService {
 
                 const res = await createUserWithEmailAndPassword(auth, user.email, user.password);
 
-                console.log(res)
+                // console.log(res)
 
                 await setDoc(doc(db, 'users', res.user.uid), {
                     username: user.username,
@@ -54,7 +54,7 @@ class userService {
             } else {
                 const res = await createUserWithEmailAndPassword(auth, user.email, user.password);
 
-                console.log(res)
+                // console.log(res)
 
                 await setDoc(doc(db, 'users', res.user.uid), {
                     username: user.username,
@@ -83,7 +83,7 @@ class userService {
     static async loginUser(email, password) {
         try {
             const res = await signInWithEmailAndPassword(auth, email, password);
-            console.log(res)
+            // console.log(res)
             toast.success('Welcome back!')
         } catch (error) {
             console.log(error.message)
@@ -96,10 +96,10 @@ class userService {
             const docSnap = await getDoc(docRef);
 
             if (docSnap.exists()) {
-                console.log('Document data: ', docSnap.data());
+                // console.log('Document data: ', docSnap.data());
                 return docSnap.data();
             } else {
-                console.log('No such document');
+                // console.log('No such document');
             }
         } catch (error) {
             console.log(error.message);
@@ -118,7 +118,7 @@ class userService {
             // This is an important bit..
             const endCode = strFrontCode + String.fromCharCode(strEndCode.charCodeAt(0) + 1);
             const q = query(userRef, where('username', ">=", searchTerm), where('username', "<", endCode))
-            console.log(q);
+            // console.log(q);
 
             const querySnapShot = await getDocs(q);
 
@@ -152,7 +152,7 @@ class userService {
         try {
             const imgLink = await fileService.uploadFileAndGetLink(newImage, 'avatars');
 
-            console.log(phone)
+            // console.log(phone)
 
             // const userRef = doc(db, 'users', uid);
 
@@ -172,7 +172,7 @@ class userService {
                 throw new Error('Username is taken by another user')
             }
 
-            console.log('About: ' + about)
+            // console.log('About: ' + about)
 
             await updateDoc(docRef, {
                 username,
@@ -212,7 +212,7 @@ class userService {
                 status: status
             });
 
-            console.log('User ' + status)
+            // console.log('User ' + status)
         } catch (error) {
             console.log(error.message)
         }
@@ -241,7 +241,7 @@ class userService {
                 }
             });
 
-            console.log('User ' + JSON.stringify(data))
+            // console.log('User ' + JSON.stringify(data))
         } catch (error) {
             console.log(error.message)
         }
